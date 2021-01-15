@@ -20,43 +20,50 @@ public class DriveTrain extends SubsystemBase {
   private TalonSRX backRightMotor_1 = new TalonSRX(Constants.BACK_RIGHT_MOTOR_1_ID);
   private TalonSRX backRightMotor_2 = new TalonSRX(Constants.BACK_RIGHT_MOTOR_2_ID);
 
-  /*
-   * frontLeftMotor_1.configSelectedFeedbackSensor(Constants.
-   * FRONT_LEFT_MOTOR_ENCODER_1, 0, 10);
-   * frontLeftMotor_2.configSelectedFeedbackSensor(Constants.
-   * FRONT_LEFT_MOTOR_ENCODER_2, 0, 10);
-   * backLeftMotor_1.configSelectedFeedbackSensor(Constants.
-   * BACK_LEFT_MOTOR_ENCODER_1, 0, 10);
-   * backLeftMotor_2.configSelectedFeedbackSensor(Constants.
-   * BACK_LEFT_MOTOR_ENCODER_2, 0, 10);
-   * frontRightMotor_1.configSelectedFeedbackSensor(Constants.
-   * FRONT_RIGHT_MOTOR_ENCODER_1, 0, 10);
-   * frontRightMotor_2.configSelectedFeedbackSensor(Constants.
-   * FRONT_RIGHT_MOTOR_ENCODER_2, 0, 10);
-   * backRightMotor_1.configSelectedFeedbackSensor(Constants.
-   * BACK_RIGHT_MOTOR_ENCODER_1, 0, 10);
-   * backRightMotor_2.configSelectedFeedbackSensor(Constants.
-   * BACK_RIGHT_MOTOR_ENCODER_2, 0, 10);
-   */
 
-  /*
-   * 
-   * Front Front Left Right |-----------------------------| | 1 | \Intake/ | 1 | |
-   * 2 | | 2 | |-----| |-----| | | | | | |Revolover| | | | | | |-----| |-----| | 2
-   * | | 2 | | 1 | /Shooter\ | 1 | |-----------------------------| Bottom Bottom
-   * Left Right
-   * 
-   */
+/*
+  frontLeftMotor_1.configSelectedFeedbackSensor(Constants.FRONT_LEFT_MOTOR_ENCODER_1, 0, 10);
+  frontLeftMotor_2.configSelectedFeedbackSensor(Constants.FRONT_LEFT_MOTOR_ENCODER_2, 0, 10);
+  backLeftMotor_1.configSelectedFeedbackSensor(Constants.BACK_LEFT_MOTOR_ENCODER_1, 0, 10);
+  backLeftMotor_2.configSelectedFeedbackSensor(Constants.BACK_LEFT_MOTOR_ENCODER_2, 0, 10);
+  frontRightMotor_1.configSelectedFeedbackSensor(Constants.FRONT_RIGHT_MOTOR_ENCODER_1, 0, 10);
+  frontRightMotor_2.configSelectedFeedbackSensor(Constants.FRONT_RIGHT_MOTOR_ENCODER_2, 0, 10);
+  backRightMotor_1.configSelectedFeedbackSensor(Constants.BACK_RIGHT_MOTOR_ENCODER_1, 0, 10);
+  backRightMotor_2.configSelectedFeedbackSensor(Constants.BACK_RIGHT_MOTOR_ENCODER_2, 0, 10);*/
+
+ /*
+  * 
+  * Front Front          Left Right 
+  * |-----------------------------| 
+  * | 1   |     \Intake/    |   1 | 
+  * |   2 |                 | 2   | 
+  * |-----|                 |-----| 
+  * |                             | 
+  * |                             | 
+  * |         |Revolover|         |
+  * |                             | 
+  * |                             |
+  * |-----|                 |-----| 
+  * |   2 |                 | 2   | 
+  * | 1   |    /Shooter\    |   1 | 
+  * |-----------------------------| 
+  * Bottom                   Bottom
+  * Left                      Right
+  * 
+*/
+
 
   // GYRO
   private AHRS gyro = new AHRS(Port.kMXP);
   // PDP
   final PowerDistributionPanel PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
-  public void resetGyro() {
+
+  public void resetGyro(){
     gyro.reset();
     gyro.zeroYaw();
   }
+
 
   public DriveTrain() {
 
