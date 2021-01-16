@@ -1,7 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
-
 public interface Constants {
 
     public static final int JOYSTICK_CONTROLLER = 0;
@@ -82,16 +80,6 @@ public interface Constants {
         }
     }
   
-    // DRIVE TRAIN ENCODERS
-    public static final TalonSRXFeedbackDevice FRONT_LEFT_MOTOR_ENCODER_1 = null;
-    public static final TalonSRXFeedbackDevice FRONT_LEFT_MOTOR_ENCODER_2 = null;
-    public static final TalonSRXFeedbackDevice BACK_LEFT_MOTOR_ENCODER_1 = null;
-    public static final TalonSRXFeedbackDevice BACK_LEFT_MOTOR_ENCODER_2 = null;
-    public static final TalonSRXFeedbackDevice FRONT_RIGHT_MOTOR_ENCODER_1 = null;
-    public static final TalonSRXFeedbackDevice FRONT_RIGHT_MOTOR_ENCODER_2 = null;
-    public static final TalonSRXFeedbackDevice BACK_RIGHT_MOTOR_ENCODER_1 = null;
-    public static final TalonSRXFeedbackDevice BACK_RIGHT_MOTOR_ENCODER_2 = null;
-
     public static final int PDP_DEVICE_ID = 0;
 
 }

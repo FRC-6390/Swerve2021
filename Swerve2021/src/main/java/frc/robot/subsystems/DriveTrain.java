@@ -2,16 +2,16 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
-  //They are TalonFX speed controllers not TalonSPX
+  // They are TalonFX speed controllers not TalonSPX
   private TalonFX frontLeftMotor_1 = new TalonFX(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID());
   private TalonFX frontLeftMotor_2 = new TalonFX(Constants.MOTORID.FRONT_LEFT_ROTATION.GetID());
   private TalonFX backLeftMotor_1 = new TalonFX(Constants.MOTORID.BACK_LEFT_MOMENTUM.GetID());
@@ -21,24 +21,6 @@ public class DriveTrain extends SubsystemBase {
   private TalonFX backRightMotor_1 = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
   private TalonFX backRightMotor_2 = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
-  /*
-   * frontLeftMotor_1.configSelectedFeedbackSensor(Constants.
-   * FRONT_LEFT_MOTOR_ENCODER_1, 0, 10);
-   * frontLeftMotor_2.configSelectedFeedbackSensor(Constants.
-   * FRONT_LEFT_MOTOR_ENCODER_2, 0, 10);
-   * backLeftMotor_1.configSelectedFeedbackSensor(Constants.
-   * BACK_LEFT_MOTOR_ENCODER_1, 0, 10);
-   * backLeftMotor_2.configSelectedFeedbackSensor(Constants.
-   * BACK_LEFT_MOTOR_ENCODER_2, 0, 10);
-   * frontRightMotor_1.configSelectedFeedbackSensor(Constants.
-   * FRONT_RIGHT_MOTOR_ENCODER_1, 0, 10);
-   * frontRightMotor_2.configSelectedFeedbackSensor(Constants.
-   * FRONT_RIGHT_MOTOR_ENCODER_2, 0, 10);
-   * backRightMotor_1.configSelectedFeedbackSensor(Constants.
-   * BACK_RIGHT_MOTOR_ENCODER_1, 0, 10);
-   * backRightMotor_2.configSelectedFeedbackSensor(Constants.
-   * BACK_RIGHT_MOTOR_ENCODER_2, 0, 10);
-   */
 
   /*
    * 
@@ -54,18 +36,77 @@ public class DriveTrain extends SubsystemBase {
   // PDP
   final PowerDistributionPanel PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
+  public DriveTrain() {
+
+  }
+
   public void resetGyro() {
     gyro.reset();
     gyro.zeroYaw();
   }
 
-  public DriveTrain() {
+  public void zeroDriveEncoders(){
+    resetEncodersFL();
+    resetEncodersBL();
+    resetEncodersFR();
+    resetEncodersBR();
+    System.out.println("Drive Train Encoders Reset");
+  }
 
+  public void resetEncodersFL(){
+    //Resets Top Left Module
+    frontLeftMotor_1.getSensorCollection().setIntegratedSensorPosition(0, 0);
+    frontLeftMotor_2.getSensorCollection().setIntegratedSensorPosition(0, 0);
+  }
+
+  public void resetEncodersBL(){
+    //Resets Back Left Module
+    backLeftMotor_1.getSensorCollection().setIntegratedSensorPosition(0, 0);
+    backLeftMotor_2.getSensorCollection().setIntegratedSensorPosition(0, 0);
+  }
+
+  public void resetEncodersFR(){
+    //Resets Top Right Module
+    frontRightMotor_1.getSensorCollection().setIntegratedSensorPosition(0, 0);
+    frontRightMotor_2.getSensorCollection().setIntegratedSensorPosition(0, 0);
+  }
+
+  public void resetEncodersBR(){
+    //Resets Top Right Module
+    backRightMotor_1.getSensorCollection().setIntegratedSensorPosition(0, 0);
+    backRightMotor_2.getSensorCollection().setIntegratedSensorPosition(0, 0);
+  }
+
+  public void factoryResetDrive(){
+    frontLeftMotor_1.configFactoryDefault();
+    frontLeftMotor_2.configFactoryDefault();
+    backLeftMotor_1.configFactoryDefault();
+    backLeftMotor_2.configFactoryDefault();
+    frontRightMotor_1.configFactoryDefault();
+    frontRightMotor_2.configFactoryDefault();
+    backRightMotor_1.configFactoryDefault();
+    backRightMotor_2.configFactoryDefault();
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    //Display Motors on SDB
+    SmartDashboard.putNumber("Top Left Motor 1", frontLeftMotor_1.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Top Left Motor 2", frontLeftMotor_2.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Back Left Motor 1", backLeftMotor_1.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Back Left Motor 2", backLeftMotor_2.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Top Right Motor 1", frontRightMotor_1.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Top Right Motor 2", frontRightMotor_2.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Back Right Motor 1", backRightMotor_1.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Back Right Motor 2", backRightMotor_2.getSensorCollection().getIntegratedSensorPosition());
+  }
+
+  public void resetRobot(){
+    zeroDriveEncoders();
+    factoryResetDrive();
+    resetGyro();
+    PDP.clearStickyFaults();
+    System.out.println("Robot Reset");
   }
 
   @Override
