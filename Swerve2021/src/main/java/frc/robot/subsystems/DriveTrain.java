@@ -4,21 +4,22 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
-
-  private TalonSRX frontLeftMotor_1 = new TalonSRX(Constants.FRONT_LEFT_MOTOR_1_ID);
-  private TalonSRX frontLeftMotor_2 = new TalonSRX(Constants.FRONT_LEFT_MOTOR_2_ID);
-  private TalonSRX backLeftMotor_1 = new TalonSRX(Constants.BACK_LEFT_MOTOR_1_ID);
-  private TalonSRX backLeftMotor_2 = new TalonSRX(Constants.BACK_LEFT_MOTOR_2_ID);
-  private TalonSRX frontRightMotor_1 = new TalonSRX(Constants.FRONT_RIGHT_MOTOR_1_ID);
-  private TalonSRX frontRightMotor_2 = new TalonSRX(Constants.FRONT_RIGHT_MOTOR_2_ID);
-  private TalonSRX backRightMotor_1 = new TalonSRX(Constants.BACK_RIGHT_MOTOR_1_ID);
-  private TalonSRX backRightMotor_2 = new TalonSRX(Constants.BACK_RIGHT_MOTOR_2_ID);
+  //They are TalonFX speed controllers not TalonSPX
+  private TalonFX frontLeftMotor_1 = new TalonFX(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID());
+  private TalonFX frontLeftMotor_2 = new TalonFX(Constants.MOTORID.FRONT_LEFT_ROTATION.GetID());
+  private TalonFX backLeftMotor_1 = new TalonFX(Constants.MOTORID.BACK_LEFT_MOMENTUM.GetID());
+  private TalonFX backLeftMotor_2 = new TalonFX(Constants.MOTORID.BACK_LEFT_ROTATION.GetID());
+  private TalonFX frontRightMotor_1 = new TalonFX(Constants.MOTORID.FRONT_RIGHT_MOMENTUM.GetID());
+  private TalonFX frontRightMotor_2 = new TalonFX(Constants.MOTORID.FRONT_RIGHT_ROTATION.GetID());
+  private TalonFX backRightMotor_1 = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
+  private TalonFX backRightMotor_2 = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
 
 /*
