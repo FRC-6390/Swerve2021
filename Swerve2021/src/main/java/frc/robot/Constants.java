@@ -2,21 +2,86 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 
-public final class Constants {
+public interface Constants {
 
     public static final int JOYSTICK_CONTROLLER = 0;
     public static final int XBOX_CONTROLLER = 1;
 
     /*-------------------------MOTORS--------------------*/
     // DRIVE TRAIN MOTORS
-    public static final int FRONT_LEFT_MOTOR_1_ID = 0;
-    public static final int FRONT_LEFT_MOTOR_2_ID = 0;
-    public static final int BACK_LEFT_MOTOR_1_ID = 0;
-    public static final int BACK_LEFT_MOTOR_2_ID = 0;
-    public static final int FRONT_RIGHT_MOTOR_1_ID = 0;
-    public static final int FRONT_RIGHT_MOTOR_2_ID = 0;
-    public static final int BACK_RIGHT_MOTOR_1_ID = 0;
-    public static final int BACK_RIGHT_MOTOR_2_ID = 0;
+    enum MOTORID {
+        FRONT_LEFT_ROTATION(1),
+        FRONT_LEFT_MOMENTUM(2),
+        FRONT_RIGHT_ROTATION(3),
+        FRONT_RIGHT_MOMENTUM(4),
+        BACK_LEFT_ROTATION(5),
+        BACK_LEFT_MOMENTUM(6),
+        BACK_RIGHT_ROTATION(7),
+        BACK_RIGHT_MOMENTUM(8);
+
+        private int id;
+        private MOTORID(int id){
+            this.id = id;
+        }
+
+        public int GetID(){
+            return id;
+        }
+    }
+
+    enum JOYSTICK {
+        JOYSTICK_BUTTON_1(1),
+        JOYSTICK_BUTTON_2(2),
+        JOYSTICK_BUTTON_3(3),
+        JOYSTICK_BUTTON_4(4),
+        JOYSTICK_BUTTON_5(5),
+        JOYSTICK_BUTTON_6(6),
+        JOYSTICK_BUTTON_7(7),
+        JOYSTICK_BUTTON_8(8),
+        JOYSTICK_BUTTON_9(9),
+        JOYSTICK_BUTTON_10(10),
+        JOYSTICK_BUTTON_11(11),
+        JOYSTICK_BUTTON_12(12),
+        JOYSTICK_AXIS_Y(1),
+        JOYSTICK_AXIS_Z(2),
+        JOYSTICK_AXIS_THROTTLE(3),
+        JOYSTICK_PORT_ID(0);
+
+        private int id;
+        private JOYSTICK(int id){
+            this.id = id;
+        }
+
+        public int GetButton(){
+            return id;
+        }
+    }
+    
+    enum XBOX {
+        XBOX_A(1),
+        XBOX_B(2),
+        XBOX_X(3),
+        XBOX_Y(4),
+        XBOX_BUMBER_LEFT(5),
+        XBOX_BUMBER_RIGHT(6),
+        XBOX_BACK(7),
+        XBOX_START(8),
+        XBOX_LEFT_JOYSTICK_IN(9),
+        XBOX_RIGHT_JOYSTICK_IN(10),
+        XBOX_LEFT_AXIS(1),
+        XBOX_RIGHT_AXIS(2),
+        XBOX_PORT_ID(1);
+
+        private int id;
+        private XBOX(int id){
+            this.id = id;
+        }
+
+        public int GetButton(){
+            return id;
+        }
+    }
+  
     // DRIVE TRAIN ENCODERS
     public static final TalonSRXFeedbackDevice FRONT_LEFT_MOTOR_ENCODER_1 = null;
     public static final TalonSRXFeedbackDevice FRONT_LEFT_MOTOR_ENCODER_2 = null;
