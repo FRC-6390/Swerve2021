@@ -23,7 +23,6 @@ public class DriveTrain extends SubsystemBase {
 
 
   /*
-  * 
   * Front Front          Left Right 
   * |-----------------------------| 
   * | 1   |     \Intake/    |   1 | 
