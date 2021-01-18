@@ -23,13 +23,25 @@ public class DriveTrain extends SubsystemBase {
 
 
   /*
-   * 
-   * Front Front Left Right |-----------------------------| | 1 | \Intake/ | 1 | |
-   * 2 | | 2 | |-----| |-----| | | | | | |Revolover| | | | | | |-----| |-----| | 2
-   * | | 2 | | 1 | /Shooter\ | 1 | |-----------------------------| Bottom Bottom
-   * Left Right
-   * 
-   */
+  * 
+  * Front Front          Left Right 
+  * |-----------------------------| 
+  * | 1   |     \Intake/    |   1 | 
+  * |   2 |                 | 2   | 
+  * |-----|                 |-----| 
+  * |                             | 
+  * |                             | 
+  * |         |Revolover|         |
+  * |                             | 
+  * |                             |
+  * |-----|                 |-----| 
+  * |   2 |                 | 2   | 
+  * | 1   |    /Shooter\    |   1 | 
+  * |-----------------------------| 
+  * Bottom                   Bottom
+  * Left                      Right
+  * 
+*/
 
   // GYRO
   private AHRS gyro = new AHRS(Port.kMXP);
