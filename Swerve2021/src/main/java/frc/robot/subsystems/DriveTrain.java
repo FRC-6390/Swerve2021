@@ -24,19 +24,20 @@ public class DriveTrain extends SubsystemBase {
 
 
   /*
-  * Front Front          Left Right 
+  * Front                     Front          
+  * Left                      Right 
   * |-----------------------------| 
-  * | 1   |     \Intake/    |   1 | 
-  * |   2 |                 | 2   | 
+  * | M   |     \Intake/    |   M | 
+  * |   R |                 | R   | 
   * |-----|                 |-----| 
   * |                             | 
-  * |                             | 
-  * |         |Revolover|         |
+  * |                             |   M = Momentom
+  * |         |Revolover|         |   R = Rotation
   * |                             | 
   * |                             |
   * |-----|                 |-----| 
-  * |   2 |                 | 2   | 
-  * | 1   |    /Shooter\    |   1 | 
+  * |   R |                 | R   | 
+  * | M   |    /Shooter\    |   M | 
   * |-----------------------------| 
   * Bottom                   Bottom
   * Left                      Right
