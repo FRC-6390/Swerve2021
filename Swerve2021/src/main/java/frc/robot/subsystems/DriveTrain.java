@@ -16,7 +16,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
-import frc.robot.kinematics;
 
 public class DriveTrain extends SubsystemBase {
   // They are TalonFX speed controllers not TalonSPX

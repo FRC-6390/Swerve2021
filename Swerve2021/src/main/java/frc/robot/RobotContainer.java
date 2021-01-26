@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 public class RobotContainer {
   public Joystick stick = new Joystick(Constants.JOYSTICK_CONTROLLER);
 
-  public XboxController xbox = new XboxController(Constants.XBOX_CONTROLLER);
+  public static XboxController xbox = new XboxController(Constants.XBOX_CONTROLLER);
 
   public RobotContainer() {
     // Configure the button bindings
