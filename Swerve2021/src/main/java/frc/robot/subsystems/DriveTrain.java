@@ -17,7 +17,6 @@ import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
 import frc.robot.kinematics;
-
 public class DriveTrain extends SubsystemBase {
   // They are TalonFX speed controllers not TalonSPX
   private TalonFX frontLeftMomentum = new TalonFX(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID());
@@ -28,6 +27,26 @@ public class DriveTrain extends SubsystemBase {
   private TalonFX frontRightRotation = new TalonFX(Constants.MOTORID.FRONT_RIGHT_ROTATION.GetID());
   private TalonFX backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
   private TalonFX backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
+
+
+  Translation2d m_frontleftlocation = new Translation2d(0.3302,0.3302);
+  Translation2d m_frontrightlocation = new Translation2d(0.3302,-0.3302);
+
+  Translation2d m_backleftlocation = new Translation2d(-0.3302,0.3302);
+  Translation2d m_backrightlocation = new Translation2d(-0.3302,-0.3302);
+
+  SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+        m_frontleftlocation, m_frontrightlocation, m_backleftlocation, m_backrightlocation
+  );
+
+  ChassisSpeeds speeds = new ChassisSpeeds(1.0,1.0,1.5);
+
+  SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+
+  SwerveModuleState frontLeft = moduleStates[0];
+  SwerveModuleState frontRight = moduleStates[1];
+  SwerveModuleState backLeft = moduleStates[2];
+  SwerveModuleState backRight = moduleStates[3];
 
   /*
    * Front Front Left Right |-----------------------------| | M | \Intake/ | M | |
@@ -43,9 +62,12 @@ public class DriveTrain extends SubsystemBase {
   final PowerDistributionPanel PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
   public DriveTrain() {
-
+    gyro.reset();
   }
 
+
+
+  
   public void resetGyro() {
     gyro.reset();
   }
