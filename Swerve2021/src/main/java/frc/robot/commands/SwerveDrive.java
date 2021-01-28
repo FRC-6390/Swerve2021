@@ -8,11 +8,11 @@ public class SwerveDrive extends CommandBase {
   public SwerveDrive() {
 
   }
+  //Math
+  public final static double length = 30; // Robot Length
+  public final static double width = 30; // Robot Width
 
-  public final double length = 30; // Robot Length
-  public final double width = 30; // Robot Width
-
-  public void drive(double x1, double y1, double x2) {
+  public static void drive(double x1, double y1, double x2) {
     double r = Math.sqrt((length * length) + (width * width));
     y1 *= -1;
 

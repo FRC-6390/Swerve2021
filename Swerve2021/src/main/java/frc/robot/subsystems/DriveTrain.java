@@ -16,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants;
-import frc.robot.kinematics;
+
 public class DriveTrain extends SubsystemBase {
   // They are TalonFX speed controllers not TalonSPX
   private TalonFX frontLeftMomentum = new TalonFX(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID());
@@ -41,7 +41,7 @@ public class DriveTrain extends SubsystemBase {
 
   ChassisSpeeds speeds = new ChassisSpeeds(1.0,1.0,1.5);
 
-  SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+  SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
 
   SwerveModuleState frontLeft = moduleStates[0];
   SwerveModuleState frontRight = moduleStates[1];
