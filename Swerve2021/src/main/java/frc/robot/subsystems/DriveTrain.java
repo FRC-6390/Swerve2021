@@ -28,7 +28,7 @@ public class DriveTrain extends SubsystemBase {
   private TalonFX backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
   private TalonFX backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
-
+  //-----KINEMATICS-------
   Translation2d m_frontleftlocation = new Translation2d(0.3302,0.3302);
   Translation2d m_frontrightlocation = new Translation2d(0.3302,-0.3302);
 
@@ -48,6 +48,39 @@ public class DriveTrain extends SubsystemBase {
   SwerveModuleState backLeft = moduleStates[2];
   SwerveModuleState backRight = moduleStates[3];
 
+  var frontLeftOptimized = SwerveModuleState.optimize(frontLeft,
+   new Rotation2d(m_turningEncoder.getDistance()));
+
+  ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+  2.0, 2.0, Math.PI / 2.0, Rotation2d.fromDegrees(45.0));
+
+  // Now use this in our kinematics
+  SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+
+  // Example module states
+  var frontLeftState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-140.19));
+  var frontRightState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-39.81));
+  var backLeftState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-109.44));
+  var backRightState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-70.56));
+  
+
+  // Convert to chassis speeds
+  ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(
+    frontLeftState, frontRightState, backLeftState, backRightState);
+
+  // Getting individual speeds
+  double forward = chassisSpeeds.vxMetersPerSecond;
+  double sideways = chassisSpeeds.vyMetersPerSecond;
+  double angular = chassisSpeeds.omegaRadiansPerSecond;
+
+
+  //------ODOMETRY-------
+  // Creating my odometry object from the kinematics object. Here,
+  // our starting pose is 5 meters along the long end of the field and in the
+  // center of the field along the short end, facing forward.
+  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics,
+    getGyro(), new Pose2d(5.0, 13.5, new Rotation2d()));
+
   /*
    * Front Front Left Right |-----------------------------| | M | \Intake/ | M | |
    * R | | R | |-----| |-----| | | | | M = Momentom | |Revolover| | R = Rotation |
@@ -65,8 +98,9 @@ public class DriveTrain extends SubsystemBase {
     gyro.reset();
   }
 
-
-
+  public Rotation2d getGyro(){
+    gyro.getAngle();
+  }
   
   public void resetGyro() {
     gyro.reset();
@@ -130,7 +164,17 @@ public class DriveTrain extends SubsystemBase {
         backRightMomentum.getSensorCollection().getIntegratedSensorPosition());
     SmartDashboard.putNumber("Back Right Motor 2",
         backRightRotation.getSensorCollection().getIntegratedSensorPosition());
-  }
+
+    //-----ODOMETRY------
+    // Get my gyro angle. We are negating the value because gyros return positive
+    // values as the robot turns clockwise. This is not standard convention that is
+    // used by the WPILib classes.
+    var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+
+    // Update the pose
+    m_pose = m_odometry.update(gyroAngle, frontLeftState.getState(), m_frontRightModule.getState(),
+        m_backLeftModule.getState(), backRight.getState());
+    }
 
   public void resetRobot() {
     zeroDriveEncoders();
