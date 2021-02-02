@@ -53,13 +53,26 @@ public class DriveTrain extends SubsystemBase {
 
   
 
-  /*
-   * Front Front Left Right |-----------------------------| | M | \Intake/ | M | |
-   * R | | R | |-----| |-----| | | | | M = Momentom | |Revolover| | R = Rotation |
-   * | | | |-----| |-----| | R | | R | | M | /Shooter\ | M |
-   * |-----------------------------| Bottom Bottom Left Right
-   * 
-   */
+  /*                                                    stap touching the all mighty diagram
+  * 
+  * Front Front          Left Right                     This is our lord and savour the robot diagram           
+  * |-----------------------------|                     please kneel in his presence, in his greatness.
+  * | 1   |     \Intake/    |   1 | 
+  * |   2 |                 | 2   | 
+  * |-----|                 |-----| 
+  * |                             | 
+  * |                             | 
+  * |         |Revolover|         |
+  * |                             | 
+  * |                             |
+  * |-----|                 |-----| 
+  * |   2 |                 | 2   | 
+  * | 1   |    /Shooter\    |   1 | 
+  * |-----------------------------| 
+  * Bottom                   Bottom
+  * Left                      Right
+  * 
+*/
 
   // GYRO
   private AHRS gyro = new AHRS(Port.kMXP);
@@ -67,7 +80,7 @@ public class DriveTrain extends SubsystemBase {
   final PowerDistributionPanel PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
   public DriveTrain() {
-    speeds = new ChassisSpeeds(1.0,1.0,1.5);
+    speeds = new ChassisSpeeds(0,0,0);
     moduleStates = m_kinematics.toSwerveModuleStates(speeds);
     frontLeft = moduleStates[0];
     frontRight = moduleStates[1];
@@ -75,6 +88,14 @@ public class DriveTrain extends SubsystemBase {
     backRight= moduleStates[3];
     gyro.reset();
 
+
+    /*
+                                       This does nothing
+                                              |
+                                              |
+                                              |
+                                              v
+    */
     // Example module states
     var frontLeftState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-140.19));
     var frontRightState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-39.81));

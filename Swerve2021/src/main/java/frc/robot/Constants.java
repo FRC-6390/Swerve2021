@@ -89,9 +89,9 @@ public interface Constants {
             return id;
         }
 
-        public double Threshold = 0.5;
-        public void setThreshold(double threshold){
-            Threshold = threshold;
+        double Threshold = 0.5;
+        public void setThreshold(double Threshold){
+            this.Threshold = Threshold;
         }
 
         public double getThreshold(){
