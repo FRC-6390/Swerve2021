@@ -2,12 +2,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,8 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
 
 import frc.robot.Constants;
 
@@ -30,14 +26,18 @@ public class DriveTrain extends SubsystemBase {
   private TalonFX frontRightRotation = new TalonFX(Constants.MOTORID.FRONT_RIGHT_ROTATION.GetID());
   private TalonFX backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
   private TalonFX backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
+  private CANCoder frontRightEncoder = new CANCoder(Constants.SENSORS.FRONT_RIGHT_ENCODER.GetID());
+  private CANCoder frontLeftEncoder = new CANCoder(Constants.SENSORS.FRONT_LEFT_ENCODER.GetID());
+  private CANCoder backRightEncoder = new CANCoder(Constants.SENSORS.BACK_RIGHT_ENCODER.GetID());
+  private CANCoder bacLeftEncoder = new CANCoder(Constants.SENSORS.BACK_LEFT_ENCODER.GetID());
 
-  CANCoder test = new CANCoder(1);
 
-  Translation2d m_frontleftlocation= new Translation2d(0.3302,0.3302);
-  Translation2d m_frontrightlocation = new Translation2d(0.3302,-0.3302);
 
-  Translation2d m_backleftlocation = new Translation2d(-0.3302,0.3302);
-  Translation2d m_backrightlocation = new Translation2d(-0.3302,-0.3302);
+  Translation2d m_frontleftlocation= new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
+  Translation2d m_frontrightlocation = new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
+
+  Translation2d m_backleftlocation = new Translation2d(-Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
+  Translation2d m_backrightlocation = new Translation2d(-Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
 
   SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
         m_frontleftlocation, m_frontrightlocation, m_backleftlocation, m_backrightlocation
@@ -51,6 +51,7 @@ public class DriveTrain extends SubsystemBase {
   SwerveModuleState backLeft;
   SwerveModuleState backRight;
 
+  
   
 
   /*                                                    stap touching the all mighty diagram
@@ -87,30 +88,6 @@ public class DriveTrain extends SubsystemBase {
     backLeft = moduleStates[2];
     backRight= moduleStates[3];
     gyro.reset();
-
-
-    /*
-                                       This does nothing
-                                              |
-                                              |
-                                              |
-                                              v
-    */
-    // Example module states
-    var frontLeftState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-140.19));
-    var frontRightState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-39.81));
-    var backLeftState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-109.44));
-    var backRightState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-70.56));
-
-    // Convert to chassis speeds
-    ChassisSpeeds chassisSpeeds = m_kinematics.toChassisSpeeds(
-      frontLeftState, frontRightState, backLeftState, backRightState);
-    
-    // Getting individual speeds
-    double forward = chassisSpeeds.vxMetersPerSecond;
-    double sideways = chassisSpeeds.vyMetersPerSecond;
-    double angular = chassisSpeeds.omegaRadiansPerSecond;
-
   }
 
   public void setSpeed(double fowardInput, double strafeInput, double rotationInput){
@@ -167,20 +144,21 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     // Display Motors on SDB
     SmartDashboard.putNumber("Top Left Motor 1", frontLeftMomentum.getSensorCollection().getIntegratedSensorPosition());
     SmartDashboard.putNumber("Top Left Motor 2", frontLeftRotation.getSensorCollection().getIntegratedSensorPosition());
     SmartDashboard.putNumber("Back Left Motor 1", backLeftMomentum.getSensorCollection().getIntegratedSensorPosition());
     SmartDashboard.putNumber("Back Left Motor 2", backLeftRotation.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Top Right Motor 1",
-        frontRightMomentum.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Top Right Motor 2",
-        frontRightRotation.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Back Right Motor 1",
-        backRightMomentum.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Back Right Motor 2",
-        backRightRotation.getSensorCollection().getIntegratedSensorPosition());
-  }
+    SmartDashboard.putNumber("Top Right Motor 1",frontRightMomentum.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Top Right Motor 2",frontRightRotation.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Back Right Motor 1",backRightMomentum.getSensorCollection().getIntegratedSensorPosition());
+    SmartDashboard.putNumber("Back Right Motor 2",backRightRotation.getSensorCollection().getIntegratedSensorPosition());
+
+    SmartDashboard.putNumber("Forward Velocity", speeds.vyMetersPerSecond);
+    SmartDashboard.putNumber("Strafe Velocity", speeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("Rotation Velocity", speeds.omegaRadiansPerSecond);
+  }  
 
   public void resetRobot() {
     zeroDriveEncoders();

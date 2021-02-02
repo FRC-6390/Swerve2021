@@ -1,11 +1,9 @@
 package frc.robot;
 
-import jdk.jfr.Threshold;
-
 public interface Constants {
 
-    public static final int JOYSTICK_CONTROLLER = 0;
-    public static final int XBOX_CONTROLLER = 1;
+    int JOYSTICK_CONTROLLER = 0;
+    int XBOX_CONTROLLER = 1;
 
     /*-------------------------MOTORS--------------------*/
     // DRIVE TRAIN MOTORS
@@ -28,6 +26,22 @@ public interface Constants {
             return id;
         }
     }
+    enum SENSORS {
+        FRONT_LEFT_ENCODER(1),
+        FRONT_RIGHT_ENCODER(2),
+        BACK_LEFT_ENCODER(3),
+        BACK_RIGHT_ENCODER(4);
+
+        private int id;
+        private SENSORS(int id){
+            this.id = id;
+        }
+
+        public int GetID(){
+            return id;
+        }
+    }
+
 
     enum JOYSTICK {
         JOYSTICK_BUTTON_1(1),
@@ -100,7 +114,9 @@ public interface Constants {
 
     }
   
-    public static final int PDP_DEVICE_ID = 0;
+    int PDP_DEVICE_ID = 0;
+    double SWERVE_LOCATION_FROM_CENTER = 0.3302;
 
+    
     
 }
