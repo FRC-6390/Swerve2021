@@ -33,7 +33,7 @@ public class DriveTrain extends SubsystemBase {
 
   CANCoder test = new CANCoder(1);
 
-  Translation2d m_frontleftlocation = new Translation2d(0.3302,0.3302);
+  Translation2d m_frontleftlocation= new Translation2d(0.3302,0.3302);
   Translation2d m_frontrightlocation = new Translation2d(0.3302,-0.3302);
 
   Translation2d m_backleftlocation = new Translation2d(-0.3302,0.3302);
@@ -43,14 +43,13 @@ public class DriveTrain extends SubsystemBase {
         m_frontleftlocation, m_frontrightlocation, m_backleftlocation, m_backrightlocation
   );
 
-  ChassisSpeeds speeds = new ChassisSpeeds(1.0,1.0,1.5);
+  ChassisSpeeds speeds; 
 
-  SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
-
-  SwerveModuleState frontLeft = moduleStates[0];
-  SwerveModuleState frontRight = moduleStates[1];
-  SwerveModuleState backLeft = moduleStates[2];
-  SwerveModuleState backRight = moduleStates[3];
+  SwerveModuleState[] moduleStates; 
+  SwerveModuleState frontLeft;
+  SwerveModuleState frontRight;
+  SwerveModuleState backLeft;
+  SwerveModuleState backRight;
 
   
 
@@ -68,7 +67,12 @@ public class DriveTrain extends SubsystemBase {
   final PowerDistributionPanel PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
   public DriveTrain() {
-   
+    speeds = new ChassisSpeeds(1.0,1.0,1.5);
+    moduleStates = m_kinematics.toSwerveModuleStates(speeds);
+    frontLeft = moduleStates[0];
+    frontRight = moduleStates[1];
+    backLeft = moduleStates[2];
+    backRight= moduleStates[3];
     gyro.reset();
 
   }
