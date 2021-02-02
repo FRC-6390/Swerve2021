@@ -26,11 +26,12 @@ public class SwerveDrive extends CommandBase {
   @Override
   public void execute() {
 
-   double RightX = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_RIGHT_AXIS_Y.GetAxis()); 
-   double RightY =  RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_RIGHT_AXIS_X.GetAxis()); 
+    double RightX = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_RIGHT_AXIS_Y.GetAxis()); 
+    double RightY = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_RIGHT_AXIS_X.GetAxis()); 
 
-   double LeftX =   RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_LEFT_AXIS_Y.GetAxis()); 
-   double LeftY =   RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_LEFT_AXIS_X.GetAxis()); 
+    double LeftX = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_LEFT_AXIS_Y.GetAxis()); 
+    double LeftY = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_LEFT_AXIS_X.GetAxis()); 
+
 
   }
 

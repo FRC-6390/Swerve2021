@@ -1,5 +1,7 @@
 package frc.robot;
 
+import jdk.jfr.Threshold;
+
 public interface Constants {
 
     public static final int JOYSTICK_CONTROLLER = 0;
@@ -68,6 +70,8 @@ public interface Constants {
         XBOX_RIGHT_JOYSTICK_IN(10),
         XBOX_LEFT_AXIS_Y(1),
         XBOX_LEFT_AXIS_X(0),
+        XBOX_RIGHT_TRIGGER(2),
+        XBOX_LEFT_TRIGGER(3),
         XBOX_RIGHT_AXIS_Y(5),
         XBOX_RIGHT_AXIS_X(4),
         XBOX_PORT_ID(1);
@@ -84,8 +88,19 @@ public interface Constants {
         public int GetAxis(){
             return id;
         }
+
+        public double Threshold = 0.5;
+        public void setThreshold(double threshold){
+            Threshold = threshold;
+        }
+
+        public double getThreshold(){
+            return Threshold;
+        }
+
     }
   
     public static final int PDP_DEVICE_ID = 0;
 
+    
 }

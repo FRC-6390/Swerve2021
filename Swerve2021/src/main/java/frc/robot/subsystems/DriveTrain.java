@@ -75,10 +75,25 @@ public class DriveTrain extends SubsystemBase {
     backRight= moduleStates[3];
     gyro.reset();
 
+    // Example module states
+    var frontLeftState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-140.19));
+    var frontRightState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-39.81));
+    var backLeftState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-109.44));
+    var backRightState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-70.56));
+
+    // Convert to chassis speeds
+    ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(
+      frontLeftState, frontRightState, backLeftState, backRightState);
+    
+    // Getting individual speeds
+    double forward = chassisSpeeds.vxMetersPerSecond;
+    double sideways = chassisSpeeds.vyMetersPerSecond;
+    double angular = chassisSpeeds.omegaRadiansPerSecond;
+
   }
 
   public void setSpeed(double fowardInput, double strafeInput, double rotationInput){
-    speeds.fromFieldRelativeSpeeds(fowardInput, strafeInput, Math.PI / rotationInput, Rotation2d.fromDegrees(45))
+    ChassisSpeeds.fromFieldRelativeSpeeds(fowardInput, strafeInput, Math.PI / rotationInput, Rotation2d.fromDegrees(45));
   }
 
   
