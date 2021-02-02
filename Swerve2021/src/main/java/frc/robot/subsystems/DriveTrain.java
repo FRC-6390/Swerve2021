@@ -103,7 +103,7 @@ public class DriveTrain extends SubsystemBase {
     var backRightState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-70.56));
 
     // Convert to chassis speeds
-    ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(
+    ChassisSpeeds chassisSpeeds = m_kinematics.toChassisSpeeds(
       frontLeftState, frontRightState, backLeftState, backRightState);
     
     // Getting individual speeds
