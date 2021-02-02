@@ -46,8 +46,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SwerveDrive.drive(RobotContainer.xbox.getRawAxis(1), RobotContainer.xbox.getRawAxis(0),
-        RobotContainer.xbox.getRawAxis(4));
+    swerve.schedule();
   }
 
   @Override

@@ -66,8 +66,10 @@ public interface Constants {
         XBOX_START(8),
         XBOX_LEFT_JOYSTICK_IN(9),
         XBOX_RIGHT_JOYSTICK_IN(10),
-        XBOX_LEFT_AXIS(1),
-        XBOX_RIGHT_AXIS(2),
+        XBOX_LEFT_AXIS_Y(1),
+        XBOX_LEFT_AXIS_X(0),
+        XBOX_RIGHT_AXIS_Y(5),
+        XBOX_RIGHT_AXIS_X(4),
         XBOX_PORT_ID(1);
 
         private int id;
@@ -76,6 +78,10 @@ public interface Constants {
         }
 
         public int GetButton(){
+            return id;
+        }
+
+        public int GetAxis(){
             return id;
         }
     }
