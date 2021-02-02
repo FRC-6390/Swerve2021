@@ -77,7 +77,9 @@ public class DriveTrain extends SubsystemBase {
 
   }
 
-
+  public void setSpeed(double fowardInput, double strafeInput, double rotationInput){
+    speeds.fromFieldRelativeSpeeds(fowardInput, strafeInput, Math.PI / rotationInput, Rotation2d.fromDegrees(45))
+  }
 
   
   public void resetGyro() {
