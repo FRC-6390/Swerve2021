@@ -42,6 +42,22 @@ public interface Constants {
         }
     }
 
+    enum LIMITSWITCH {
+        FRONT_LEFT_LIMIT(1), 
+        FRONT_RIGHT_LIMIT(2), 
+        BACK_RIGHT_LIMIT(3),
+        BACK_LEFT_LIMIT(4);
+
+        private int id;
+        private LIMITSWITCH(int id){
+            this.id = id;
+        }
+
+        public int GetID(){
+            return id;
+        }
+    }
+
 
     enum JOYSTICK {
         JOYSTICK_BUTTON_1(1),

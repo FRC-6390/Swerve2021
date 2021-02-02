@@ -3,9 +3,6 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveDrive extends CommandBase {
@@ -32,8 +29,12 @@ public class SwerveDrive extends CommandBase {
     double LeftX = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_LEFT_AXIS_Y.GetAxis()); 
     double LeftY = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_LEFT_AXIS_X.GetAxis()); 
 
-    Robot.driveTrain.setSpeed(RightY, RightX, LeftX);
+    if(RobotContainer.xbox.getAButton()){
+      Robot.driveTrain.centerModules();
+      System.out.println("Modules are Centered");
+    }
 
+    Robot.driveTrain.setSpeed(RightY, RightX, LeftX);
   }
 
   @Override
