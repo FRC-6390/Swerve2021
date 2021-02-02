@@ -33,7 +33,7 @@ public class DriveTrain extends SubsystemBase {
 
   CANCoder test = new CANCoder(1);
 
-  Translation2d m_frontleftlocation= new Translation2d(0.3302,0.3302);
+  Translation2d m_frontleftlocation = new Translation2d(0.3302,0.3302);
   Translation2d m_frontrightlocation = new Translation2d(0.3302,-0.3302);
 
   Translation2d m_backleftlocation = new Translation2d(-0.3302,0.3302);
@@ -43,13 +43,15 @@ public class DriveTrain extends SubsystemBase {
         m_frontleftlocation, m_frontrightlocation, m_backleftlocation, m_backrightlocation
   );
 
-  ChassisSpeeds speeds; 
+  ChassisSpeeds speeds = new ChassisSpeeds(1.0,1.0,1.5);
 
-  SwerveModuleState[] moduleStates; 
-  SwerveModuleState frontLeft;
-  SwerveModuleState frontRight;
-  SwerveModuleState backLeft;
-  SwerveModuleState backRight;
+  SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
+
+  SwerveModuleState frontLeft = moduleStates[0];
+  SwerveModuleState frontRight = moduleStates[1];
+  SwerveModuleState backLeft = moduleStates[2];
+  SwerveModuleState backRight = moduleStates[3];
+
 
   
 
@@ -67,13 +69,22 @@ public class DriveTrain extends SubsystemBase {
   final PowerDistributionPanel PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
   public DriveTrain() {
-    speeds = new ChassisSpeeds(1.0,1.0,1.5);
-    moduleStates = m_kinematics.toSwerveModuleStates(speeds);
-    frontLeft = moduleStates[0];
-    frontRight = moduleStates[1];
-    backLeft = moduleStates[2];
-    backRight= moduleStates[3];
+   
     gyro.reset();
+    // Example module states
+    var frontLeftState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-140.19));
+    var frontRightState = new SwerveModuleState(23.43, Rotation2d.fromDegrees(-39.81));
+    var backLeftState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-109.44));
+    var backRightState = new SwerveModuleState(54.08, Rotation2d.fromDegrees(-70.56));
+
+    // Convert to chassis speeds
+    ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(
+      frontLeftState, frontRightState, backLeftState, backRightState);
+
+    // Getting individual speeds
+    double forward = chassisSpeeds.vxMetersPerSecond;
+    double sideways = chassisSpeeds.vyMetersPerSecond;
+    double angular = chassisSpeeds.omegaRadiansPerSecond;
 
   }
 
