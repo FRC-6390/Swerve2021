@@ -30,7 +30,11 @@ public interface Constants {
         FRONT_LEFT_ENCODER(1),
         FRONT_RIGHT_ENCODER(2),
         BACK_LEFT_ENCODER(3),
-        BACK_RIGHT_ENCODER(4);
+        BACK_RIGHT_ENCODER(4),
+        FRONT_LEFT_LIMIT(1), 
+        FRONT_RIGHT_LIMIT(2), 
+        BACK_RIGHT_LIMIT(3),
+        BACK_LEFT_LIMIT(4);
 
         private int id;
         private SENSORS(int id){
@@ -42,23 +46,7 @@ public interface Constants {
         }
     }
 
-    enum LIMITSWITCH {
-        FRONT_LEFT_LIMIT(1), 
-        FRONT_RIGHT_LIMIT(2), 
-        BACK_RIGHT_LIMIT(3),
-        BACK_LEFT_LIMIT(4);
-
-        private int id;
-        private LIMITSWITCH(int id){
-            this.id = id;
-        }
-
-        public int GetID(){
-            return id;
-        }
-    }
-
-
+    
     enum JOYSTICK {
         JOYSTICK_BUTTON_1(1),
         JOYSTICK_BUTTON_2(2),

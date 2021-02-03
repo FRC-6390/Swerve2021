@@ -33,10 +33,10 @@ public class DriveTrain extends SubsystemBase {
   private CANCoder backRightEncoder = new CANCoder(Constants.SENSORS.BACK_RIGHT_ENCODER.GetID());
   private CANCoder backLeftEncoder = new CANCoder(Constants.SENSORS.BACK_LEFT_ENCODER.GetID());
   //Limit Switches
-  private DigitalInput frontRightLimit = new DigitalInput(Constants.LIMITSWITCH.FRONT_RIGHT_LIMIT.GetID());
-  private DigitalInput frontLeftLimit = new DigitalInput(Constants.LIMITSWITCH.FRONT_LEFT_LIMIT.GetID());
-  private DigitalInput backRightLimit = new DigitalInput(Constants.LIMITSWITCH.BACK_RIGHT_LIMIT.GetID());
-  private DigitalInput backLeftLimit = new DigitalInput(Constants.LIMITSWITCH.BACK_LEFT_LIMIT.GetID());
+  private DigitalInput frontRightLimit = new DigitalInput(Constants.SENSORS.FRONT_RIGHT_LIMIT.GetID());
+  private DigitalInput frontLeftLimit = new DigitalInput(Constants.SENSORS.FRONT_LEFT_LIMIT.GetID());
+  private DigitalInput backRightLimit = new DigitalInput(Constants.SENSORS.BACK_RIGHT_LIMIT.GetID());
+  private DigitalInput backLeftLimit = new DigitalInput(Constants.SENSORS.BACK_LEFT_LIMIT.GetID());
 
   Translation2d frontleftlocation= new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
   Translation2d frontrightlocation = new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
