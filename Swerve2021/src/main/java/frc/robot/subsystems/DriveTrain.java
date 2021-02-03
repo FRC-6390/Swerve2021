@@ -19,34 +19,39 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
   // Motors
-  private TalonFX frontLeftMomentum = new TalonFX(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID());
-  private TalonFX frontLeftRotation = new TalonFX(Constants.MOTORID.FRONT_LEFT_ROTATION.GetID());
-  private TalonFX backLeftMomentum = new TalonFX(Constants.MOTORID.BACK_LEFT_MOMENTUM.GetID());
-  private TalonFX backLeftRotation = new TalonFX(Constants.MOTORID.BACK_LEFT_ROTATION.GetID());
-  private TalonFX frontRightMomentum = new TalonFX(Constants.MOTORID.FRONT_RIGHT_MOMENTUM.GetID());
-  private TalonFX frontRightRotation = new TalonFX(Constants.MOTORID.FRONT_RIGHT_ROTATION.GetID());
-  private TalonFX backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
-  private TalonFX backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
+  public static TalonFX frontLeftMomentum = new TalonFX(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID());
+  public static TalonFX frontLeftRotation = new TalonFX(Constants.MOTORID.FRONT_LEFT_ROTATION.GetID());
+  public static TalonFX backLeftMomentum = new TalonFX(Constants.MOTORID.BACK_LEFT_MOMENTUM.GetID());
+  public static TalonFX backLeftRotation = new TalonFX(Constants.MOTORID.BACK_LEFT_ROTATION.GetID());
+  public static TalonFX frontRightMomentum = new TalonFX(Constants.MOTORID.FRONT_RIGHT_MOMENTUM.GetID());
+  public static TalonFX frontRightRotation = new TalonFX(Constants.MOTORID.FRONT_RIGHT_ROTATION.GetID());
+  public static TalonFX backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
+  public static TalonFX backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
   //Encoders
-  private CANCoder frontRightEncoder = new CANCoder(Constants.SENSORS.FRONT_RIGHT_ENCODER.GetID());
-  private CANCoder frontLeftEncoder = new CANCoder(Constants.SENSORS.FRONT_LEFT_ENCODER.GetID());
-  private CANCoder backRightEncoder = new CANCoder(Constants.SENSORS.BACK_RIGHT_ENCODER.GetID());
-  private CANCoder backLeftEncoder = new CANCoder(Constants.SENSORS.BACK_LEFT_ENCODER.GetID());
+  public static CANCoder frontRightEncoder = new CANCoder(Constants.SENSORS.FRONT_RIGHT_ENCODER.GetID());
+  public static CANCoder frontLeftEncoder = new CANCoder(Constants.SENSORS.FRONT_LEFT_ENCODER.GetID());
+  public static CANCoder backRightEncoder = new CANCoder(Constants.SENSORS.BACK_RIGHT_ENCODER.GetID());
+  public static CANCoder backLeftEncoder = new CANCoder(Constants.SENSORS.BACK_LEFT_ENCODER.GetID());
   //Limit Switches
-  private DigitalInput frontRightLimit = new DigitalInput(Constants.SENSORS.FRONT_RIGHT_LIMIT.GetID());
-  private DigitalInput frontLeftLimit = new DigitalInput(Constants.SENSORS.FRONT_LEFT_LIMIT.GetID());
-  private DigitalInput backRightLimit = new DigitalInput(Constants.SENSORS.BACK_RIGHT_LIMIT.GetID());
-  private DigitalInput backLeftLimit = new DigitalInput(Constants.SENSORS.BACK_LEFT_LIMIT.GetID());
+  public static DigitalInput frontRightLimit = new DigitalInput(Constants.SENSORS.FRONT_RIGHT_LIMIT.GetID());
+  public static DigitalInput frontLeftLimit = new DigitalInput(Constants.SENSORS.FRONT_LEFT_LIMIT.GetID());
+  public static DigitalInput backRightLimit = new DigitalInput(Constants.SENSORS.BACK_RIGHT_LIMIT.GetID());
+  public static DigitalInput backLeftLimit = new DigitalInput(Constants.SENSORS.BACK_LEFT_LIMIT.GetID());
 
-  Translation2d frontleftlocation= new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
-  Translation2d frontrightlocation = new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
+  Translation2d frontLeftLocation= new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
+  Translation2d frontRightLocation = new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
 
-  Translation2d backleftlocation = new Translation2d(-Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
-  Translation2d backrightlocation = new Translation2d(-Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
+  Translation2d backLeftLocation = new Translation2d(-Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
+  Translation2d backRightLocation = new Translation2d(-Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
 
   SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-        frontleftlocation, frontrightlocation, backleftlocation, backrightlocation
+        frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation
   );
+
+  SwerveDriveKinematics frontLeftKinematics = new SwerveDriveKinematics(frontLeftLocation);
+  SwerveDriveKinematics frontRightKinematics = new SwerveDriveKinematics(frontRightLocation);
+  SwerveDriveKinematics backLeftKinematics = new SwerveDriveKinematics(backLeftLocation);
+  SwerveDriveKinematics backRightKinematics = new SwerveDriveKinematics(backRightLocation);
 
   ChassisSpeeds speeds; 
 
@@ -56,6 +61,12 @@ public class DriveTrain extends SubsystemBase {
   SwerveModuleState backLeft;
   SwerveModuleState backRight;
 
+  SwerveModuleState frontLeftK;
+  SwerveModuleState frontRightK;
+  SwerveModuleState backLeftK;
+  SwerveModuleState backRightK;
+
+  
   
   
 
@@ -81,7 +92,7 @@ public class DriveTrain extends SubsystemBase {
 */
 
   // GYRO
-  private AHRS gyro = new AHRS(Port.kMXP);
+  public static AHRS gyro = new AHRS(Port.kMXP);
   // PDP
   final PowerDistributionPanel PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
@@ -99,62 +110,8 @@ public class DriveTrain extends SubsystemBase {
     ChassisSpeeds.fromFieldRelativeSpeeds(fowardInput, strafeInput, Math.PI / rotationInput, Rotation2d.fromDegrees(45));
   }
 
-
-
-  public void centerFrontLeft(){
-    //centers top left module
-    boolean limit = frontLeftLimit.get();
-    double encoder = frontLeftEncoder.getPosition();
-    if(limit == true || encoder == 0){
-      frontLeftEncoder.setPosition(0.0);
-    }
-    else{
-      setSpeed(0, 0, 0.2);
-    }
-  }
-
-  public void centerFrontRight(){
-    //centers top right module
-    boolean limit = frontRightLimit.get();
-    double encoder = frontRightEncoder.getPosition();
-    if(limit == true || encoder == 0){
-      frontRightEncoder.setPosition(0.0);
-    }
-    else{
-      setSpeed(0, 0, 0.2);
-    }
-  }
-
-  public void centerBackLeft(){
-    //center back left module
-    boolean limit = backLeftLimit.get();
-    double encoder = backLeftEncoder.getPosition();
-    if(limit == true || encoder == 0){
-      backLeftEncoder.setPosition(0.0);
-    }
-    else{
-      setSpeed(0, 0, 0.2);
-    }
-  }
-
-  public void centerBackRight(){
-    //centers back right module
-    boolean limit = backRightLimit.get();
-    double encoder = backRightEncoder.getPosition();
-    if(limit == true || encoder == 0){
-      backRightEncoder.setPosition(0.0);
-    }
-    else{
-      setSpeed(0, 0, 0.2);
-    }
-  }
-
-  public void centerModules(){
-    //centers all modules
-    centerFrontLeft();
-    centerFrontRight();
-    centerBackLeft();
-    centerBackRight();
+  public void center(double rotationSpeed){
+    ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, Math.PI / rotationSpeed, Rotation2d.fromDegrees(45));
   }
   
   public void resetGyro() {

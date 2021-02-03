@@ -42,7 +42,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    XboxA.whileHeld(new AlignSwerveModules(), true);
+    XboxA.whileHeld(new AlignSwerveModules("all", 0.3), true);
   }
 
   /**
