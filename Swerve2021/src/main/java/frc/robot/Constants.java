@@ -34,15 +34,25 @@ public interface Constants {
         FRONT_LEFT_LIMIT(1), 
         FRONT_RIGHT_LIMIT(2), 
         BACK_RIGHT_LIMIT(3),
-        BACK_LEFT_LIMIT(4);
+        BACK_LEFT_LIMIT(4),
+        ENCODER_RESOLUTION(0.02);
 
         private int id;
+        private double resolution;
         private SENSORS(int id){
             this.id = id;
         }
 
+        private SENSORS(double resolution){
+            this.resolution = resolution;
+        }
+
         public int GetID(){
             return id;
+        }
+
+        public double GetResolution(){
+            return resolution;
         }
     }
 
@@ -120,6 +130,11 @@ public interface Constants {
   
     int PDP_DEVICE_ID = 0;
     double SWERVE_LOCATION_FROM_CENTER = 0.3302;
+    double ROBOT_WHEEL_RADIUS = 0.0;
+    double ROBOT_MAX_SPEED = 3.0;
+    double ROBOT_MAX_ANGULAR_SPEED = 3.145;
+	double ROBOT_MAX_ANGULAR_ACCELERATION = 6.29;
+    
 
     
     

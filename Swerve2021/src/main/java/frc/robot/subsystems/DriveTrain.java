@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.GroupMotorControllers;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
@@ -60,14 +62,6 @@ public class DriveTrain extends SubsystemBase {
   SwerveModuleState frontRight;
   SwerveModuleState backLeft;
   SwerveModuleState backRight;
-
-  SwerveModuleState frontLeftK;
-  SwerveModuleState frontRightK;
-  SwerveModuleState backLeftK;
-  SwerveModuleState backRightK;
-
-  
-  
   
 
   /*                                                    stap touching the all mighty diagram
@@ -103,11 +97,14 @@ public class DriveTrain extends SubsystemBase {
     frontRight = moduleStates[1];
     backLeft = moduleStates[2];
     backRight= moduleStates[3];
+    
     gyro.reset();
   }
 
   public void setSpeed(double fowardInput, double strafeInput, double rotationInput){
-    ChassisSpeeds.fromFieldRelativeSpeeds(fowardInput, strafeInput, Math.PI / rotationInput, Rotation2d.fromDegrees(45));
+    speeds.fromFieldRelativeSpeeds(fowardInput, strafeInput, Math.PI / rotationInput, Rotation2d.fromDegrees(45));
+   
+
   }
 
   public void center(double rotationSpeed){
