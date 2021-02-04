@@ -73,5 +73,4 @@ public class SwerveModule {
       return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
     }
 }
-    
 }
