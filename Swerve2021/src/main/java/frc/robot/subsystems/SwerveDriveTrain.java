@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -30,7 +32,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   backRightMomentum,
   backRightRotation;
 
-  public static List<TalonFX> momentumMotorArray,
+  private static List<TalonFX> momentumMotorArray,
   rotationMotorArray, motorArray;
 
   private static CANCoder frontRightEncoder,
@@ -38,7 +40,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   backRightEncoder,
   backLeftEncoder;
 
-  public static List<CANCoder> encoderArray;
+  private static List<CANCoder> encoderArray;
 
   private final SwerveModule frontLeftModule,
   frontRightModule,
@@ -50,7 +52,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   backRightLimit,
   backLeftLimit;
 
-  public static List<DigitalInput> limitSwitchArray;
+  private static List<DigitalInput> limitSwitchArray;
 
   private final Translation2d frontLeftLocation,
   frontRightLocation,
@@ -59,9 +61,7 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   private final SwerveDriveKinematics m_kinematics;
 
-  ChassisSpeeds speeds; 
-
-  
+  private ChassisSpeeds speeds; 
 
   public static AHRS gyro;
 
@@ -168,6 +168,8 @@ public class SwerveDriveTrain extends SubsystemBase {
     motorArray.get(moduleId+4).set(ControlMode.PercentOutput, rotationSpeed);
   }
 
+
+  //gets for the arrays
   public static List<TalonFX> getMotorArray(){
     return motorArray;
   }
