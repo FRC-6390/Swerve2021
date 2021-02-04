@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -17,7 +18,11 @@ public class SwerveModule {
     private final TalonFX momentumMotor;
     private final TalonFX rotationMotor;
 
+    
     //TODO check if this actually works with CAN bus
+    //if it doesnt try this
+    //RotationEncoder.setPosition(2*Math.PI/Constants.SENSORS.ENCODER_RESOLUTION.GetResolution());
+    //private final CANCoder RotationEncoder = new CANCoder(0);
     private final Encoder momentumEncoder = new Encoder(0,0);
     private final Encoder rotationEncoder = new Encoder(0,0);
 
@@ -34,7 +39,6 @@ public class SwerveModule {
         
         momentumEncoder.setDistancePerPulse(2*Math.PI*Constants.ROBOT_WHEEL_RADIUS/Constants.SENSORS.ENCODER_RESOLUTION.GetResolution());
         rotationEncoder.setDistancePerPulse(2*Math.PI/Constants.SENSORS.ENCODER_RESOLUTION.GetResolution());
-
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
 
 
