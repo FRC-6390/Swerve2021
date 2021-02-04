@@ -67,26 +67,26 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   final PowerDistributionPanel PDP;
 
-    /*                                                    stap touching the all mighty diagram
-  *               Front
-  *  Module 1                Module 2                     This is our lord and savour the robot diagram           
-  * |-------------------------------|                     please kneel in his presence, in his greatness.
-  * | 1M   |     \Intake/    |   2M |                     
-  * |   5R |                 | 6R   | 
-  * |------|                 |------| 
-  * |                               | 
-  * |                               | 
-  * |          |Revolover|          |                     M = Momentum Motor 
-  * |                               |                     R = Rotation Motor
-  * |                               | 
-  * |------|                 |------| 
-  * |   3M |                 | 4M   | 
-  * | 7R   |    /Shooter\    |   8R | 
-  * |-------------------------------| 
-  * Module 3                 Module 4
-  *                       
-  *               Back
-*/
+/*                                                    stap touching the all mighty diagram
+ *                     <Front>
+ *         Module 1               Module 2                     This is our lord and savour the robot diagram           
+ *        |-------------------------------|                    please kneel in his presence, in his greatness.
+ *        | 1M   |     \Intake/    |   2M |                     
+ *        |   5R |                 | 6R   | 
+ *        |------|                 |------| 
+ *        |                               | 
+ *        |                               |  
+ * <left> |          |Revolover|          | <Right>  
+ *        |                               |                     M = Momentum Motor 
+ *        |                               |                     R = Rotation Motor
+ *        |------|                 |------| 
+ *        |   3M |                 | 4M   | 
+ *        | 7R   |    /Shooter\    |   8R | 
+ *        |-------------------------------| 
+ *         Module 3               Module 4
+ *                     <Back>     
+ *               
+ */
 
   public SwerveDriveTrain() {
 
