@@ -6,4 +6,4 @@ PUT CHANGES IN HERE
     Made a setMotorSpeed and setModuleSpeed
     Added Arrays for each motors (rotation and momentum) and sensors
     Updated Constants including motorIds and encoder resolution, if you are plaining on changing motorid constants please tell me
-    
+    added gets for the arrays

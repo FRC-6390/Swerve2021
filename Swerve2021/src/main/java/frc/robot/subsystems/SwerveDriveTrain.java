@@ -168,6 +168,28 @@ public class SwerveDriveTrain extends SubsystemBase {
     motorArray.get(moduleId+4).set(ControlMode.PercentOutput, rotationSpeed);
   }
 
+  public static List<TalonFX> getMotorArray(){
+    return motorArray;
+  }
+
+  public static List<TalonFX> getMomentumMotorArray(){
+    return momentumMotorArray;
+  }
+
+  public static List<TalonFX> getRotationMotorArray(){
+    return rotationMotorArray;
+  }
+
+  public static List<CANCoder> getEncoderArray(){
+    return encoderArray;
+  }
+
+  public static List<DigitalInput> getLimitSwitchArray(){
+    return limitSwitchArray;
+  }
+
+
+
 
   @Override
   public void periodic() {

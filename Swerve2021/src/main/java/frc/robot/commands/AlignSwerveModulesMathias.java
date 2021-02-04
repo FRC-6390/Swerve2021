@@ -22,12 +22,12 @@ public class AlignSwerveModulesMathias extends CommandBase {
   @Override
   public void execute() {
     
-    for (TalonFX rotationMotor : SwerveDriveTrain.rotationMotorArray) {
+    for (TalonFX rotationMotor : SwerveDriveTrain.getRotationMotorArray()) {
       boolean doneMotor = false;
         while(!doneMotor){
           int id = rotationMotor.getBaseID(); // may need to switch
-            if(SwerveDriveTrain.limitSwitchArray.get(id).get()){
-              SwerveDriveTrain.encoderArray.get(id).setPosition(0.0);
+            if(SwerveDriveTrain.getLimitSwitchArray().get(id).get()){
+              SwerveDriveTrain.getEncoderArray().get(id).setPosition(0.0);
               doneMotor = true;
               SwerveDriveTrain.setMotorSpeed(id, 0.0);
             }
