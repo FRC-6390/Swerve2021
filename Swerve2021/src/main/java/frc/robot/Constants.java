@@ -2,9 +2,6 @@ package frc.robot;
 
 public interface Constants {
 
-    int JOYSTICK_CONTROLLER = 0;
-    int XBOX_CONTROLLER = 1;
-
     /*-------------------------MOTORS--------------------*/
     // DRIVE TRAIN MOTORS
     enum MOTORID {
@@ -35,7 +32,7 @@ public interface Constants {
         FRONT_RIGHT_LIMIT(2), 
         BACK_RIGHT_LIMIT(3),
         BACK_LEFT_LIMIT(4),
-        ENCODER_RESOLUTION(1024); // maybe 4096
+        ENCODER_RESOLUTION(4096); // maybe 1024
 
         private int id;
         private double resolution;
@@ -73,7 +70,7 @@ public interface Constants {
         JOYSTICK_AXIS_Y(1),
         JOYSTICK_AXIS_Z(2),
         JOYSTICK_AXIS_THROTTLE(3),
-        JOYSTICK_PORT_ID(0);
+        JOYSTICK_PORT_ID(1);
 
         private int id;
         private JOYSTICK(int id){
@@ -81,6 +78,10 @@ public interface Constants {
         }
 
         public int GetButton(){
+            return id;
+        }
+
+        public int Get(){
             return id;
         }
     }
@@ -102,7 +103,7 @@ public interface Constants {
         XBOX_LEFT_TRIGGER(3),
         XBOX_RIGHT_AXIS_Y(5),
         XBOX_RIGHT_AXIS_X(4),
-        XBOX_PORT_ID(1);
+        XBOX_PORT_ID(0);
 
         private int id;
         private XBOX(int id){
@@ -114,6 +115,10 @@ public interface Constants {
         }
 
         public int GetAxis(){
+            return id;
+        }
+
+        public int Get(){
             return id;
         }
 

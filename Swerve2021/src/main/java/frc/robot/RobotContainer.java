@@ -7,9 +7,9 @@ import frc.robot.commands.AlignSwerveModules;
 
 public class RobotContainer {
 
-  public Joystick stick = new Joystick(Constants.JOYSTICK_CONTROLLER);
+  public Joystick stick = new Joystick(Constants.JOYSTICK.JOYSTICK_PORT_ID.Get());
 
-  public static XboxController xbox = new XboxController(Constants.XBOX_CONTROLLER);
+  public static XboxController xbox = new XboxController(Constants.XBOX.XBOX_PORT_ID.Get());
   public JoystickButton button1 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_1.GetButton()),
   button2 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_2.GetButton()),
   button3 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_3.GetButton()),

@@ -146,6 +146,8 @@ public class SwerveDriveTrain extends SubsystemBase {
     gyro = new AHRS(Port.kMXP);
 
     PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
+
+    gyro.reset();
   }
 
   public void drive(double xSpeed, double ySpeed, double rotation){
@@ -160,12 +162,12 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   public static void setMotorSpeed(int id, double speed){
-    motorArray.get(id).set(ControlMode.PercentOutput, speed);
+    motorArray.get(id-1).set(ControlMode.PercentOutput, speed);
   }
 
   public static void setModuleSpeed(int moduleId, double rotationSpeed, double momentumSpeed){
-    motorArray.get(moduleId).set(ControlMode.PercentOutput, momentumSpeed);
-    motorArray.get(moduleId+4).set(ControlMode.PercentOutput, rotationSpeed);
+    motorArray.get(moduleId-1).set(ControlMode.PercentOutput, momentumSpeed);
+    motorArray.get(moduleId+3).set(ControlMode.PercentOutput, rotationSpeed);
   }
 
 
@@ -190,7 +192,29 @@ public class SwerveDriveTrain extends SubsystemBase {
     return limitSwitchArray;
   }
 
+  public static void resetModuleEncoder(int id){
+    encoderArray.get(id-1).setPosition(0.0);
+    System.out.println("Reseted Module Encoder ID: "+id);
+  }
 
+  public static void resetModuleEncoders(){
+    for (CANCoder canCoder : encoderArray) {
+      canCoder.setPosition(0.0);
+    }
+    System.out.println("Rested All Module Encoders");
+  }
+
+  public static void resetMotorEncoder(int id){
+    motorArray.get(id-1).getSensorCollection().setIntegratedSensorPosition(0,0);
+    System.out.println("Reseted Motor Encoder ID: "+id);
+  }
+
+  public static void resetMotorEncoders(){
+    for (TalonFX motor : motorArray) {
+      motor.getSensorCollection().setIntegratedSensorPosition(0,0);
+    }
+    System.out.println("Rested All Motor Encoders");
+  }
 
 
   @Override

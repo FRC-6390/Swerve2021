@@ -29,7 +29,15 @@ public class SwerveDrive extends CommandBase {
     double LeftX = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_LEFT_AXIS_Y.GetAxis()); 
     //double LeftY = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_LEFT_AXIS_X.GetAxis()); 
 
-    Robot.driveTrain.setSpeed(RightY, RightX, LeftX);
+
+    //Put fancy math here if needed
+    RightX = RightX;
+
+    RightY = RightY;
+    
+    LeftX  = LeftX;
+
+    Robot.swerveDriveTrain.drive(RightX, RightY, LeftX);
   }
 
   @Override

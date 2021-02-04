@@ -16,6 +16,7 @@ public class AlignSwerveModulesMathias extends CommandBase {
 
   @Override
   public void initialize() {
+    System.out.println("AlignSwerveModules Started");
     endCommand = false;
   }
 
@@ -23,28 +24,31 @@ public class AlignSwerveModulesMathias extends CommandBase {
   public void execute() {
     
     for (TalonFX rotationMotor : SwerveDriveTrain.getRotationMotorArray()) {
+      System.out.println("Started to align a new module");
       boolean doneMotor = false;
         while(!doneMotor){
           int id = rotationMotor.getBaseID(); // may need to switch
-            if(SwerveDriveTrain.getLimitSwitchArray().get(id).get()){
-              SwerveDriveTrain.getEncoderArray().get(id).setPosition(0.0);
-              doneMotor = true;
+          System.out.println("Aligning module ID:" + id);
+            if(SwerveDriveTrain.getLimitSwitchArray().get(id-1).get()){
+              SwerveDriveTrain.getEncoderArray().get(id-1).setPosition(0.0);
               SwerveDriveTrain.setMotorSpeed(id, 0.0);
+              System.out.println("Aligned module ID:" + id);
+              doneMotor = true;
             }
             else{
               SwerveDriveTrain.setMotorSpeed(id, 0.1);
 
             }
         }
-      
     }
-
-
-
+        System.out.println("Done Aligning Motors Ending Command");
+        endCommand = true;
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("AlignSwerveModules Ended");
+  }
 
   @Override
   public boolean isFinished() {
