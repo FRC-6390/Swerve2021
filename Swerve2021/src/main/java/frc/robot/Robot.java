@@ -8,9 +8,11 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
   public static SwerveDrive swerve;
   public static DriveTrain driveTrain;
+  public static SwerveDriveTrain swerveDriveTrain;
 
   @Override
   public void robotInit() {
+    swerveDriveTrain = new SwerveDriveTrain();
     swerve = new SwerveDrive();
     driveTrain = new DriveTrain();
   }

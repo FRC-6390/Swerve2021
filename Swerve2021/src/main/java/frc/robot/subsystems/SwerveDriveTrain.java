@@ -1,18 +1,19 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.CANifier;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -28,22 +29,27 @@ public class SwerveDriveTrain extends SubsystemBase {
   backRightMomentum,
   backRightRotation;
 
+  public static List<TalonFX> momentumMotorArray,
+  rotationMotorArray, motorArray;
+
   private static CANCoder frontRightEncoder,
   frontLeftEncoder,
   backRightEncoder,
   backLeftEncoder;
+
+  public static List<CANCoder> encoderArray;
 
   private final SwerveModule frontLeftModule,
   frontRightModule,
   backLeftModule,
   backRightModule;
 
-  private final SwerveModuleState swerveModuleState[];
-
   private static DigitalInput frontRightLimit,
   frontLeftLimit,
   backRightLimit,
   backLeftLimit;
+
+  public static List<DigitalInput> limitSwitchArray;
 
   private final Translation2d frontLeftLocation,
   frontRightLocation,
@@ -71,20 +77,50 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
     backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
+    momentumMotorArray = new ArrayList<TalonFX>(){{
+      add(frontLeftMomentum);
+      add(frontRightMomentum);
+      add(backLeftMomentum);
+      add(backRightMomentum);
+
+    }};
+
+    rotationMotorArray = new ArrayList<TalonFX>(){{
+      add(frontLeftRotation);
+      add(frontRightRotation);
+      add(backLeftRotation);
+      add(backRightRotation);
+
+    }};
+
     frontRightEncoder = new CANCoder(Constants.SENSORS.FRONT_RIGHT_ENCODER.GetID());
     frontLeftEncoder = new CANCoder(Constants.SENSORS.FRONT_LEFT_ENCODER.GetID());
     backRightEncoder = new CANCoder(Constants.SENSORS.BACK_RIGHT_ENCODER.GetID());
     backLeftEncoder = new CANCoder(Constants.SENSORS.BACK_LEFT_ENCODER.GetID());
 
-    frontLeftModule = new SwerveModule(1,2);
-    frontRightModule = new SwerveModule(3,4);
-    backRightModule = new SwerveModule(5,6);
-    backLeftModule = new SwerveModule(7,8); 
+    encoderArray = new ArrayList<CANCoder>(){{
+      add(frontLeftEncoder);
+      add(frontRightEncoder);
+      add(backLeftEncoder);
+      add(backRightEncoder);
+    }};
+
+    frontLeftModule = new SwerveModule(1,5);
+    frontRightModule = new SwerveModule(2,6);
+    backRightModule = new SwerveModule(3,7);
+    backLeftModule = new SwerveModule(4,8); 
 
     frontRightLimit = new DigitalInput(Constants.SENSORS.FRONT_RIGHT_LIMIT.GetID());
     frontLeftLimit = new DigitalInput(Constants.SENSORS.FRONT_LEFT_LIMIT.GetID());
     backRightLimit = new DigitalInput(Constants.SENSORS.BACK_RIGHT_LIMIT.GetID());
     backLeftLimit = new DigitalInput(Constants.SENSORS.BACK_LEFT_LIMIT.GetID());
+
+    limitSwitchArray = new ArrayList<DigitalInput>(){{
+      add(frontLeftLimit);
+      add(frontRightLimit);
+      add(backLeftLimit);
+      add(backRightLimit);
+    }};
 
     frontLeftLocation= new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
     frontRightLocation = new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
@@ -99,8 +135,6 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
   }
-  CANifier test = new CANifier(1);
-
 
   public void drive(double xSpeed, double ySpeed, double rotation){
 
@@ -112,6 +146,15 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightModule.setDesiredState(swerveModuleStates[3]);
 
   }
+
+  public void setMotorSpeed(int id){
+    
+  }
+
+  public void setModuleSpeed(int moduleId){
+
+  }
+
 
   @Override
   public void periodic() {

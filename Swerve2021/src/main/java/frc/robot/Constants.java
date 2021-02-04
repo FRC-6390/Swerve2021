@@ -9,12 +9,12 @@ public interface Constants {
     // DRIVE TRAIN MOTORS
     enum MOTORID {
         FRONT_LEFT_ROTATION(1),
-        FRONT_LEFT_MOMENTUM(2),
-        FRONT_RIGHT_ROTATION(3),
-        FRONT_RIGHT_MOMENTUM(4),
-        BACK_LEFT_ROTATION(5),
-        BACK_LEFT_MOMENTUM(6),
-        BACK_RIGHT_ROTATION(7),
+        FRONT_LEFT_MOMENTUM(5),
+        FRONT_RIGHT_ROTATION(2),
+        FRONT_RIGHT_MOMENTUM(6),
+        BACK_LEFT_ROTATION(3),
+        BACK_LEFT_MOMENTUM(7),
+        BACK_RIGHT_ROTATION(4),
         BACK_RIGHT_MOMENTUM(8);
 
         private int id;
@@ -35,7 +35,7 @@ public interface Constants {
         FRONT_RIGHT_LIMIT(2), 
         BACK_RIGHT_LIMIT(3),
         BACK_LEFT_LIMIT(4),
-        ENCODER_RESOLUTION(1024); 
+        ENCODER_RESOLUTION(1024); // maybe 4096
 
         private int id;
         private double resolution;

@@ -1,22 +1,12 @@
 package frc.robot.commands;
 
-import static frc.robot.subsystems.DriveTrain.backLeftRotation;
-import static frc.robot.subsystems.DriveTrain.backRightRotation;
-import static frc.robot.subsystems.DriveTrain.frontLeftRotation;
-import static frc.robot.subsystems.DriveTrain.frontRightRotation;
+import frc.robot.Robot;
+import frc.robot.subsystems.SwerveDriveTrain;
 
-import static frc.robot.subsystems.DriveTrain.backRightEncoder;
-import static frc.robot.subsystems.DriveTrain.backLeftEncoder;
-import static frc.robot.subsystems.DriveTrain.frontLeftEncoder;
-import static frc.robot.subsystems.DriveTrain.frontRightEncoder;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import static frc.robot.subsystems.DriveTrain.frontLeftLimit;
-import static frc.robot.subsystems.DriveTrain.frontRightLimit;
-import static frc.robot.subsystems.DriveTrain.backLeftLimit;
-import static frc.robot.subsystems.DriveTrain.backRightLimit;
-
-
-
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AlignSwerveModulesMathias extends CommandBase {
@@ -32,9 +22,24 @@ public class AlignSwerveModulesMathias extends CommandBase {
   @Override
   public void execute() {
     
-    if(backRightLimit.get()){
-
+    for (TalonFX rotationMotor : SwerveDriveTrain.rotationMotorArray) {
+      boolean doneMotor = false;
+        while(!doneMotor){
+          int id = rotationMotor.getBaseID(); // may need to switch
+            if(SwerveDriveTrain.limitSwitchArray.get(id).get()){
+              SwerveDriveTrain.encoderArray.get(id).setPosition(0.0);
+              doneMotor = true;
+              rotationMotor.set(ControlMode.PercentOutput, 0.0);
+            }
+            else{
+            rotationMotor.set(ControlMode.PercentOutput, 0.1);
+            }
+        }
+      
     }
+
+
+
   }
 
   @Override
