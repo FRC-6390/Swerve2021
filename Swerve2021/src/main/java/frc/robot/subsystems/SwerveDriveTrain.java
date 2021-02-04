@@ -159,11 +159,11 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   }
 
-  public void setMotorSpeed(int id, double speed){
+  public static void setMotorSpeed(int id, double speed){
     motorArray.get(id).set(ControlMode.PercentOutput, speed);
   }
 
-  public void setModuleSpeed(int moduleId, double rotationSpeed, double momentumSpeed){
+  public static void setModuleSpeed(int moduleId, double rotationSpeed, double momentumSpeed){
     motorArray.get(moduleId).set(ControlMode.PercentOutput, momentumSpeed);
     motorArray.get(moduleId+4).set(ControlMode.PercentOutput, rotationSpeed);
   }
