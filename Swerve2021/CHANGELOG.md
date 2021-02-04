@@ -16,3 +16,4 @@ PUT CHANGES IN HERE
     fixed an issue where the first item in the arrays would not be accesable
     made gryo reset on start in SwerveDriveTrain
     Added System.out everywhere to help with debugging
+    Updated Diagram and added it to SwerveDriveTrain
