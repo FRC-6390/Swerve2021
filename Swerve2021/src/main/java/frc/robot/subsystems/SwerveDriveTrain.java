@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -15,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-//comment 
 public class SwerveDriveTrain extends SubsystemBase {
   
   private static TalonFX frontLeftMomentum,
@@ -36,6 +37,8 @@ public class SwerveDriveTrain extends SubsystemBase {
   frontRightModule,
   backLeftModule,
   backRightModule;
+
+  private final SwerveModuleState swerveModuleState[];
 
   private static DigitalInput frontRightLimit,
   frontLeftLimit,
@@ -96,9 +99,18 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
   }
+  CANifier test = new CANifier(1);
 
-  public void drive(double xSpeed, double ySpeed, double rot, ){
-    frontLeftModule.setDesiredState(desiredState);
+
+  public void drive(double xSpeed, double ySpeed, double rotation){
+
+    var swerveModuleStates = m_kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
+    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT_MAX_SPEED);
+    frontLeftModule.setDesiredState(swerveModuleStates[0]);
+    frontRightModule.setDesiredState(swerveModuleStates[1]);
+    backLeftModule.setDesiredState(swerveModuleStates[2]);
+    backRightModule.setDesiredState(swerveModuleStates[3]);
+
   }
 
   @Override
