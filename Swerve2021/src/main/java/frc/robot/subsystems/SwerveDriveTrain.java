@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
@@ -93,6 +94,17 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     }};
 
+    motorArray = new ArrayList<TalonFX>(){{
+      add(frontLeftMomentum);
+      add(frontRightMomentum);
+      add(backLeftMomentum);
+      add(backRightMomentum);
+      add(frontLeftRotation);
+      add(frontRightRotation);
+      add(backLeftRotation);
+      add(backRightRotation);
+    }};
+
     frontRightEncoder = new CANCoder(Constants.SENSORS.FRONT_RIGHT_ENCODER.GetID());
     frontLeftEncoder = new CANCoder(Constants.SENSORS.FRONT_LEFT_ENCODER.GetID());
     backRightEncoder = new CANCoder(Constants.SENSORS.BACK_RIGHT_ENCODER.GetID());
@@ -147,12 +159,13 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   }
 
-  public void setMotorSpeed(int id){
-    
+  public void setMotorSpeed(int id, double speed){
+    motorArray.get(id).set(ControlMode.PercentOutput, speed);
   }
 
-  public void setModuleSpeed(int moduleId){
-
+  public void setModuleSpeed(int moduleId, double rotationSpeed, double momentumSpeed){
+    motorArray.get(moduleId).set(ControlMode.PercentOutput, momentumSpeed);
+    motorArray.get(moduleId+4).set(ControlMode.PercentOutput, rotationSpeed);
   }
 
 
