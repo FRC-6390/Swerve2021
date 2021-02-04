@@ -35,7 +35,7 @@ public interface Constants {
         FRONT_RIGHT_LIMIT(2), 
         BACK_RIGHT_LIMIT(3),
         BACK_LEFT_LIMIT(4),
-        ENCODER_RESOLUTION(0.02);
+        ENCODER_RESOLUTION(1024); 
 
         private int id;
         private double resolution;
