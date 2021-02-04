@@ -29,10 +29,11 @@ public class AlignSwerveModulesMathias extends CommandBase {
             if(SwerveDriveTrain.limitSwitchArray.get(id).get()){
               SwerveDriveTrain.encoderArray.get(id).setPosition(0.0);
               doneMotor = true;
-              rotationMotor.set(ControlMode.PercentOutput, 0.0);
+              SwerveDriveTrain.setMotorSpeed(id, 0.0);
             }
             else{
-            rotationMotor.set(ControlMode.PercentOutput, 0.1);
+              SwerveDriveTrain.setMotorSpeed(id, 0.1);
+
             }
         }
       
