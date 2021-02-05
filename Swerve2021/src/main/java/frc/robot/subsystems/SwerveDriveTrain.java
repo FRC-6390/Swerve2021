@@ -59,7 +59,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   backLeftLocation,
   backRightLocation;
 
-  private final SwerveDriveKinematics m_kinematics;
+  private final SwerveDriveKinematics kinematics;
 
   private ChassisSpeeds speeds; 
 
@@ -100,30 +100,30 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
     momentumMotorArray = new ArrayList<TalonFX>(){{
-      add(frontLeftMomentum);
-      add(frontRightMomentum);
-      add(backLeftMomentum);
-      add(backRightMomentum);
+      set(1,frontLeftMomentum);
+      set(2,frontRightMomentum);
+      set(3,backLeftMomentum);
+      set(4,backRightMomentum);
 
     }};
 
     rotationMotorArray = new ArrayList<TalonFX>(){{
-      add(frontLeftRotation);
-      add(frontRightRotation);
-      add(backLeftRotation);
-      add(backRightRotation);
+      set(1,frontLeftRotation);
+      set(2,frontRightRotation);
+      set(3,backLeftRotation);
+      set(4,backRightRotation);
 
     }};
 
     motorArray = new ArrayList<TalonFX>(){{
-      add(frontLeftMomentum);
-      add(frontRightMomentum);
-      add(backLeftMomentum);
-      add(backRightMomentum);
-      add(frontLeftRotation);
-      add(frontRightRotation);
-      add(backLeftRotation);
-      add(backRightRotation);
+      set(1,frontLeftMomentum);
+      set(2,frontRightMomentum);
+      set(3,backLeftMomentum);
+      set(4,backRightMomentum);
+      set(5,frontLeftRotation);
+      set(6,frontRightRotation);
+      set(7,backLeftRotation);
+      set(8,backRightRotation);
     }};
 
     frontRightEncoder = new CANCoder(Constants.SENSORS.FRONT_RIGHT_ENCODER.GetID());
@@ -132,13 +132,13 @@ public class SwerveDriveTrain extends SubsystemBase {
     backLeftEncoder = new CANCoder(Constants.SENSORS.BACK_LEFT_ENCODER.GetID());
 
     encoderArray = new ArrayList<CANCoder>(){{
-      add(frontLeftEncoder);
-      add(frontRightEncoder);
-      add(backLeftEncoder);
-      add(backRightEncoder);
+      set(1,frontLeftEncoder);
+      set(2,frontRightEncoder);
+      set(3,backLeftEncoder);
+      set(4,backRightEncoder);
     }};
 
-    frontLeftModule = new SwerveModule(1,5);
+    frontLeftModule = new SwerveModule(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID(),Constants.MOTORID.FRONT_LEFT_ROTATION.GetID());
     frontRightModule = new SwerveModule(2,6);
     backRightModule = new SwerveModule(3,7);
     backLeftModule = new SwerveModule(4,8); 
@@ -149,10 +149,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     backLeftLimit = new DigitalInput(Constants.SENSORS.BACK_LEFT_LIMIT.GetID());
 
     limitSwitchArray = new ArrayList<DigitalInput>(){{
-      add(frontLeftLimit);
-      add(frontRightLimit);
-      add(backLeftLimit);
-      add(backRightLimit);
+      set(1,frontLeftLimit);
+      set(2,frontRightLimit);
+      set(3,backLeftLimit);
+      set(4,backRightLimit);
     }};
 
     frontLeftLocation= new Translation2d(Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
@@ -160,7 +160,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     backLeftLocation = new Translation2d(-Constants.SWERVE_LOCATION_FROM_CENTER,Constants.SWERVE_LOCATION_FROM_CENTER);
     backRightLocation = new Translation2d(-Constants.SWERVE_LOCATION_FROM_CENTER,-Constants.SWERVE_LOCATION_FROM_CENTER);
 
-    m_kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
+    kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
 
     speeds = new ChassisSpeeds(0,0,0);
 
@@ -173,7 +173,7 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   public void drive(double xSpeed, double ySpeed, double rotation){
 
-    var swerveModuleStates = m_kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
+    var swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT_MAX_SPEED);
     frontLeftModule.setDesiredState(swerveModuleStates[0]);
     frontRightModule.setDesiredState(swerveModuleStates[1]);
@@ -182,13 +182,16 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   }
 
-  public static void setMotorSpeed(int id, double speed){
-    motorArray.get(id-1).set(ControlMode.PercentOutput, speed);
+  public static void setMotorSpeed(int motorId, double speed){
+    int id = motorId == 0 ? 1 : motorId;
+    motorArray.get(id).set(ControlMode.PercentOutput, speed);
   }
 
   public static void setModuleSpeed(int moduleId, double rotationSpeed, double momentumSpeed){
-    motorArray.get(moduleId-1).set(ControlMode.PercentOutput, momentumSpeed);
-    motorArray.get(moduleId+3).set(ControlMode.PercentOutput, rotationSpeed);
+    int id = moduleId == 0 ? 1 : moduleId;
+    motorArray.get(id).set(ControlMode.PercentOutput, momentumSpeed);
+    motorArray.get(id+4).set(ControlMode.PercentOutput, rotationSpeed);
+    //               ^bad way of doing this
   }
 
 
@@ -213,8 +216,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     return limitSwitchArray;
   }
 
-  public static void resetModuleEncoder(int id){
-    encoderArray.get(id-1).setPosition(0.0);
+  public static void resetModuleEncoder(int encoderId){
+    int id = encoderId == 0 ? 1 : encoderId;
+
+    encoderArray.get(id).setPosition(0.0);
     System.out.println("Reseted Module Encoder ID: "+id);
   }
 
@@ -225,8 +230,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     System.out.println("Rested All Module Encoders");
   }
 
-  public static void resetMotorEncoder(int id){
-    motorArray.get(id-1).getSensorCollection().setIntegratedSensorPosition(0,0);
+  public static void resetMotorEncoder(int motorId){
+    int id = motorId == 0 ? 1 : motorId;
+
+    motorArray.get(id).getSensorCollection().setIntegratedSensorPosition(0,0);
     System.out.println("Reseted Motor Encoder ID: "+id);
   }
 
