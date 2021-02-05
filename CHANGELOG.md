@@ -19,4 +19,6 @@ PUT CHANGES IN HERE
     Updated Diagram and added it to SwerveDriveTrain
     Minor var name changes
     Moved the cheese log and added a readme
+~~Febuary 5 - Mathias
+    Moved cheese log back and got rid of the first folder in the repo
     
