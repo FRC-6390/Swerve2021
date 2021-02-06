@@ -138,10 +138,10 @@ public class SwerveDriveTrain extends SubsystemBase {
       set(4,backRightEncoder);
     }};
 
-    frontLeftModule = new SwerveModule(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID(),Constants.MOTORID.FRONT_LEFT_ROTATION.GetID());
-    frontRightModule = new SwerveModule(2,6);
-    backRightModule = new SwerveModule(3,7);
-    backLeftModule = new SwerveModule(4,8); 
+    frontLeftModule = new SwerveModule(Constants.SWERVE.FRONT_LEFT_MODULE.GetID());
+    frontRightModule = new SwerveModule(Constants.SWERVE.FRONT_RIGHT_MODULE.GetID());
+    backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID());
+    backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID()); 
 
     frontRightLimit = new DigitalInput(Constants.SENSORS.FRONT_RIGHT_LIMIT.GetID());
     frontLeftLimit = new DigitalInput(Constants.SENSORS.FRONT_LEFT_LIMIT.GetID());

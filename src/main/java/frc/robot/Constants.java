@@ -23,6 +23,27 @@ public interface Constants {
             return id;
         }
     }
+
+    enum SWERVE {
+        FRONT_LEFT_MODULE(1),
+        FRONT_RIGHT_MODULE(2),
+        BACK_LEFT_MODULE(3),
+        BACK_RIGHT_MODULE(4);
+
+        private int id;
+        private SWERVE(int id){
+            this.id = id;
+        }
+
+        public int GetID(){
+            return id;
+        }
+
+        public int GetEncoder(){
+            return id; //this is  ment to do the same as the above bc the encoders have the same ids as the modules
+        }
+    }
+
     enum SENSORS {
         FRONT_LEFT_ENCODER(1),
         FRONT_RIGHT_ENCODER(2),
