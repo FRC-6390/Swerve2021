@@ -7,6 +7,7 @@ PUT CHANGES IN HERE
     Added Arrays for each motors (rotation and momentum) and sensors
     Updated Constants including motorIds and encoder resolution, if you are plaining on changing motorid constants please tell me
     added gets for the arrays
+
 ~~Febuary 4 - Mathias~~
     Made preperations to add math to the driver inputs
     Remove the joystick and xbox constants and swapped anything that was using that onto the Enum one
@@ -19,7 +20,10 @@ PUT CHANGES IN HERE
     Updated Diagram and added it to SwerveDriveTrain
     Minor var name changes
     Moved the cheese log and added a readme
+
 ~~Febuary 5 - Mathias
     Moved cheese log back and got rid of the first folder in the repo
     Optimized SwerveModule a little bit
     
+~~Febuary 6 - Mohammad
+    added methods at the bottom of SwerveModule.java Subystem responsible for converting raw units / meters / velocity we ca use these methods instead of .setDistancePerPulse() as it is not available for TalonFX. Cleaned some code. Please note that I am not completly done but I will push so that anyone can have the latest update. also its 2:30 so YAAAA!
