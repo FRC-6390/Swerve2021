@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -14,12 +16,13 @@ import frc.robot.Constants;
 
 public class SwerveModule {
 
-    private final TalonFX momentumMotor;
-    private final TalonFX rotationMotor;
+    private final double momentumMath = 2*Math.PI*Constants.ROBOT_WHEEL_RADIUS;
+    private final double rotationMath = 2*Math.PI;
 
-    //TODO check if this actually works with CAN bus
-    private final Encoder momentumEncoder = new Encoder(0,0);
-    private final Encoder rotationEncoder = new Encoder(0,0);
+
+    private final TalonFX momentumMotor, rotationMotor;
+
+    private final TalonFXSensorCollection momentumEncoder, rotationEncoder;
 
     private final PIDController momentumController = new PIDController(1, 0,0);
     private final ProfiledPIDController rotationController = new ProfiledPIDController(1, 0,0,new TrapezoidProfile.Constraints(Constants.ROBOT_MAX_ANGULAR_SPEED, Constants.ROBOT_MAX_ANGULAR_ACCELERATION));
@@ -27,11 +30,16 @@ public class SwerveModule {
     private final SimpleMotorFeedforward momentumFeedforward = new SimpleMotorFeedforward(1, 3);
     private final SimpleMotorFeedforward rotationFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
-    public SwerveModule(int momentumMotorID, int rotationMotorID) {
+    public SwerveModule(int ModuleId) {
 
-        momentumMotor = new TalonFX(momentumMotorID);
-        rotationMotor = new TalonFX(rotationMotorID);
+        momentumMotor = new TalonFX(ModuleId);
+        rotationMotor = new TalonFX(ModuleId+4);
         
+        momentumEncoder = momentumMotor.getSensorCollection();
+        rotationEncoder = rotationMotor.getSensorCollection();
+
+        momentumEncoder.getIntegratedSensorPosition();
+
         momentumEncoder.setDistancePerPulse(2*Math.PI*Constants.ROBOT_WHEEL_RADIUS/Constants.SENSORS.ENCODER_RESOLUTION.GetResolution());
         rotationEncoder.setDistancePerPulse(2*Math.PI/Constants.SENSORS.ENCODER_RESOLUTION.GetResolution());
 
