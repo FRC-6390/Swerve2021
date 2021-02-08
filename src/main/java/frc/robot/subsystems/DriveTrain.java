@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.GroupMotorControllers;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -127,6 +128,7 @@ public class DriveTrain extends SubsystemBase {
     // Resets Top Left Module
     frontLeftMomentum.getSensorCollection().setIntegratedSensorPosition(0, 0);
     frontLeftRotation.getSensorCollection().setIntegratedSensorPosition(0, 0);
+    //frontLeftRotation.getP
   }
 
   public void resetEncodersBL() {
