@@ -31,6 +31,8 @@ public class SwerveModule {
 
     private final TalonFXSensorCollection momentumEncoder, rotationEncoder;
 
+    private final CANCoder test;
+
     private final PIDController momentumController = new PIDController(1, 0,0);
     private final ProfiledPIDController rotationController = new ProfiledPIDController(1, 0,0,new TrapezoidProfile.Constraints(Constants.ROBOT_MAX_ANGULAR_SPEED, Constants.ROBOT_MAX_ANGULAR_ACCELERATION));
 
@@ -41,6 +43,12 @@ public class SwerveModule {
 
         momentumMotor = new TalonFX(ModuleId);
         rotationMotor = new TalonFX(ModuleId+4);
+
+        test = new CANCoder(ModuleId);
+
+        test.get();
+
+        
         
         momentumEncoder = momentumMotor.getSensorCollection();
         rotationEncoder = rotationMotor.getSensorCollection();
