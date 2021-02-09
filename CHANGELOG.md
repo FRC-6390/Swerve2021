@@ -27,3 +27,9 @@ PUT CHANGES IN HERE
     
 ~~Febuary 6 - Mohammad
     added methods at the bottom of SwerveModule.java Subystem responsible for converting raw units / meters / velocity we ca use these methods instead of .setDistancePerPulse() as it is not available for TalonFX. Cleaned some code. Please note that I am not completly done but I will push so that anyone can have the latest update. also its 2:30 so YAAAA!
+
+~~Febuary 8 - Mathias
+    More swerve encoder changes, this way of doing it may actually work
+    added a ROBOT enum for all things related to the robot like dimensions
+    moved some swerve constants into the SWERVE enum
+    changed anything that was affect by the previous constants changes

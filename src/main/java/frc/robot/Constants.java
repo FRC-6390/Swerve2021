@@ -28,11 +28,18 @@ public interface Constants {
         FRONT_LEFT_MODULE(1),
         FRONT_RIGHT_MODULE(2),
         BACK_LEFT_MODULE(3),
-        BACK_RIGHT_MODULE(4);
+        BACK_RIGHT_MODULE(4),
+        LOCATION_FROM_CENTER(0.3302),
+        GEAR_RATIO(8.16);
 
         private int id;
+        private double doubles;
         private SWERVE(int id){
             this.id = id;
+        }
+
+        private SWERVE(double id){
+            this.doubles = id;
         }
 
         public int GetID(){
@@ -41,6 +48,10 @@ public interface Constants {
 
         public int GetEncoder(){
             return id; //this is  ment to do the same as the above bc the encoders have the same ids as the modules
+        }
+
+        public double get(){
+            return doubles;
         }
     }
 
@@ -53,7 +64,9 @@ public interface Constants {
         FRONT_RIGHT_LIMIT(2), 
         BACK_RIGHT_LIMIT(3),
         BACK_LEFT_LIMIT(4),
-        ENCODER_RESOLUTION(4096); // maybe 1024
+        EXTERNAL_ENCODER_RESOLUTION(4096),// maybe 1024
+        INTERNAL_ENCODER_RESOLUTION(2048); 
+
 
         private int id;
         private double resolution;
@@ -153,13 +166,25 @@ public interface Constants {
         }
 
     }
+
+    enum ROBOT{
+        WHEEL_RADIUS(0.0508),
+        MAX_SPEED(3.0),
+        MAX_ANGULAR_SPEED(3.145),
+        MAX_ANGULAR_ACCELERATION(6.29);
+
+        private double id;
+        private ROBOT(double id){
+            this.id = id;
+        }
+
+        public double get(){
+            return id;
+        }
+       
+    }
   
     int PDP_DEVICE_ID = 0;
-    double SWERVE_LOCATION_FROM_CENTER = 0.3302;
-    double ROBOT_WHEEL_RADIUS = 0.0;
-    double ROBOT_MAX_SPEED = 3.0;
-    double ROBOT_MAX_ANGULAR_SPEED = 3.145;
-	double ROBOT_MAX_ANGULAR_ACCELERATION = 6.29;
     
 
     
