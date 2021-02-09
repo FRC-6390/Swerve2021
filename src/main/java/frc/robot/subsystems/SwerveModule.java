@@ -20,7 +20,7 @@ public class SwerveModule {
     final int kCountsPerRev = 2048;//units per revolution for talon fx
     final double kGearRatio = 8.16;
     final double kWheelRadiusInches = 3;//3 inch radius
-    final int k100msPerSecod = 10;//idk 
+    final int k100msPerSecond = 10;
 
     private final double momentumMath = 2*Math.PI*Constants.ROBOT_WHEEL_RADIUS;
     private final double rotationMath = 2*Math.PI;
@@ -91,9 +91,12 @@ public class SwerveModule {
     //converts velocity to native Units
     private int velocityToUnits(double velocityMetersPerSecond){
       double wheelRotationsPerSecond = velocityMetersPerSecond/(2* Math.PI * Units.inchesToMeters(kWheelRadiusInches));
-      double motorRotationsPersecond = wheelRotationsPerSecond * kGearRatio;
-      int motorRotationsPer100ms = (int)(motorRotationsPer100ms * kCountsPerRev);
-      return motorRotationsPer100ms;
+      double motorRotationsPerSecond = wheelRotationsPerSecond * kGearRatio;
+      double motorRotationsPer100ms = motorRotationsPerSecond / k100msPerSecond;
+      int sensorCountsPer100ms = (int)(motorRotationsPer100ms * kCountsPerRev);
+      return sensorCountsPer100ms;
+ 
+ 
     }
 
     //Converts Native Units to Meters
