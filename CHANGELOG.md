@@ -33,3 +33,4 @@ PUT CHANGES IN HERE
     added a ROBOT enum for all things related to the robot like dimensions
     moved some swerve constants into the SWERVE enum
     changed anything that was affect by the previous constants changes
+    Diagram is thicc no more
