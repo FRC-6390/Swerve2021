@@ -77,7 +77,7 @@ public class FileManager implements Runnable {
             writer.write("["+eventTime+"]"+"["+id+"] "+data+"\n");
             writer.close();
             previousTime = System.nanoTime();
-            System.out.println("Writted To File");
+            System.out.println("Wrote To File");
         }catch(IOException e){
             System.out.println("Error Writting A File");
             e.printStackTrace();
