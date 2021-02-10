@@ -37,7 +37,7 @@ public class SwerveDrive extends CommandBase {
     
     LeftX  = LeftX;
 
-    Robot.swerveDriveTrain.drive(RightX, RightY, LeftX);
+    Robot.driveTrain.drive(RightX, RightY, LeftX);
   }
 
   @Override
