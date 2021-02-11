@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AlignSwerveModulesMathias extends CommandBase {
@@ -33,11 +34,12 @@ public class AlignSwerveModulesMathias extends CommandBase {
               SwerveDriveTrain.getEncoderArray().get(id-1).setPosition(0.0);
               SwerveDriveTrain.setMotorSpeed(id, 0.0);
               System.out.println("Aligned module ID:" + id);
+              SmartDashboard.putBoolean("Swerve Alligned", true);
               doneMotor = true;
             }
             else{
               SwerveDriveTrain.setMotorSpeed(id, 0.1);
-
+              SmartDashboard.putBoolean("Swerve Alligned", false);
             }
         }
     }

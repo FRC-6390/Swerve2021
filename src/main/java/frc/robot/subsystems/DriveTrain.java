@@ -176,6 +176,8 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Forward Velocity", speeds.vyMetersPerSecond);
     SmartDashboard.putNumber("Strafe Velocity", speeds.vxMetersPerSecond);
     SmartDashboard.putNumber("Rotation Velocity", speeds.omegaRadiansPerSecond);
+
+    SmartDashboard.putNumber("GYRO", gyro.getAngle());
   }  
 
   public void resetRobot() {
