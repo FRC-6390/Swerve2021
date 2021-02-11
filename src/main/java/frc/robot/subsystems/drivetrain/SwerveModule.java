@@ -54,18 +54,18 @@ public class SwerveModule {
         rotationMotor.set(ControlMode.PercentOutput, rotationOutput+rotationFeed);
     }
 
-    // //converts units to meters
-    // private int distanceToUnits(double positionMeters){
-    //   double wheelRotations = positionMeters/(2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches));
-    //   double motorRotations = wheelRotations * kGearRatio;
-    //   int sensorCounts = (int)(motorRotations * kCountsPerRev);
-    //   return sensorCounts;
-    // }
+    //converts units to meters
+    private int distanceToUnits(double positionMeters){
+      double wheelRotations = positionMeters/(2 * Math.PI * Constants.ROBOT.WHEEL_RADIUS.get());
+      double motorRotations = wheelRotations * Constants.SWERVE.GEAR_RATIO.get();
+      int sensorCounts = (int)(motorRotations *  Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution());
+      return sensorCounts;
+    }
 
     //converts velocity to native Units
     int motorRotationsPer100ms = 0;
     private int velocityToUnits(double velocityMetersPerSecond){
-      double wheelRotationsPerSecond = velocityMetersPerSecond/(2* Math.PI * Units.inchesToMeters(kWheelRadiusInches));
+      double wheelRotationsPerSecond = velocityMetersPerSecond/(2* Math.PI * Constants.ROBOT.WHEEL_RADIUS.get());
       double motorRotationsPerSecond = wheelRotationsPerSecond * Constants.SWERVE.GEAR_RATIO.get();
       double motorRotationsPer100ms = motorRotationsPerSecond / k100msPerSecond;
       int sensorCountsPer100ms = (int)(motorRotationsPer100ms * Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution());
@@ -82,7 +82,7 @@ public class SwerveModule {
       return positionMeters;
     }
     
-
+    //Optimizes the Swerve Drive to Feel Smoother While Driving 
     private static SwerveModuleState optimize(
       SwerveModuleState desiredState, Rotation2d currentAngle) {
         var delta = desiredState.angle.minus(currentAngle);

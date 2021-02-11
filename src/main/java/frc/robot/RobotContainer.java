@@ -6,10 +6,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AlignSwerveModules;
 
 public class RobotContainer {
-
+  //Declaring Controllers
   public Joystick stick = new Joystick(Constants.JOYSTICK.JOYSTICK_PORT_ID.Get());
-
   public static XboxController xbox = new XboxController(Constants.XBOX.XBOX_PORT_ID.Get());
+
+  //LOGITECH CONTROLER
   public JoystickButton button1 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_1.GetButton()),
   button2 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_2.GetButton()),
   button3 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_3.GetButton()),
@@ -23,6 +24,7 @@ public class RobotContainer {
   button11 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_11.GetButton()),
   button12 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_12.GetButton());
   
+  //XBOX CONTROLER
   public JoystickButton XboxA = new JoystickButton(xbox, Constants.XBOX.XBOX_A.GetButton()),
   XboxB = new JoystickButton(xbox, Constants.XBOX.XBOX_B.GetButton()),
   XboxX = new JoystickButton(xbox, Constants.XBOX.XBOX_X.GetButton()),
@@ -42,7 +44,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    XboxA.whileHeld(new AlignSwerveModules("all", 0.3), true);
+    //Assign Buttons to Commands Here
+    XboxA.whileHeld(new AlignSwerveModules(), true);
   }
 
   /**

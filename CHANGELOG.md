@@ -41,3 +41,10 @@ PUT CHANGES IN HERE
     Shelved DriveTrain, turned it into a text file
     Fixed anything that was affect by the changes above
     more changes to FileManger
+
+~~Febuary 11 - Mohammad
+    Fixed errors and added comments everywhere so anyone can undersatnd
+    Whenever writing code pls write comments to avoid later confusion
+    Added new Dashboard still in progress got a timer, Camera, and Gyro
+    so far. Wont be able to test them until we have a working robot.
+    renamed AlignSwerveDriveModules and got rid of the other one
