@@ -3,18 +3,22 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.*;
+import frc.robot.files.FileManager;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.drivetrain.*;
 
 public class Robot extends TimedRobot {
   public static SwerveDrive swerve;
-  public static DriveTrain driveTrain;
-  public static SwerveDriveTrain swerveDriveTrain;
+  public static FileManager fileManager;
+  public static SwerveDriveTrain driveTrain;
 
   @Override
   public void robotInit() {
-    swerveDriveTrain = new SwerveDriveTrain();
+    fileManager = new FileManager("Output");
     swerve = new SwerveDrive();
-    driveTrain = new DriveTrain();
+    driveTrain = new SwerveDriveTrain();
+
+    fileManager.Init();
   }
 
   @Override

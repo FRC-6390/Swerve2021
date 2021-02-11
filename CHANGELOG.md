@@ -35,3 +35,9 @@ PUT CHANGES IN HERE
     changed anything that was affect by the previous constants changes
     Diagram is thicc no more
     Started work on a file manager
+
+~~Febuary 10 - Mathias
+    Moved some files arround and renamed the SwerveDriveTrain var in robot to driveTrain
+    Shelved DriveTrain, turned it into a text file
+    Fixed anything that was affect by the changes above
+    more changes to FileManger

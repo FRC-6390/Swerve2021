@@ -24,6 +24,7 @@ public class SwerveDrive extends CommandBase {
   @Override
   public void execute() {
 
+    //Setting Joystick Values to Doubles
     double RightX = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_RIGHT_AXIS_Y.GetAxis()); 
     double RightY = RobotContainer.xbox.getRawAxis(Constants.XBOX.XBOX_RIGHT_AXIS_X.GetAxis()); 
 
@@ -32,13 +33,13 @@ public class SwerveDrive extends CommandBase {
 
 
     //Put fancy math here if needed
-    RightX = RightX;
+    //RightX = RightX;
+    //RightY = RightY;
+    //LeftX  = LeftX;
 
-    RightY = RightY;
-    
-    LeftX  = LeftX;
-
-    Robot.swerveDriveTrain.drive(RightX, RightY, LeftX);
+    //Calls the Drive void and sets the power of the motors using doubles created ^
+    Robot.driveTrain.drive(RightX, RightY, LeftX);
+    //Displays joystick values on Smart Dashboard
     SmartDashboard.putNumber("Right X", RightX);
     SmartDashboard.putNumber("Right Y", RightY);
     SmartDashboard.putNumber("Left X", LeftX);
