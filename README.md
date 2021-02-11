@@ -11,4 +11,5 @@ As a team we have standerds for programming that must always be maintained
   1. Add comments explaining the code
   2. camelCase all variable names ```ex. double driveMotor```
   3. have another programmer review your code before testing on robot
-  4. If you dont know ask
+  4. If you dont know ask question
+  5. Communicate your work and research to others
