@@ -7,7 +7,7 @@ This is FRC 6390's github repository for Swerve Drive, we are using MK3 Modules,
   2. Ask a current Programmer on the team to add you to this organization
   
 ## Contributing
-As a team we have standers for programming that must always be maintained
+As a team we have standerds for programming that must always be maintained
   1. Add comments explaining the code
   2. camelCase all variable names ```ex. double driveMotor```
   3. have another programmer review your code before testing on robot
