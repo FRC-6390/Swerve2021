@@ -18,12 +18,17 @@ import frc.robot.Constants;
 public class SwerveModule {
 
     final int k100msPerSecond = 10;
+    private final TalonFX momentumMotor, rotationMotor;
+    
     private final TalonFXSensorCollection momentumEncoder, rotationEncoder;
 
     private final PIDController momentumController = new PIDController(1, 0,0);
 
     private final SimpleMotorFeedforward momentumFeedforward = new SimpleMotorFeedforward(1, 3);
     private final SimpleMotorFeedforward rotationFeedforward = new SimpleMotorFeedforward(1, 0.5);
+
+    private final ProfiledPIDController rotationController = new ProfiledPIDController(1, 0,0,new TrapezoidProfile.Constraints(Constants.ROBOT.MAX_ANGULAR_SPEED.get(), Constants.ROBOT.MAX_ANGULAR_ACCELERATION.get()));
+
 
     public SwerveModule(int ModuleId) {
 
