@@ -8,20 +8,21 @@ public class FileManager implements Runnable {
     static String fileLocation, fileName, fileDest;
     static FileWriter writer;
     public static Thread thread;
-    private static File file, folder;
+    private static File file, destination, folder;
     private static long previousTime;
     private static double eventTime;
 
     public FileManager(String fileName) {
         this.fileLocation = "output/";
         this.fileName = "output/" + fileName + ".txt";
+        destination = new File("u/" + fileName);
         thread = new Thread(this);
         thread.start();
         previousTime = System.nanoTime();
     }
 
     public static void main(String[] args) {
-        new FileManager("test");
+        new FileManager("Test File");
         Init();
         WriteLn(ID.DEBUG, "Debug Start");
         WriteLn(ID.SYSTEM, "System Start");
@@ -85,15 +86,10 @@ public class FileManager implements Runnable {
     }
     private File destFile = new File("u/output/"+fileName+".txt");
     public static void MoveFileToUsb(){
-        try{
-            file = new File("output/");
-            file.mkdir();
-            file = new File(fileName);
-            file.renameTo("u/"+fileName);
-        }catch(IOException e){
-            System.out.println("Error Copying A File");
-            e.printStackTrace();
-        }
+        file = new File("u/output/");
+        file.mkdir();
+        file = new File(fileName);
+        file.renameTo(destination);
 
     }
 

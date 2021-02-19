@@ -44,13 +44,16 @@ PUT CHANGES IN HERE
 
 ~~Febuary 11 - Mohammad
     Fixed errors and added comments everywhere so anyone can undersatnd
-    Whenever writing code pls write comments to avoid later confusion
+    Whenever writing code PLS WRITE COMMENTS to avoid later confusion
     Added new Dashboard still in progress got a timer, Camera, and Gyro
     so far. Wont be able to test them until we have a working robot.
     renamed AlignSwerveDriveModules and got rid of the other one
                                     ^^^ 
     Mathias: You gave me small panic attack when i couldnt find my swerve drive alignment code
+    Mohammad: LOL
 
 ~~Febuary 18 - Mathias
     Fixed issue with SwerveModule.java being messed up, re-added everything that was missing
     
+~~Febuary 18 - Mohammad
+    Fiexed error in file Manager 
