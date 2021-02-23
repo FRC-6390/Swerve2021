@@ -60,3 +60,7 @@ PUT CHANGES IN HERE
 
 ~~Febuary 22 - Mathias
     Major FileManager changes, should be better overall. None of it tested but passed my mental test so I believe its good to go
+
+~~Febuary 23 - Mathias
+    Alot more FileManager changes, FileManager is now RIOLog and all code relying on FileManager has been chaneged
+    RIOWritter has been given support for more data types

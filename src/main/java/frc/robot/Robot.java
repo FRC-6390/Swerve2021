@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.*;
-import frc.robot.files.FileManager;
-import frc.robot.files.FileManager.ID;
+import frc.robot.files.RIOLevel;
+import frc.robot.files.RIOLog;
 import frc.robot.subsystems.drivetrain.*;
 
 public class Robot extends TimedRobot {
   public static SwerveDrive swerve;
-  public static FileManager fileManager;
+  public static RIOLog fileManager;
   public static SwerveDriveTrain driveTrain;
 
   @Override
@@ -21,15 +21,15 @@ public class Robot extends TimedRobot {
     swerve = new SwerveDrive();
     driveTrain = new SwerveDriveTrain();
     
-    new FileManager("OutputLog");
-    FileManager.Init();
-    FileManager.out.Write("This is a test with no Id");
-    FileManager.out.Write("This is a test with DEBUG", ID.DEBUG);
-    FileManager.out.Write("This is a test with INPUT", ID.INPUT);
-    FileManager.out.Write("This is a test with OUTPUT", ID.OUPUT);
-    FileManager.out.Write("This is a test with SYSTEM", ID.SYSTEM);
-    FileManager.out.Write("This is a test with ERROR", ID.ERROR);
-    FileManager.MoveFileToUsb();
+    new RIOLog("OutputLog");
+    RIOLog.Init();
+    RIOLog.out.Write("This is a test with no RIOLevel");
+    RIOLog.out.Write("This is a test with DEBUG", RIOLevel.DEBUG);
+    RIOLog.out.Write("This is a test with INPUT", RIOLevel.INPUT);
+    RIOLog.out.Write("This is a test with OUTPUT", RIOLevel.OUPUT);
+    RIOLog.out.Write("This is a test with SYSTEM", RIOLevel.SYSTEM);
+    RIOLog.out.Write("This is a test with ERROR", RIOLevel.ERROR);
+    RIOLog.MoveFileToUsb();
   }
 
   @Override

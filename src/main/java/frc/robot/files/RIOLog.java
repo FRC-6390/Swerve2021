@@ -9,29 +9,21 @@ import java.text.SimpleDateFormat;
 
 import frc.robot.Constants;
 
-public class FileManager {
+public class RIOLog {
 
     private static File m_File, m_Destination, m_Folder, m_USBFolder;
     private static long m_Time;
     SimpleDateFormat formatter;
     Date date;
     String m_FileName;
-
-    public enum ID{
-        DEBUG,
-        INPUT,
-        OUPUT,
-        SYSTEM,
-        ERROR;
-    }
-
-    public static final FileManagerWriter out = null;
+    
+    public static final RIOWritter out = null;
 
 
-    public FileManager(String fileName) {
+    public RIOLog(String fileName) {
 
         //Gets date to avoid same name files
-        formatter= new SimpleDateFormat("yyyy-MM-dd");
+        formatter= new SimpleDateFormat("ddMMyy-hhmmss.SSS");
         date = new Date(System.currentTimeMillis());
 
         m_FileName = formatter.format(date)+"-"+fileName;
@@ -44,7 +36,7 @@ public class FileManager {
         m_USBFolder = new File(Constants.FILES.USB_OUTPUT.get());
         m_Destination = new File(Constants.FILES.USB_OUTPUT.getFolder() + m_FileName + ".txt");
 
-        new FileManagerWriter(Constants.FILES.ROBORIO_OUTPUT.getFolder()+m_FileName+".txt", m_Time);
+        new RIOWritter(Constants.FILES.ROBORIO_OUTPUT.getFolder()+m_FileName+".txt", m_Time);
     }
 
     public static void Init() {
