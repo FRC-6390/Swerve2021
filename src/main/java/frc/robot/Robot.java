@@ -1,11 +1,14 @@
 package frc.robot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.*;
 import frc.robot.files.FileManager;
 import frc.robot.files.FileManager.ID;
-import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.*;
 
 public class Robot extends TimedRobot {
@@ -17,10 +20,15 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     swerve = new SwerveDrive();
     driveTrain = new SwerveDriveTrain();
-
-    new FileManager("TestLog");
+    
+    new FileManager("OutputLog");
     FileManager.Init();
-    FileManager.WriteLn(ID.DEBUG, "Testing 123");
+    FileManager.out.Write("This is a test with no Id");
+    FileManager.out.Write("This is a test with DEBUG", ID.DEBUG);
+    FileManager.out.Write("This is a test with INPUT", ID.INPUT);
+    FileManager.out.Write("This is a test with OUTPUT", ID.OUPUT);
+    FileManager.out.Write("This is a test with SYSTEM", ID.SYSTEM);
+    FileManager.out.Write("This is a test with ERROR", ID.ERROR);
     FileManager.MoveFileToUsb();
   }
 

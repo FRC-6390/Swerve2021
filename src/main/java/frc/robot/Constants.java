@@ -189,11 +189,29 @@ public interface Constants {
        
     }
 
+    enum FILES{
+        ROBORIO_OUTPUT("/home/lvuser/output"),
+        USB_OUTPUT("u/output");
+
+
+        private String m_String;
+        private FILES(String string){
+            m_String = string;
+        }
+
+        public String get(){
+            return m_String;
+        }
+
+        public String getFolder(){
+            return m_String+"/";
+        }
+    }
+
     /**_____________________NON ENUM VALUES_____________________ */
 
     //Power Distribution Panel
-    int PDP_DEVICE_ID = 0;
-    
+    int PDP_DEVICE_ID = 0;    
 
     
     

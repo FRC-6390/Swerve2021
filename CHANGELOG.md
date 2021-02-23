@@ -57,3 +57,6 @@ PUT CHANGES IN HERE
     
 ~~Febuary 18 - Mohammad
     Fiexed error in file Manager 
+
+~~Febuary 22 - Mathias
+    Major FileManager changes, should be better overall. None of it tested but passed my mental test so I believe its good to go
