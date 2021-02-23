@@ -15,7 +15,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    fileManager = new FileManager("Output");
     swerve = new SwerveDrive();
     driveTrain = new SwerveDriveTrain();
 
