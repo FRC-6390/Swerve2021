@@ -163,7 +163,7 @@ public class RIOWritter{
 
     private void WriteToFile(String data, RIOLevel... id){
         String identifier = id != null ? id.toString() : "OUTPUT"; 
-        m_EventTime = ((System.nanoTime()-m_PreviousTime)/100000000);
+        m_EventTime = (double)((System.nanoTime()-m_PreviousTime)/100000000);
         
         try{
             m_Writer = new FileWriter(m_FileName, true);
