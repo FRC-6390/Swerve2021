@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.*;
 import frc.robot.files.FileManager;
+import frc.robot.files.FileManager.ID;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.*;
 
@@ -18,7 +19,10 @@ public class Robot extends TimedRobot {
     swerve = new SwerveDrive();
     driveTrain = new SwerveDriveTrain();
 
-    fileManager.Init();
+    new FileManager("TestLog");
+    FileManager.Init();
+    FileManager.WriteLn(ID.DEBUG, "Testing 123");
+    FileManager.MoveFileToUsb();
   }
 
   @Override

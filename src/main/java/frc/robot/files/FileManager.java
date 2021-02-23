@@ -8,50 +8,31 @@ public class FileManager implements Runnable {
     static String fileLocation, fileName, fileDest;
     static FileWriter writer;
     public static Thread thread;
-    private static File file, destination, folder;
+    private static File file, destination, folder, usbFolder;
     private static long previousTime;
     private static double eventTime;
 
+
     public FileManager(String fileName) {
-        this.fileLocation = "output/";
-        this.fileName = "output/" + fileName + ".txt";
-        destination = new File("u/" + fileName);
+        this.fileLocation = "/home/lvuser/output";
+        this.fileName = "/home/lvuser/output/" + fileName + ".txt";
+        destination = new File("u/output/" + fileName + ".txt");
         thread = new Thread(this);
         thread.start();
         previousTime = System.nanoTime();
+        file = new File(fileName);
+        folder = new File(fileLocation);
+        usbFolder = new File("u/output");
     }
 
-    public static void main(String[] args) {
-        new FileManager("Test File");
-        Init();
-        WriteLn(ID.DEBUG, "Debug Start");
-        WriteLn(ID.SYSTEM, "System Start");
-        try {
-            thread.sleep(100);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        WriteLn(ID.SYSTEM, "System Start");
+    public void run() {
 
-        try {
-            thread.sleep(123);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        WriteLn(ID.SYSTEM, "System Start");
     }
 
-    public void run(){
-        
-    }
-    
-    public static void Init(){
+    public static void Init() {
         try{
-            folder = new File(fileLocation);
             folder.mkdirs();
-            file = new File(fileName);
+            
             if(file.createNewFile()){
                 System.out.println("File created: " + file.getName());
             } else {
@@ -64,7 +45,7 @@ public class FileManager implements Runnable {
         }
     }
 
-    enum ID{
+    public enum ID{
         DEBUG,
         INPUT,
         OUPUT,
@@ -84,11 +65,8 @@ public class FileManager implements Runnable {
             e.printStackTrace();
         }
     }
-    private File destFile = new File("u/output/"+fileName+".txt");
     public static void MoveFileToUsb(){
-        file = new File("u/output/");
-        file.mkdir();
-        file = new File(fileName);
+        usbFolder.mkdir();
         file.renameTo(destination);
 
     }
