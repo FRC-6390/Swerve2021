@@ -67,6 +67,7 @@ PUT CHANGES IN HERE
     Added lots of method descriptions
     Added log levels and bypass log level
     Changed alot of RIOLog stuff, its late but none of the changes were major just made the code better
+    Changed all the drive train arrays to make it stop yelling at me and changed anything that was affect
 
 ~~Febuary 23 - Mohammad
     Added feature to connect to robots network tables for the custom dashboard to allow us to grab data and display it. This is also
