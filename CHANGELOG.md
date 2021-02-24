@@ -77,3 +77,5 @@ PUT CHANGES IN HERE
 ~~Febuary 24 - Mathias
     Added some novelty things 
     fixed an issue where to error output text wouldnt output what class it came from
+    Compressed the 3 files for RIOLog RIOLevel RIOWritter all into RIOLog.
+    nothing should have chnaged and everything should work the same.

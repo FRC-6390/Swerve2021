@@ -3,8 +3,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.*;
-import frc.robot.files.RIOLevel;
 import frc.robot.files.RIOLog;
+import frc.robot.files.RIOLog.RIOLevel;
 import frc.robot.subsystems.drivetrain.*;
 
 public class Robot extends TimedRobot {
