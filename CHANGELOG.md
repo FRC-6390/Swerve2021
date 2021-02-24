@@ -67,3 +67,10 @@ PUT CHANGES IN HERE
     Added lots of method descriptions
     Added log levels and bypass log level
     Changed alot of RIOLog stuff, its late but none of the changes were major just made the code better
+
+~~Febuary 23 - Mohammad
+    Added feature to connect to robots network tables for the custom dashboard to allow us to grab data and display it. This is also
+    not tested, but should be able to connect to the robot at the moment.
+
+~~Febuary 23 - Mohammad
+    added vission folder and for all vission related stuff, as of now I have just created a thread for a camera server it is still in progress so nobody touch it for now as I am  not yet finished implementing it.
