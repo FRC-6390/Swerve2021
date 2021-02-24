@@ -1,6 +1,6 @@
 PUT CHANGES IN HERE
 
-~~Febuary 3 - Mathias~~
+~~Febuary 3 - Mathias
     Fixed the SwerveDriveTrain Drive Method
     Finalized AlignSwerveModulesMathias (Some changes pending)
     Made a setMotorSpeed and setModuleSpeed
@@ -8,7 +8,7 @@ PUT CHANGES IN HERE
     Updated Constants including motorIds and encoder resolution, if you are plaining on changing motorid constants please tell me
     added gets for the arrays
 
-~~Febuary 4 - Mathias~~
+~~Febuary 4 - Mathias
     Made preperations to add math to the driver inputs
     Remove the joystick and xbox constants and swapped anything that was using that onto the Enum one
     added gets for JOYSTICK and XBOX enum
