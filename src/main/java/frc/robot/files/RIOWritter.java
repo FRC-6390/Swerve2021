@@ -3,6 +3,8 @@ package frc.robot.files;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import frc.robot.Constants;
+
 public class RIOWritter{
 
     long m_PreviousTime;
@@ -13,6 +15,7 @@ public class RIOWritter{
     public RIOWritter(String fileName, long time){
         m_FileName = fileName;
         m_PreviousTime = time;
+        WriteHephaestus();
     }
 
     /**
@@ -275,5 +278,16 @@ public class RIOWritter{
             System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,Class.class.getName());
         }
 
+    }
+
+    private void WriteHephaestus(){
+        try{
+            m_Writer = new FileWriter(m_FileName, true);
+            m_Writer.write(Constants.FILES.HEPHAESTUS.get());
+            m_Writer.close();
+            System.out.println(Constants.FILES.HEPHAESTUS.get());
+        }catch(IOException e){
+            System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,Class.class.getName());
+        }
     }
 }
