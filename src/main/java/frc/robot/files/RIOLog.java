@@ -13,20 +13,21 @@ public class RIOLog {
 
     private static File m_File, m_Destination, m_Folder, m_USBFolder;
     private static long m_Time;
-    SimpleDateFormat formatter;
-    Date date;
-    String m_FileName;
-    
+    private SimpleDateFormat m_formatter;
+    private Date m_date;
+    private String m_FileName;
+    private static int m_LogLevel;
+
     public static final RIOWritter out = null;
 
 
     public RIOLog(String fileName) {
 
         //Gets date to avoid same name files
-        formatter= new SimpleDateFormat("ddMMyy-hhmmss.SSS");
-        date = new Date(System.currentTimeMillis());
+        m_formatter= new SimpleDateFormat("ddMMyy-hhmmss.SSS");
+        m_date = new Date(System.currentTimeMillis());
 
-        m_FileName = formatter.format(date)+"-"+fileName;
+        m_FileName = m_formatter.format(m_date)+"-"+fileName;
 
         m_Time = System.nanoTime();
         //RoboRIO Files
@@ -36,9 +37,18 @@ public class RIOLog {
         m_USBFolder = new File(Constants.FILES.USB_OUTPUT.get());
         m_Destination = new File(Constants.FILES.USB_OUTPUT.getFolder() + m_FileName + ".txt");
 
+        m_LogLevel = 0;
+        
         new RIOWritter(Constants.FILES.ROBORIO_OUTPUT.getFolder()+m_FileName+".txt", m_Time);
     }
 
+    /**
+     * Creates any folders and fiels needed to make the log file
+     * Sets up preperations to properly use the log writter
+     * 
+     * 
+     * 
+     */
     public static void Init() {
         if(!CreateRoboRIOFolder())
             System.err.printf("[%s] Ran into an error creating a folder \n \t "+m_Folder.getAbsolutePath(),Class.class.getName());
@@ -48,11 +58,29 @@ public class RIOLog {
 
     }
 
-    public static void MoveFileToUsb(){
+    /**
+     * Moves file to the first USB pluged into the RoboRio
+     * This will automaticaly create any needed folders to move the file
+     * if set to true the file on the roborio will stay after transfering to the usb
+     * 
+     * 
+     */
+    public static void MoveFileToUsb(boolean... keep){
+        boolean keepingFile = keep != null ? keep[0] : false;
         if(!CreateUSBFolder())
             System.err.printf("[%s] Ran into an error creating a folder \n \t "+m_USBFolder.getAbsolutePath(),Class.class.getName());
         if(!CreateUSBFile())
             System.err.printf("[%s] Ran into an error creating a file \n \t "+m_Destination.getAbsolutePath(),Class.class.getName());
+
+        if(!(keepingFile)){
+            if(!(DeleteRoboRIoFile()))
+                System.err.printf("[%s] Ran into an error deleting a file \n \t "+m_File.getAbsolutePath(),Class.class.getName());
+        }
+
+    }
+
+    private static boolean DeleteRoboRIoFile(){
+        return m_File.delete();
     }
 
     private static boolean CreateRoboRIOFolder(){
@@ -83,8 +111,37 @@ public class RIOLog {
         }
     }
 
+    /**
+     * Returns time when RIOLog was started
+     * 
+     * 
+     * 
+     * 
+     */
     public static long getTime(){
         return m_Time;
+    }
+
+    /**
+     * Everything in the RIOLog File gets saved to file but this method sets what get sent to robot console. The default log level is SYSTEM(2)
+     * 
+     * 
+     * 
+     * 
+     */
+    public static void setLogLevel(RIOLevel level){
+        m_LogLevel = level.getLevel();
+    }
+
+     /**
+     * Returns the log level previously set, the default log level is SYSTEM(2)
+     * 
+     * 
+     * 
+     * 
+     */
+    public static int getLogLevel(){
+        return m_LogLevel;
     }
 
 

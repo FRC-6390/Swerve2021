@@ -64,3 +64,6 @@ PUT CHANGES IN HERE
 ~~Febuary 23 - Mathias
     Alot more FileManager changes, FileManager is now RIOLog and all code relying on FileManager has been chaneged
     RIOWritter has been given support for more data types
+    Added lots of method descriptions
+    Added log levels and bypass log level
+    Changed alot of RIOLog stuff, its late but none of the changes were major just made the code better
