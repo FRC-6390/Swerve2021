@@ -154,7 +154,7 @@ aside > * {
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.8)
 }
-/*
+
 body.login #login {
     display: flex;
 }
@@ -167,4 +167,3 @@ body.login #login {
 #login > button {
     margin-left: 5px;
 }
-*/

@@ -64,3 +64,7 @@ PUT CHANGES IN HERE
 ~~Febuary 23 - Mathias
     Alot more FileManager changes, FileManager is now RIOLog and all code relying on FileManager has been chaneged
     RIOWritter has been given support for more data types
+
+~~Febuary 23 - Mohammad
+    Added feature to connect to robots network tables for the custom dashboard to allow us to grab data and display it. This is also
+    not tested, but should be able to connect to the robot at the moment.
