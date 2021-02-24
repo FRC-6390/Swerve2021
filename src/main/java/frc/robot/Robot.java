@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
     RIOLog.out.Write("This is a test with IO", RIOLevel.IO); 
     RIOLog.out.Write("This is a test with SYSTEM", RIOLevel.SYSTEM);
     RIOLog.out.Write("This is a test with ERROR", RIOLevel.ERROR);
-    RIOLog.MoveFileToUsb();
+    RIOLog.MoveFileToUsb(true);
   }
 
   @Override

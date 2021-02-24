@@ -76,3 +76,4 @@ PUT CHANGES IN HERE
 
 ~~Febuary 24 - Mathias
     Added some novelty things 
+    fixed an issue where to error output text wouldnt output what class it came from

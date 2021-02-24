@@ -10,11 +10,12 @@ public class RIOWritter{
     long m_PreviousTime;
     double m_EventTime;
     FileWriter m_Writer; 
-    String m_FileName;
+    String m_FileName, m_ClassName;
 
     public RIOWritter(String fileName, long time){
         m_FileName = fileName;
         m_PreviousTime = time;
+        m_ClassName = getClass().getName();
         WriteHephaestus();
     }
 
@@ -260,7 +261,7 @@ public class RIOWritter{
                 System.out.println(line);
             }
         }catch(IOException e){
-            System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,Class.class.getName());
+            System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
         }
 
     }
@@ -275,7 +276,7 @@ public class RIOWritter{
             System.out.println(line);
             m_PreviousTime = System.nanoTime();
         }catch(IOException e){
-            System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,Class.class.getName());
+            System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
         }
 
     }
@@ -287,7 +288,7 @@ public class RIOWritter{
             m_Writer.close();
             System.out.println(Constants.FILES.HEPHAESTUS.get());
         }catch(IOException e){
-            System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,Class.class.getName());
+            System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
         }
     }
 }

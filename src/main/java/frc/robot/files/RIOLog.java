@@ -13,9 +13,9 @@ public class RIOLog {
 
     private static File m_File, m_Destination, m_Folder, m_USBFolder;
     private static long m_Time;
-    private SimpleDateFormat m_formatter;
-    private Date m_date;
-    private String m_FileName;
+    private static SimpleDateFormat m_formatter;
+    private static Date m_date;
+    private static String m_FileName, m_ClassName;
     private static int m_LogLevel;
 
     public static final RIOWritter out = null;
@@ -39,6 +39,7 @@ public class RIOLog {
 
         m_LogLevel = 0;
         
+        m_ClassName = getClass().getName();
         new RIOWritter(Constants.FILES.ROBORIO_OUTPUT.getFolder()+m_FileName+".txt", m_Time);
     }
 
@@ -51,9 +52,9 @@ public class RIOLog {
      */
     public static void Init() {
         if(!CreateRoboRIOFolder())
-            System.err.printf("[%s] Ran into an error creating a folder \n \t "+m_Folder.getAbsolutePath(),Class.class.getName());
+            System.err.printf("[%s] Ran into an error creating a folder \n \t "+m_Folder.getAbsolutePath(),m_ClassName);
         if(!CreateRoboRIOFile())
-            System.err.printf("[%s] Ran into an error creating a file \n \t "+m_File.getAbsolutePath(),Class.class.getName());
+            System.err.printf("[%s] Ran into an error creating a file \n \t "+m_File.getAbsolutePath(),m_ClassName);
 
 
     }
@@ -68,13 +69,13 @@ public class RIOLog {
     public static void MoveFileToUsb(boolean... keep){
         boolean keepingFile = keep != null ? keep[0] : false;
         if(!CreateUSBFolder())
-            System.err.printf("[%s] Ran into an error creating a folder \n \t "+m_USBFolder.getAbsolutePath(),Class.class.getName());
+            System.err.printf("[%s] Ran into an error creating a folder \n \t "+m_USBFolder.getAbsolutePath(),m_ClassName);
         if(!CreateUSBFile())
-            System.err.printf("[%s] Ran into an error creating a file \n \t "+m_Destination.getAbsolutePath(),Class.class.getName());
+            System.err.printf("[%s] Ran into an error creating a file \n \t "+m_Destination.getAbsolutePath(),m_ClassName);
 
         if(!(keepingFile)){
             if(!(DeleteRoboRIoFile()))
-                System.err.printf("[%s] Ran into an error deleting a file \n \t "+m_File.getAbsolutePath(),Class.class.getName());
+                System.err.printf("[%s] Ran into an error deleting a file \n \t "+m_File.getAbsolutePath(),m_ClassName);
         }
 
     }
@@ -90,7 +91,7 @@ public class RIOLog {
     private static boolean CreateRoboRIOFile(){
         try{
              m_File.createNewFile();
-             System.out.printf("[%s] File created! \n \t "+m_File.getAbsolutePath(),Class.class.getName());
+             System.out.printf("[%s] File created! \n \t "+m_File.getAbsolutePath(),m_ClassName);
              return true;
         }catch(IOException ex){
             return false;
@@ -104,7 +105,7 @@ public class RIOLog {
     private static boolean CreateUSBFile(){
         try {
             Files.move(m_File.toPath(), m_Destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.printf("[%s] File created! \n \t "+m_Destination.getAbsolutePath(),Class.class.getName());
+            System.out.printf("[%s] File created! \n \t "+m_Destination.getAbsolutePath(),m_ClassName);
             return true;
         } catch (IOException e) {
             return false;
@@ -143,7 +144,4 @@ public class RIOLog {
     public static int getLogLevel(){
         return m_LogLevel;
     }
-
-
-
 }
