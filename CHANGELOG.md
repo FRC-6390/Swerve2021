@@ -73,3 +73,6 @@ PUT CHANGES IN HERE
     Added feature to connect to robots network tables for the custom dashboard to allow us to grab data and display it. This is also
     not tested, but should be able to connect to the robot at the moment.
     added vission folder and for all vission related stuff, as of now I have just created a thread for a camera server it is still in progress so nobody touch it for now as I am  not yet finished implementing it.
+
+~~Febuary 24 - Mathias
+    Added some novelty things 
