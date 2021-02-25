@@ -79,3 +79,6 @@ PUT CHANGES IN HERE
     fixed an issue where to error output text wouldnt output what class it came from
     Compressed the 3 files for RIOLog RIOLevel RIOWritter all into RIOLog.
     nothing should have chnaged and everything should work the same.
+    PART2
+    Changed RIOLog to RioLog, fixed almost all the issues, the only thing that is not working is ERRORS not printing to the console (prints to the file) and bypassing not working either
+

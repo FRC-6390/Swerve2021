@@ -10,7 +10,8 @@ import java.text.SimpleDateFormat;
 
 import frc.robot.Constants;
 
-public class RIOLog {
+
+public class RioLog {
 
     private static File m_File, m_Destination, m_Folder, m_USBFolder;
     private static long m_Time;
@@ -19,18 +20,18 @@ public class RIOLog {
     private static String m_FileName, m_ClassName;
     private static int m_LogLevel;
 
-    public static final RIOWritter out = null;
+    public static RioWritter out = null;
 
 
-    public RIOLog(String fileName) {
+    public RioLog(String fileName) {
 
         //Gets date to avoid same name files
-        m_formatter= new SimpleDateFormat("dd/MM/yy hh:mm:ss");
+        m_formatter= new SimpleDateFormat("dd-MM-yy hh-mm-ss");
         m_date = new Date(System.currentTimeMillis());
 
         m_FileName = m_formatter.format(m_date)+"-"+fileName;
 
-        m_Time = System.nanoTime();
+        m_Time = System.currentTimeMillis();
         //RoboRIO Files
         m_Folder = new File(Constants.FILES.ROBORIO_OUTPUT.get());
         m_File = new File(Constants.FILES.ROBORIO_OUTPUT.getFolder()+m_FileName+".txt");
@@ -41,7 +42,7 @@ public class RIOLog {
         m_LogLevel = 0;
         
         m_ClassName = getClass().getName();
-        new RIOWritter(Constants.FILES.ROBORIO_OUTPUT.getFolder()+m_FileName+".txt", m_Time);
+        out = new RioWritter(m_File.getAbsolutePath(), m_Time);
     }
 
     /**
@@ -53,12 +54,21 @@ public class RIOLog {
      */
     public static void Init() {
         if(!CreateRoboRIOFolder())
-            System.err.printf("[%s] Ran into an error creating a folder \n \t "+m_Folder.getAbsolutePath(),m_ClassName);
+            System.err.printf("\n[%s] Ran into an error creating a folder \n \t "+m_Folder.getAbsolutePath(),m_ClassName);
         if(!CreateRoboRIOFile())
-            System.err.printf("[%s] Ran into an error creating a file \n \t "+m_File.getAbsolutePath(),m_ClassName);
+            System.err.printf("\n[%s] Ran into an error creating a file \n \t "+m_File.getAbsolutePath(),m_ClassName);
 
 
     }
+
+     /**
+     * Moves file to the first USB pluged into the RoboRio
+     * This will automaticaly create any needed folders to move the file
+     * if set to true the file on the roborio will stay after transfering to the usb
+     * 
+     * 
+     */
+    public static void MoveFileToUsb(){MoveFileToUsb(false);}
 
     /**
      * Moves file to the first USB pluged into the RoboRio
@@ -67,16 +77,15 @@ public class RIOLog {
      * 
      * 
      */
-    public static void MoveFileToUsb(boolean... keep){
-        boolean keepingFile = keep != null ? keep[0] : false;
+    public static void MoveFileToUsb(boolean keep){
         if(!CreateUSBFolder())
-            System.err.printf("[%s] Ran into an error creating a folder \n \t "+m_USBFolder.getAbsolutePath(),m_ClassName);
+            System.err.printf("\n[%s] Ran into an error creating a folder \n \t "+m_USBFolder.getAbsolutePath(),m_ClassName);
         if(!CreateUSBFile())
-            System.err.printf("[%s] Ran into an error creating a file \n \t "+m_Destination.getAbsolutePath(),m_ClassName);
+            System.err.printf("\n[%s] Ran into an error creating a file \n \t "+m_Destination.getAbsolutePath(),m_ClassName);
 
-        if(!(keepingFile)){
+        if(!(keep)){
             if(!(DeleteRoboRIoFile()))
-                System.err.printf("[%s] Ran into an error deleting a file \n \t "+m_File.getAbsolutePath(),m_ClassName);
+                System.err.printf("\n[%s] Ran into an error deleting a file \n \t "+m_File.getAbsolutePath(),m_ClassName);
         }
 
     }
@@ -86,13 +95,13 @@ public class RIOLog {
     }
 
     private static boolean CreateRoboRIOFolder(){
-        return m_Folder.exists() == false ? m_Folder.mkdir() : true;
+        return m_Folder.exists() == false ? m_Folder.mkdirs() : true;
     }
 
     private static boolean CreateRoboRIOFile(){
         try{
              m_File.createNewFile();
-             System.out.printf("[%s] File created! \n \t "+m_File.getAbsolutePath(),m_ClassName);
+             System.out.printf("\n[%s] File created! \n \t "+m_File.getAbsolutePath(),m_ClassName);
              return true;
         }catch(IOException ex){
             return false;
@@ -100,13 +109,13 @@ public class RIOLog {
     }
 
     private static boolean CreateUSBFolder(){
-        return m_USBFolder.mkdir();
+        return m_USBFolder.exists() == false ? m_USBFolder.mkdirs() : true;
     }
 
     private static boolean CreateUSBFile(){
         try {
-            Files.move(m_File.toPath(), m_Destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.printf("[%s] File created! \n \t "+m_Destination.getAbsolutePath(),m_ClassName);
+            Files.copy(m_File.toPath(), m_Destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.printf("\n[%s] File created! \n \t "+m_Destination.getAbsolutePath(),m_ClassName);
             return true;
         } catch (IOException e) {
             return false;
@@ -131,7 +140,7 @@ public class RIOLog {
      * 
      * 
      */
-    public static void setLogLevel(RIOLevel level){
+    public static void setLogLevel(RioLevel level){
         m_LogLevel = level.getLevel();
     }
 
@@ -146,13 +155,13 @@ public class RIOLog {
         return m_LogLevel;
     }
 
-    public enum RIOLevel{
+    public enum RioLevel{
         DEBUG(0),
-        IO(1), // change maybe but works for now
+        IO(1),      // change maybe but works for now
         SYSTEM(2),
         ERROR(3);
         private int id;
-        private RIOLevel(int level){
+        private RioLevel(int level){
             id = level;
         }
     
@@ -162,278 +171,286 @@ public class RIOLog {
     
     }
 
-    public class RIOWritter{
+    public class RioWritter{
 
-        long m_PreviousTime;
+        long m_StartTime;
         double m_EventTime;
         FileWriter m_Writer; 
         String m_FileName, m_ClassName;
     
-        public RIOWritter(String fileName, long time){
-            m_FileName = fileName;
-            m_PreviousTime = time;
+        private boolean defualtBypassValue = false;
+    
+        public RioWritter(String fileName, long time){
+            m_FileName =  fileName;
+            m_StartTime = time;
             m_ClassName = getClass().getName();
             WriteHephaestus();
         }
-    
         /**
          * Writes a String to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(String data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(String data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
     
         /**
          * Writes a int to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(int data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(int data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
         
         /**
          * Writes a boolean to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(boolean data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(boolean data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
     
          /**
          * Writes a char to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(char data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(char data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
     
         /**
          * Writes a byte to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(byte data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(byte data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
     
         /**
          * Writes a long to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(long data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(long data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
         
         /**
          * Writes a double to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(double data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(double data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
     
          /**
          * Writes a float to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(float data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(float data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
     
          /**
          * Writes a short to the file created by RIOLog
          * defaults log level to SYSTEM
          */
-        public void Write(short data){
-            String output = data+"\n";
-            WriteToFile(output);
-        }
+        public void Write(short data){Write(data, RioLevel.SYSTEM,defualtBypassValue);}
     
         ///////////////////////////////////////////////////////////////////
+        /**
+         * Writes a String to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(String data, RioLevel id){Write(data, id ,defualtBypassValue);}
+    
+        /**
+         * Writes a int to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(int data, RioLevel id){Write(data, id,defualtBypassValue);}
         
         /**
-         * Writes a char with an RIOLevel to the file created by RIOLog
+         * Writes a boolean to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(boolean data, RioLevel id){Write(data, id,defualtBypassValue);}
+    
+         /**
+         * Writes a char to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(char data, RioLevel id){Write(data, id,defualtBypassValue);}
+    
+        /**
+         * Writes a byte to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(byte data, RioLevel id){Write(data, id,defualtBypassValue);}
+    
+        /**
+         * Writes a long to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(long data, RioLevel id){Write(data, id,defualtBypassValue);}
+        
+        /**
+         * Writes a double to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(double data, RioLevel id){Write(data, id,defualtBypassValue);}
+    
+         /**
+         * Writes a float to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(float data, RioLevel id){Write(data, id,defualtBypassValue);}
+    
+         /**
+         * Writes a short to the file created by RIOLog
+         * defaults log level to SYSTEM
+         */
+        public void Write(short data, RioLevel id){Write(data, id,defualtBypassValue);}
+        //////////////////////////////////////////////////////////////////
+        /**
+         * Writes a char with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
-        public void Write(char data, RIOLevel id, boolean... bypass){
+        public void Write(char data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
     
         /**
-         * Writes a String with an RIOLevel to the file created by RIOLog
+         * Writes a String with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
-        public void Write(String data, RIOLevel id, boolean... bypass){
+        public void Write(String data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            WriteToFile(output, id);
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
     
          /**
-         * Writes a boolean with an RIOLevel to the file created by RIOLog
+         * Writes a boolean with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
-        public void Write(boolean data, RIOLevel id, boolean... bypass){
+        public void Write(boolean data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            WriteToFile(output, id);
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
     
         /**
-         * Writes a int with an RIOLevel to the file created by RIOLog
+         * Writes a int with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
-        public void Write(int data, RIOLevel id, boolean... bypass){
+        public void Write(int data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            WriteToFile(output, id);
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
         /**
-         * Writes a short with an RIOLevel to the file created by RIOLog
+         * Writes a short with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
     
-        public void Write(short data, RIOLevel id, boolean... bypass){
+        public void Write(short data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            WriteToFile(output, id);
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
     
         /**
-         * Writes a byte with an RIOLevel to the file created by RIOLog
+         * Writes a byte with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
-        public void Write(byte data, RIOLevel id, boolean... bypass){
+        public void Write(byte data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            WriteToFile(output, id);
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
     
          /**
-         * Writes a long with an RIOLevel to the file created by RIOLog
+         * Writes a long with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
-        public void Write(long data, RIOLevel id, boolean... bypass){
+        public void Write(long data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            WriteToFile(output, id);
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
     
         /**
-         * Writes a double with an RIOLevel to the file created by RIOLog
+         * Writes a double with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
-        public void Write(double data, RIOLevel id, boolean... bypass){
+        public void Write(double data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            WriteToFile(output, id);
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
     
         /**
-         * Writes a float with an RIOLevel to the file created by RIOLog
+         * Writes a float with an RioLevel to the file created by RIOLog
          * True will bypass log level set
          * The default log level is SYSTEM(2)
          */
-        public void Write(float data, RIOLevel id, boolean... bypass){
+        public void Write(float data, RioLevel id, boolean bypass){
             String output = data+"\n";
-            WriteToFile(output, id);
-            boolean overRide = bypass != null ? true : false;
-            if(!(overRide)){
-                WriteToFile(output, id);
-            }else{
+            if(bypass){
                 WriteToFileBypass(output, id);
+            }else{
+                WriteToFile(output, id);
             }
         }
     
-        private void WriteToFile(String data, RIOLevel... id){
-            int level = id != null ? id[0].getLevel() : 2;
-            String identifier = id != null ? id.toString() : "OUTPUT"; 
-            m_EventTime = (double)((System.nanoTime()-m_PreviousTime)/100000000);
+        private void WriteToFile(String data, RioLevel id){
+            int level = id.getLevel();
+            String identifier = id.toString(); 
+            m_EventTime = (((double)System.currentTimeMillis()-m_StartTime)/100);
             String line = "["+m_EventTime+"]"+"["+identifier+"] "+data;
     
             try{
                 m_Writer = new FileWriter(m_FileName, true);
                 m_Writer.write(line);
                 m_Writer.close();
-                m_PreviousTime = System.nanoTime();
     
-                if(level >= RIOLog.getLogLevel()){
+                if(level >= RioLog.getLogLevel()){
                     System.out.println(line);
                 }
             }catch(IOException e){
-                System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
+                System.err.printf("\n[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
             }
     
         }
     
-        private void WriteToFileBypass(String data, RIOLevel id){ 
-            m_EventTime = (double)((System.nanoTime()-m_PreviousTime)/100000000);
+        private void WriteToFileBypass(String data, RioLevel id){ 
+            m_EventTime = (((double)System.currentTimeMillis()-m_StartTime)/100);
             String line = "["+m_EventTime+"]"+"["+id+"] "+data;
             try{
                 m_Writer = new FileWriter(m_FileName, true);
                 m_Writer.write(line);
                 m_Writer.close();
                 System.out.println(line);
-                m_PreviousTime = System.nanoTime();
             }catch(IOException e){
-                System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
+                System.err.printf("\n[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
             }
     
         }
@@ -445,8 +462,9 @@ public class RIOLog {
                 m_Writer.close();
                 System.out.println(Constants.FILES.HEPHAESTUS.get());
             }catch(IOException e){
-                System.err.printf("[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
+                System.err.printf("\n[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
             }
         }
     }
+
 }
