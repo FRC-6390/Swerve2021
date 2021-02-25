@@ -14,17 +14,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    swerve = new SwerveDrive();
-    driveTrain = new SwerveDriveTrain();
+    // swerve = new SwerveDrive();
+    // driveTrain = new SwerveDriveTrain();
     
     new RIOLog("OutputLog");
     RIOLog.Init();
-    RIOLog.setLogLevel(RIOLevel.DEBUG);
-    RIOLog.out.Write("This is a test with no RIOLevel");
-    RIOLog.out.Write("This is a test with DEBUG", RIOLevel.DEBUG);
-    RIOLog.out.Write("This is a test with IO", RIOLevel.IO); 
-    RIOLog.out.Write("This is a test with SYSTEM", RIOLevel.SYSTEM);
-    RIOLog.out.Write("This is a test with ERROR", RIOLevel.ERROR);
+    // RIOLog.setLogLevel(RIOLevel.DEBUG);
+    // RIOLog.out.Write("This is a test with no RIOLevel");
+    // RIOLog.out.Write("This is a test with DEBUG", RIOLevel.DEBUG);
+    // RIOLog.out.Write("This is a test with IO", RIOLevel.IO); 
+    // RIOLog.out.Write("This is a test with SYSTEM", RIOLevel.SYSTEM);
+    // RIOLog.out.Write("This is a test with ERROR", RIOLevel.ERROR);
     RIOLog.MoveFileToUsb(true);
   }
 
