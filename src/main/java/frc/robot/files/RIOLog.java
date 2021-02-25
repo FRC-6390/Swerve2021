@@ -86,7 +86,7 @@ public class RIOLog {
     }
 
     private static boolean CreateRoboRIOFolder(){
-        return m_Folder.mkdirs();
+        return m_Folder.exists() == false ? m_Folder.mkdir() : true;
     }
 
     private static boolean CreateRoboRIOFile(){
