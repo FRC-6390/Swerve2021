@@ -25,7 +25,7 @@ public class RIOLog {
     public RIOLog(String fileName) {
 
         //Gets date to avoid same name files
-        m_formatter= new SimpleDateFormat("ddMMyy-hhmmss.SSS");
+        m_formatter= new SimpleDateFormat("dd/MM/yy hh:mm:ss");
         m_date = new Date(System.currentTimeMillis());
 
         m_FileName = m_formatter.format(m_date)+"-"+fileName;
