@@ -82,3 +82,6 @@ PUT CHANGES IN HERE
     PART2
     Changed RIOLog to RioLog, fixed almost all the issues, the only thing that is not working is ERRORS not printing to the console (prints to the file) and bypassing not working either
 
+~~Febuary 25 - Mohammad
+    cleaned some code and added sub folders so that files can be placed in the folder relative to its day
+    this will have to be tested on the robot to confirm it works, if you nottice I skipped a step let me please let me know
