@@ -6,16 +6,19 @@ import frc.robot.commands.*;
 import frc.robot.files.RIOLog;
 import frc.robot.files.RIOLog.RIOLevel;
 import frc.robot.subsystems.drivetrain.*;
+import frc.robot.vission.Camera;
 
 public class Robot extends TimedRobot {
   public static SwerveDrive swerve;
   public static RIOLog fileManager;
   public static SwerveDriveTrain driveTrain;
+  public static Camera camera;
 
   @Override
   public void robotInit() {
     swerve = new SwerveDrive();
     driveTrain = new SwerveDriveTrain();
+    camera = new Camera();
     
     new RIOLog("OutputLog");
     RIOLog.Init();
