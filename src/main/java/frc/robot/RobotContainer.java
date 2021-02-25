@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AlignSwerveModules;
 
 public class RobotContainer {
-  //Declaring Controllers
+  //Declaring Controllers for both XBOX and LOGITECH
   public Joystick stick = new Joystick(Constants.JOYSTICK.JOYSTICK_PORT_ID.Get());
   public static XboxController xbox = new XboxController(Constants.XBOX.XBOX_PORT_ID.Get());
 
