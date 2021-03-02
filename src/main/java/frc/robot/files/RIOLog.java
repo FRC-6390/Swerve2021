@@ -13,11 +13,11 @@ import frc.robot.Constants;
 
 public class RioLog {
 
-    private static File m_File, m_Destination, m_Folder, m_USBFolder;
+    private static File m_File, m_Destination, m_Folder, m_subFolder, m_USBFolder, m_subUSBFolder;
     private static long m_Time;
     private static SimpleDateFormat m_DateFormatter, m_TimeFormatter;
     private static Date m_date;
-    private static String m_FileName, m_ClassName;
+    private static String m_FileName, m_ClassName, m_formattedDate;
     private static int m_LogLevel;
 
     public static RioWritter out = null;
@@ -48,25 +48,20 @@ public class RioLog {
     /**
      * Creates any folders and fiels needed to make the log file
      * Sets up preperations to properly use the log writter
-     * 
-     * 
-     * 
      */
     public static void Init() {
         if(!CreateRoboRIOFolder())
-            System.err.printf("\n[%s] Ran into an error creating a folder \n \t "+m_Folder.getAbsolutePath(),m_ClassName);
+            System.err.printf("\n[%s] Ran into an error creating a folder \n \t " + m_Folder.getAbsolutePath(),m_ClassName);
+        if(!CreateRoboRIOSubFolder())
+            System.err.printf("\n[%s] Ran into an error creating a sub folder \n \t " + m_subFolder.getAbsolutePath(),m_ClassName);
         if(!CreateRoboRIOFile())
-            System.err.printf("\n[%s] Ran into an error creating a file \n \t "+m_File.getAbsolutePath(),m_ClassName);
-
-
+            System.err.printf("\n[%s] Ran into an error creating a file \n \t " + m_File.getAbsolutePath(),m_ClassName);
     }
 
      /**
      * Moves file to the first USB pluged into the RoboRio
      * This will automaticaly create any needed folders to move the file
      * if set to true the file on the roborio will stay after transfering to the usb
-     * 
-     * 
      */
     public static void MoveFileToUsb(){MoveFileToUsb(false);}
 
@@ -74,83 +69,79 @@ public class RioLog {
      * Moves file to the first USB pluged into the RoboRio
      * This will automaticaly create any needed folders to move the file
      * if set to true the file on the roborio will stay after transfering to the usb
-     * 
-     * 
      */
     public static void MoveFileToUsb(boolean keep){
         if(!CreateUSBFolder())
-            System.err.printf("\n[%s] Ran into an error creating a folder \n \t "+m_USBFolder.getAbsolutePath(),m_ClassName);
+            System.err.printf("\n[%s] Ran into an error creating a folder \n \t " + m_USBFolder.getAbsolutePath(),m_ClassName);
+        if(!CreateUSBSubFolder())
+            System.err.printf("\n[%s] Ran into an error creating a sub folder \n \t " + m_subUSBFolder.getAbsolutePath(),m_ClassName);
         if(!CreateUSBFile())
-            System.err.printf("\n[%s] Ran into an error creating a file \n \t "+m_Destination.getAbsolutePath(),m_ClassName);
+            System.err.printf("\n[%s] Ran into an error creating a file \n \t " + m_Destination.getAbsolutePath(),m_ClassName);
 
         if(!(keep)){
-            if(!(DeleteRoboRIoFile()))
-                System.err.printf("\n[%s] Ran into an error deleting a file \n \t "+m_File.getAbsolutePath(),m_ClassName);
+            if(!(DeleteRoboRIOFile()))
+                System.err.printf("\n[%s] Ran into an error deleting a file \n \t " + m_File.getAbsolutePath(),m_ClassName);
         }
 
     }
 
-    private static boolean DeleteRoboRIoFile(){
+    
+    private static boolean DeleteRoboRIOFile(){
         return m_File.delete();
     }
 
+    //Creating RoboRIO fodlers and files
     private static boolean CreateRoboRIOFolder(){
         return m_Folder.exists() == false ? m_Folder.mkdirs() : true;
+    }
+
+    private static boolean CreateRoboRIOSubFolder(){
+        return m_subFolder.exists() == false ? m_subFolder.mkdirs() : true;
     }
 
     private static boolean CreateRoboRIOFile(){
         try{
              m_File.createNewFile();
-             System.out.printf("\n[%s] File created! \n \t "+m_File.getAbsolutePath(),m_ClassName);
+             System.out.printf("\n[%s] File created! \n \t "+ m_File.getAbsolutePath(),m_ClassName);
              return true;
         }catch(IOException ex){
             return false;
         }
     }
 
+    //Creating USB Folder and Files
     private static boolean CreateUSBFolder(){
         return m_USBFolder.exists() == false ? m_USBFolder.mkdirs() : true;
+    }
+
+    private static boolean CreateUSBSubFolder(){
+        return m_subUSBFolder.exists() == false ? m_subUSBFolder.mkdirs() : true;
     }
 
     private static boolean CreateUSBFile(){
         try {
             Files.copy(m_File.toPath(), m_Destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.printf("\n[%s] File created! \n \t "+m_Destination.getAbsolutePath(),m_ClassName);
+            System.out.printf("\n[%s] File created! \n \t "+ m_Destination.getAbsolutePath(),m_ClassName);
             return true;
         } catch (IOException e) {
             return false;
         }
     }
 
-    /**
-     * Returns time when RIOLog was started
-     * 
-     * 
-     * 
-     * 
-     */
+    
+    //Returns time when RIOLog was started
     public static long getTime(){
         return m_Time;
     }
 
-    /**
-     * Everything in the RIOLog File gets saved to file but this method sets what get sent to robot console. The default log level is SYSTEM(2)
-     * 
-     * 
-     * 
-     * 
-     */
+    
+    //Everything in the RIOLog File gets saved to file but this method sets what get sent to robot console. The default log level is SYSTEM(2)
     public static void setLogLevel(RioLevel level){
         m_LogLevel = level.getLevel();
     }
 
-     /**
-     * Returns the log level previously set, the default log level is SYSTEM(2)
-     * 
-     * 
-     * 
-     * 
-     */
+     
+    //Returns the log level previously set, the default log level is SYSTEM(2)
     public static int getLogLevel(){
         return m_LogLevel;
     }
@@ -462,7 +453,7 @@ public class RioLog {
                 m_Writer.close();
                 System.out.println(Constants.FILES.HEPHAESTUS.get());
             }catch(IOException e){
-                System.err.printf("\n[%s] Ran into an error writting to a file \n \t "+m_FileName,m_ClassName);
+                System.err.printf("\n[%s] Ran into an error writting to a file \n \t " + m_FileName,m_ClassName);
             }
         }
     }

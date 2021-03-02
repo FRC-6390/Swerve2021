@@ -205,7 +205,7 @@ public interface Constants {
         }
 
         public String getFolder(){
-            return m_String+"/";
+            return m_String + "/";
         }
     }
 
