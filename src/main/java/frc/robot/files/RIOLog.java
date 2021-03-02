@@ -13,7 +13,7 @@ import frc.robot.Constants;
 
 public class RioLog {
 
-    private static File m_File, m_Destination, m_Folder, m_subFolder, m_USBFolder, m_subUSBFolder;
+    private static File m_File, m_Destination, m_Folder, m_USBFolder;// m_subFolder, m_subUSBFolder;
     private static long m_Time;
     private static SimpleDateFormat m_formatter, m_simpleFormatter;
     private static Date m_date;
@@ -26,7 +26,7 @@ public class RioLog {
     public RioLog(String fileName) {
 
         //Gets date to avoid same name files
-        m_formatter = new SimpleDateFormat("dd-MM-yy hh-mm-ss");
+        m_formatter = new SimpleDateFormat("hh-mm-ss");
         m_simpleFormatter = new SimpleDateFormat("dd-MM-yy");
         m_date = new Date(System.currentTimeMillis());
 
@@ -35,13 +35,13 @@ public class RioLog {
 
         m_Time = System.currentTimeMillis();
         //RoboRIO Files/Folders
-        m_Folder = new File(Constants.FILES.ROBORIO_OUTPUT.get());
-        m_subFolder = new File(Constants.FILES.ROBORIO_OUTPUT.get() + m_formattedDate);
+        m_Folder = new File(Constants.FILES.ROBORIO_OUTPUT.get() + m_formattedDate);
+        // m_subFolder = new File(Constants.FILES.ROBORIO_OUTPUT.get());
         m_File = new File(Constants.FILES.ROBORIO_OUTPUT.getFolder() + m_FileName +".txt");
         //USB Files/Folders
         m_USBFolder = new File(Constants.FILES.USB_OUTPUT.get());
-        m_subUSBFolder = new File(Constants.FILES.USB_OUTPUT.get() + m_formattedDate);
-        m_Destination = new File(Constants.FILES.USB_OUTPUT.getFolder() + m_subUSBFolder + "/" + m_FileName + ".txt");
+        // m_subUSBFolder = new File(Constants.FILES.USB_OUTPUT.get() + m_formattedDate);
+        m_Destination = new File(Constants.FILES.USB_OUTPUT.getFolder() + m_USBFolder + "/" + m_FileName + ".txt");
 
         m_LogLevel = 0;
         
@@ -56,8 +56,8 @@ public class RioLog {
     public static void Init() {
         if(!CreateRoboRIOFolder())
             System.err.printf("\n[%s] Ran into an error creating a folder \n \t " + m_Folder.getAbsolutePath(),m_ClassName);
-        if(!CreateRoboRIOSubFolder())
-            System.err.printf("\n[%s] Ran into an error creating a sub folder \n \t " + m_subFolder.getAbsolutePath(),m_ClassName);
+        // if(!CreateRoboRIOSubFolder())
+        //     System.err.printf("\n[%s] Ran into an error creating a sub folder \n \t " + m_USBFolder.getAbsolutePath(),m_ClassName);
         if(!CreateRoboRIOFile())
             System.err.printf("\n[%s] Ran into an error creating a file \n \t " + m_File.getAbsolutePath(),m_ClassName);
     }
@@ -76,9 +76,9 @@ public class RioLog {
      */
     public static void MoveFileToUsb(boolean keep){
         if(!CreateUSBFolder())
-            System.err.printf("\n[%s] Ran into an error creating a folder \n \t " + m_USBFolder.getAbsolutePath(),m_ClassName);
-        if(!CreateUSBSubFolder())
-            System.err.printf("\n[%s] Ran into an error creating a sub folder \n \t " + m_subUSBFolder.getAbsolutePath(),m_ClassName);
+            System.err.printf("\n[%s] Ran into an error creating a folder \n \t " + m_Folder.getAbsolutePath(),m_ClassName);
+        // if(!CreateUSBSubFolder())
+        //     System.err.printf("\n[%s] Ran into an error creating a sub folder \n \t " + m_USBFolder.getAbsolutePath(),m_ClassName);
         if(!CreateUSBFile())
             System.err.printf("\n[%s] Ran into an error creating a file \n \t " + m_Destination.getAbsolutePath(),m_ClassName);
 
@@ -99,10 +99,6 @@ public class RioLog {
         return m_Folder.exists() == false ? m_Folder.mkdirs() : true;
     }
 
-    private static boolean CreateRoboRIOSubFolder(){
-        return m_subFolder.exists() == false ? m_subFolder.mkdirs() : true;
-    }
-
     private static boolean CreateRoboRIOFile(){
         try{
              m_File.createNewFile();
@@ -118,9 +114,9 @@ public class RioLog {
         return m_USBFolder.exists() == false ? m_USBFolder.mkdirs() : true;
     }
 
-    private static boolean CreateUSBSubFolder(){
-        return m_subUSBFolder.exists() == false ? m_subUSBFolder.mkdirs() : true;
-    }
+    // private static boolean CreateUSBSubFolder(){
+    //     return m_subUSBFolder.exists() == false ? m_subUSBFolder.mkdirs() : true;
+    // }
 
     private static boolean CreateUSBFile(){
         try {

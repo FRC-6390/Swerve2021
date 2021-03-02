@@ -51,7 +51,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   frontLeftLimit,
   backRightLimit,
   backLeftLimit,
-  limitSwitchArray[]; //Limit Switch Arrat
+  limitSwitchArray[]; //Limit Switch Array
 
 
   //Module Location
