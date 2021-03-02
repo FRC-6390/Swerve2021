@@ -39,6 +39,7 @@ public class SwerveDrive extends CommandBase {
 
     //Calls the Drive void and sets the power of the motors using doubles created ^
     Robot.driveTrain.drive(RightX, RightY, LeftX);
+    
     //Displays joystick values on Smart Dashboard
     SmartDashboard.putNumber("Right X", RightX);
     SmartDashboard.putNumber("Right Y", RightY);
