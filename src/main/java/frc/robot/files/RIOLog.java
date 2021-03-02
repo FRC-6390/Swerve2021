@@ -15,7 +15,7 @@ public class RioLog {
 
     private static File m_File, m_Destination, m_Folder, m_USBFolder;
     private static long m_Time;
-    private static SimpleDateFormat m_formatter;
+    private static SimpleDateFormat m_DateFormatter, m_TimeFormatter;
     private static Date m_date;
     private static String m_FileName, m_ClassName;
     private static int m_LogLevel;
@@ -24,20 +24,20 @@ public class RioLog {
 
 
     public RioLog(String fileName) {
-
-        //Gets date to avoid same name files
-        m_formatter= new SimpleDateFormat("dd-MM-yy hh-mm-ss");
-        m_date = new Date(System.currentTimeMillis());
-
-        m_FileName = m_formatter.format(m_date)+"-"+fileName;
-
         m_Time = System.currentTimeMillis();
+        //Gets date to avoid same name files
+        m_DateFormatter = new SimpleDateFormat("yyy MMM d");
+        m_TimeFormatter = new SimpleDateFormat("hh-mm-ss"); 
+        m_date = new Date(m_Time);
+
+        m_FileName = m_TimeFormatter.format(m_date)+"-"+fileName;
+
         //RoboRIO Files
-        m_Folder = new File(Constants.FILES.ROBORIO_OUTPUT.get());
-        m_File = new File(Constants.FILES.ROBORIO_OUTPUT.getFolder()+m_FileName+".txt");
+        m_Folder = new File(Constants.FILES.ROBORIO_OUTPUT.get() + m_DateFormatter.format(m_date));
+        m_File = new File(Constants.FILES.ROBORIO_OUTPUT.getFolder()+ m_DateFormatter.format(m_date) +"/"+ m_FileName + ".txt");
         //USB Files
-        m_USBFolder = new File(Constants.FILES.USB_OUTPUT.get());
-        m_Destination = new File(Constants.FILES.USB_OUTPUT.getFolder() + m_FileName + ".txt");
+        m_USBFolder = new File(Constants.FILES.USB_OUTPUT.get() + m_DateFormatter.format(m_date));
+        m_Destination = new File(Constants.FILES.USB_OUTPUT.getFolder() + m_DateFormatter.format(m_date) +"/"+ m_FileName + ".txt");
 
         m_LogLevel = 0;
         

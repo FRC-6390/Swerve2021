@@ -20,14 +20,14 @@ public class Robot extends TimedRobot {
     // driveTrain = new SwerveDriveTrain();
     
     new RioLog("OutputLog");
-    RioLog.Init();
-    RioLog.setLogLevel(RioLevel.DEBUG);
+     RioLog.Init();
+    RioLog.setLogLevel(RioLevel.ERROR);
     RioLog.out.Write("This is a test with no RIOLevel");
     RioLog.out.Write("This is a test with DEBUG", RioLevel.DEBUG);
     RioLog.out.Write("This is a test with IO", RioLevel.IO); 
     RioLog.out.Write("This is a test with SYSTEM", RioLevel.SYSTEM);
     RioLog.out.Write("This is a test with ERROR", RioLevel.ERROR);
-    RioLog.MoveFileToUsb(true);
+    RioLog.MoveFileToUsb();
   }
 
   @Override
@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    swerve.schedule();
+    //swerve.schedule();
 
   }
 
