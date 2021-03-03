@@ -3,38 +3,29 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Constants;
 
 public class SwerveModule {
 
-    // final int kCountsPerRev = 2048;//units per revolution for talon fx
-    // final double kGearRatio = 8.16;
-    // final double kWheelRadiusInches = 3;//3 inch radius
-    // final int k100msPerSecod = 10;//idk 
-
-    
-
+    final int k100msPerSecond = 10;
     private final TalonFX momentumMotor, rotationMotor;
-
-    Encoder test = new Encoder(0, 0);
-
+    
     private final TalonFXSensorCollection momentumEncoder, rotationEncoder;
 
     private final PIDController momentumController = new PIDController(1, 0,0);
-    private final ProfiledPIDController rotationController = new ProfiledPIDController(1, 0,0,new TrapezoidProfile.Constraints(Constants.ROBOT.MAX_ANGULAR_SPEED.get(), Constants.ROBOT.MAX_ANGULAR_ACCELERATION.get()));
 
     private final SimpleMotorFeedforward momentumFeedforward = new SimpleMotorFeedforward(1, 3);
     private final SimpleMotorFeedforward rotationFeedforward = new SimpleMotorFeedforward(1, 0.5);
+
+    private final ProfiledPIDController rotationController = new ProfiledPIDController(1, 0,0,new TrapezoidProfile.Constraints(Constants.ROBOT.MAX_ANGULAR_SPEED.get(), Constants.ROBOT.MAX_ANGULAR_ACCELERATION.get()));
+
 
     public SwerveModule(int ModuleId) {
 
@@ -46,6 +37,7 @@ public class SwerveModule {
 
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
         
+        distanceToUnits(0); // to make not complain
     }
 
 
@@ -65,21 +57,24 @@ public class SwerveModule {
         rotationMotor.set(ControlMode.PercentOutput, rotationOutput+rotationFeed);
     }
 
-    // //converts units to meters
-    // private int distanceToUnits(double positionMeters){
-    //   double wheelRotations = positionMeters/(2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches));
-    //   double motorRotations = wheelRotations * kGearRatio;
-    //   int sensorCounts = (int)(motorRotations * kCountsPerRev);
-    //   return sensorCounts;
-    // }
+    //converts units to meters
+    private int distanceToUnits(double positionMeters){
+      double wheelRotations = positionMeters/(2 * Math.PI * Constants.ROBOT.WHEEL_RADIUS.get());
+      double motorRotations = wheelRotations * Constants.SWERVE.GEAR_RATIO.get();
+      int sensorCounts = (int)(motorRotations *  Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution());
+      return sensorCounts;
+    }
 
     //converts velocity to native Units
     int motorRotationsPer100ms = 0;
     private int velocityToUnits(double velocityMetersPerSecond){
       double wheelRotationsPerSecond = velocityMetersPerSecond/(2* Math.PI * Constants.ROBOT.WHEEL_RADIUS.get());
-      double motorRotationsPersecond = wheelRotationsPerSecond * Constants.SWERVE.GEAR_RATIO.get();
-      motorRotationsPer100ms = (int)(motorRotationsPer100ms * Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution());
-      return motorRotationsPer100ms;
+      double motorRotationsPerSecond = wheelRotationsPerSecond * Constants.SWERVE.GEAR_RATIO.get();
+      double motorRotationsPer100ms = motorRotationsPerSecond / k100msPerSecond;
+      int sensorCountsPer100ms = (int)(motorRotationsPer100ms * Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution());
+      return sensorCountsPer100ms;
+ 
+ 
     }
 
     //Converts Native Units to Meters
@@ -90,7 +85,7 @@ public class SwerveModule {
       return positionMeters;
     }
     
-
+    //Optimizes the Swerve Drive to Feel Smoother While Driving 
     private static SwerveModuleState optimize(
       SwerveModuleState desiredState, Rotation2d currentAngle) {
         var delta = desiredState.angle.minus(currentAngle);

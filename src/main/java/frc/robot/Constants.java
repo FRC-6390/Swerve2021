@@ -2,7 +2,6 @@ package frc.robot;
 
 public interface Constants {
 
-    /*-------------------------MOTORS--------------------*/
     // DRIVE TRAIN MOTORS
     enum MOTORID {
         FRONT_LEFT_ROTATION(1),
@@ -24,6 +23,7 @@ public interface Constants {
         }
     }
 
+    //Swerve Module Values
     enum SWERVE {
         FRONT_LEFT_MODULE(1),
         FRONT_RIGHT_MODULE(2),
@@ -55,6 +55,9 @@ public interface Constants {
         }
     }
 
+    //Might Have to Seperate Later
+    //Limit Switches
+    //Encoderss
     enum SENSORS {
         FRONT_LEFT_ENCODER(1),
         FRONT_RIGHT_ENCODER(2),
@@ -87,7 +90,7 @@ public interface Constants {
         }
     }
 
-    
+    //Logitech Controler Buttons and Axises
     enum JOYSTICK {
         JOYSTICK_BUTTON_1(1),
         JOYSTICK_BUTTON_2(2),
@@ -120,6 +123,7 @@ public interface Constants {
         }
     }
     
+    //Xbox Controller Buttons and Axises
     enum XBOX {
         XBOX_A(1),
         XBOX_B(2),
@@ -167,6 +171,7 @@ public interface Constants {
 
     }
 
+    //Robot Details
     enum ROBOT{
         WHEEL_RADIUS(0.0508),
         MAX_SPEED(3.0),
@@ -183,9 +188,31 @@ public interface Constants {
         }
        
     }
-  
-    int PDP_DEVICE_ID = 0;
-    
+
+    enum FILES{
+        ROBORIO_OUTPUT("/home/lvuser/output/"),
+        USB_OUTPUT("u/output/"),
+        HEPHAESTUS("      _    _            _                     _                 __ ____   ___   ___  \n     | |  | |          | |                   | |               / /|___ \\ / _ \\ / _ \\ \n     | |__| | ___ _ __ | |__   __ _  ___  ___| |_ _   _ ___   / /_  __) | (_) | | | |\n     |  __  |/ _ \\ '_ \\| '_ \\ / _` |/ _ \\/ __| __| | | / __| | '_ \\|__ < \\__, | | | |\n     | |  | |  __/ |_) | | | | (_| |  __/\\__ \\ |_| |_| \\__ \\ | (_) |__) |  / /| |_| |\n     |_|  |_|\\___| .__/|_| |_|\\__,_|\\___||___/\\__|\\__,_|___/  \\___/____/  /_/  \\___/ \n                 | |                                                                 \n                 |_|            \n");
+
+
+        private String m_String;
+        private FILES(String string){
+            m_String = string;
+        }
+
+        public String get(){
+            return m_String;
+        }
+
+        public String getFolder(){
+            return m_String + "/";
+        }
+    }
+
+    /**_____________________NON ENUM VALUES_____________________ */
+
+    //Power Distribution Panel
+    int PDP_DEVICE_ID = 0;    
 
     
     

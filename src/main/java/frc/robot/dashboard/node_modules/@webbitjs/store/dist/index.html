@@ -1,0 +1,27 @@
+
+<html>
+  <body>
+
+
+    <script src="./webbit-store.js"></script>
+
+    <script>
+      class TestProvider extends webbitStore.SourceProvider {
+        static get typeName() {
+          return 'TestProvider';
+        }
+      }
+
+      webbitStore.addSourceProviderType(TestProvider);
+      provider = webbitStore.addSourceProvider('TestProvider');
+
+      //provider.updateSource(' ??/ .A', 1);
+      // provider.updateSource('/a', 2);
+      provider.updateSource('/a/ b/c/d', true);
+      // provider.updateSource('/ a /b/ c/d', false);
+      // provider.updateSource('/a/c', { 'd': 'e' });
+    </script>
+  </body>
+
+
+</html>

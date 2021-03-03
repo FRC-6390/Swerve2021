@@ -3,22 +3,31 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.*;
-import frc.robot.files.FileManager;
-import frc.robot.subsystems.*;
+import frc.robot.files.RioLog;
+import frc.robot.files.RioLog.RioLevel;
 import frc.robot.subsystems.drivetrain.*;
+import frc.robot.vission.Camera;
 
 public class Robot extends TimedRobot {
   public static SwerveDrive swerve;
-  public static FileManager fileManager;
+  public static RioLog fileManager;
   public static SwerveDriveTrain driveTrain;
+  public static Camera camera;
 
   @Override
   public void robotInit() {
-    fileManager = new FileManager("Output");
-    swerve = new SwerveDrive();
-    driveTrain = new SwerveDriveTrain();
-
-    fileManager.Init();
+    // swerve = new SwerveDrive();
+    // driveTrain = new SwerveDriveTrain();
+    
+    new RioLog("OutputLog");
+     RioLog.Init();
+    RioLog.setLogLevel(RioLevel.ERROR);
+    RioLog.out.Write("This is a test with no RIOLevel");
+    RioLog.out.Write("This is a test with DEBUG", RioLevel.DEBUG);
+    RioLog.out.Write("This is a test with IO", RioLevel.IO); 
+    RioLog.out.Write("This is a test with SYSTEM", RioLevel.SYSTEM);
+    RioLog.out.Write("This is a test with ERROR", RioLevel.ERROR);
+    RioLog.MoveFileToUsb();
   }
 
   @Override
@@ -52,7 +61,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    swerve.schedule();
+    //swerve.schedule();
 
   }
 
