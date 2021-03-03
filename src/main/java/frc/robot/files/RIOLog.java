@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.awt.*;
+
 
 import frc.robot.Constants;
 
@@ -15,33 +17,29 @@ public class RioLog {
 
     private static File m_File, m_Destination, m_Folder, m_USBFolder;// m_subFolder, m_subUSBFolder;
     private static long m_Time;
-    private static SimpleDateFormat m_formatter, m_simpleFormatter;
+    private static SimpleDateFormat m_DateFormatter, m_TimeFormatter;
     private static Date m_date;
-    private static String m_FileName, m_ClassName, m_formattedDate;
+    private static String m_FileName, m_ClassName;
     private static int m_LogLevel;
 
     public static RioWritter out = null;
 
 
     public RioLog(String fileName) {
-
-        //Gets date to avoid same name files
-        m_formatter = new SimpleDateFormat("hh-mm-ss");
-        m_simpleFormatter = new SimpleDateFormat("dd-MM-yy");
-        m_date = new Date(System.currentTimeMillis());
-
-        m_formattedDate = m_simpleFormatter.format(m_date);
-        m_FileName = m_formatter.format(m_date)+ "-" + fileName;
-
         m_Time = System.currentTimeMillis();
-        //RoboRIO Files/Folders
-        m_Folder = new File(Constants.FILES.ROBORIO_OUTPUT.get() + m_formattedDate);
-        // m_subFolder = new File(Constants.FILES.ROBORIO_OUTPUT.get());
-        m_File = new File(Constants.FILES.ROBORIO_OUTPUT.getFolder() + m_FileName +".txt");
-        //USB Files/Folders
-        m_USBFolder = new File(Constants.FILES.USB_OUTPUT.get());
-        // m_subUSBFolder = new File(Constants.FILES.USB_OUTPUT.get() + m_formattedDate);
-        m_Destination = new File(Constants.FILES.USB_OUTPUT.getFolder() + m_USBFolder + "/" + m_FileName + ".txt");
+        //Gets date to avoid same name files
+        m_DateFormatter = new SimpleDateFormat("yyy MMM d");
+        m_TimeFormatter = new SimpleDateFormat("hh-mm-ss"); 
+        m_date = new Date(m_Time);
+
+        m_FileName = m_TimeFormatter.format(m_date)+"-"+fileName;
+
+        //RoboRIO Files
+        m_Folder = new File(Constants.FILES.ROBORIO_OUTPUT.get() + m_DateFormatter.format(m_date));
+        m_File = new File(Constants.FILES.ROBORIO_OUTPUT.getFolder()+ m_DateFormatter.format(m_date) +"/"+ m_FileName + ".txt");
+        //USB Files
+        m_USBFolder = new File(Constants.FILES.USB_OUTPUT.get() + m_DateFormatter.format(m_date));
+        m_Destination = new File(Constants.FILES.USB_OUTPUT.getFolder() + m_DateFormatter.format(m_date) +"/"+ m_FileName + ".txt");
 
         m_LogLevel = 0;
         
@@ -103,6 +101,7 @@ public class RioLog {
         try{
              m_File.createNewFile();
              System.out.printf("\n[%s] File created! \n \t "+ m_File.getAbsolutePath(),m_ClassName);
+             Toolkit.getDefaultToolkit().beep(); 
              return true;
         }catch(IOException ex){
             return false;
@@ -122,6 +121,7 @@ public class RioLog {
         try {
             Files.copy(m_File.toPath(), m_Destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
             System.out.printf("\n[%s] File created! \n \t "+ m_Destination.getAbsolutePath(),m_ClassName);
+            Toolkit.getDefaultToolkit().beep(); 
             return true;
         } catch (IOException e) {
             return false;
