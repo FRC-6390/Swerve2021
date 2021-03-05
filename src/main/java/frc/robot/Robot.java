@@ -7,6 +7,7 @@ import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
 import frc.robot.subsystems.drivetrain.*;
 import frc.robot.vission.Camera;
+import java.awt.*;
 
 public class Robot extends TimedRobot {
   public static SwerveDrive swerve;
@@ -18,9 +19,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // swerve = new SwerveDrive();
     // driveTrain = new SwerveDriveTrain();
-    
+    Toolkit.getDefaultToolkit().beep();
     new RioLog("OutputLog");
-     RioLog.Init();
+    RioLog.Init();
     RioLog.setLogLevel(RioLevel.ERROR);
     RioLog.out.Write("This is a test with no RIOLevel");
     RioLog.out.Write("This is a test with DEBUG", RioLevel.DEBUG);

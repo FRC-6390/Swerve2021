@@ -101,7 +101,7 @@ public class RioLog {
         try{
              m_File.createNewFile();
              System.out.printf("\n[%s] File created! \n \t "+ m_File.getAbsolutePath(),m_ClassName);
-             Toolkit.getDefaultToolkit().beep(); 
+             //Toolkit.getDefaultToolkit().beep(); 
              return true;
         }catch(IOException ex){
             return false;
@@ -121,7 +121,7 @@ public class RioLog {
         try {
             Files.copy(m_File.toPath(), m_Destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
             System.out.printf("\n[%s] File created! \n \t "+ m_Destination.getAbsolutePath(),m_ClassName);
-            Toolkit.getDefaultToolkit().beep(); 
+            //Toolkit.getDefaultToolkit().beep(); 
             return true;
         } catch (IOException e) {
             return false;
