@@ -9,7 +9,7 @@ This branch will be used for testing random code allowing us to test new feature
     3. Reduces repetition of others testing similar code
 
 ### Update Change Log
-    Change Log is used to keep track of progress and what you have changed or added. \n Simillar to a diary but for programming
+    Change Log is used to keep track of progress and what you have changed or added. /n Simillar to a diary but for programming
 
 
 
