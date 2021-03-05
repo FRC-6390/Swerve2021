@@ -88,3 +88,7 @@ PUT CHANGES IN HERE
 
 ~~February 26 - Mohammad
     we cant spell lol... its **February** not **Febuary** :)
+
+~~ March 4, 2021 - Mohammad 
+    created testing branch and setted it up with neccesary files and folder to get it started. to switch between main and testing branch you will have to click the three dotes ... in your source control and press **Check out to** and then you can switch between them.
+    I also added motor safety impleentation for all drive motors and rotation motors also added safety to their motor controllers. The numbers are under the max that falcons can go so that we can make sure they work without going to the max amps.

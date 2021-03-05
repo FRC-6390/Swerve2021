@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
@@ -99,6 +101,30 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
     backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
+    
+    //SAFETY FEATURES FOR MOTORS
+    //Falcons go up to 40Amps
+    // Supply is for motor controller Stator is for motor keeping number low for now
+    //Drive Motors                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
+    frontLeftMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    frontLeftMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    frontRightMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    frontRightMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    backLeftMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    backLeftMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    backRightMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    backRightMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    
+    //Rotation Motors                                                            enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
+    frontLeftRotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    frontLeftRotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    frontRightRotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    frontRightRotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    backLeftRotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    backLeftRotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    backRightRotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    backRightRotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    
     //Adding Momentum Motors to Array
     momentumMotorArray = new TalonFX[5];
     momentumMotorArray[1] = frontLeftMomentum;
