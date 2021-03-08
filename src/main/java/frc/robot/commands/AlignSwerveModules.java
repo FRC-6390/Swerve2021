@@ -33,13 +33,11 @@ public class AlignSwerveModules extends CommandBase {
               SwerveDriveTrain.getEncoderArray().get(id-1).setPosition(0.0);
               SwerveDriveTrain.setMotorSpeed(id, 0.0);
               System.out.println("Aligned module ID:" + id);
-              SmartDashboard.putBoolean("Swerve Alligned", true);
               //Once all motors are alligned loops ends
               doneMotor = true;
             }
             else{
               SwerveDriveTrain.setMotorSpeed(id, 0.1);
-              SmartDashboard.putBoolean("Swerve Alligned", false);
             }
         }
     }

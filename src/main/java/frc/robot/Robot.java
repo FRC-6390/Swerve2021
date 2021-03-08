@@ -3,14 +3,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.*;
-import frc.robot.files.RIOLog;
-import frc.robot.files.RIOLog.RioLevel;
+import frc.robot.files.RioLog;
+import frc.robot.files.RioLog.RioLevel;
 import frc.robot.subsystems.drivetrain.*;
 import frc.robot.vission.Camera;
 
 public class Robot extends TimedRobot {
   public static SwerveDrive swerve;
-  public static RIOLog fileManager;
+  public static RioLog fileManager;
   public static SwerveDriveTrain driveTrain;
   public static Camera camera;
 
@@ -19,15 +19,15 @@ public class Robot extends TimedRobot {
     // swerve = new SwerveDrive();
     // driveTrain = new SwerveDriveTrain();
     
-    new RIOLog("OutputLog");
-     RIOLog.Init();
-    RIOLog.setLogLevel(RioLevel.ERROR);
-    RIOLog.out.Write("This is a test with no RIOLevel");
-    RIOLog.out.Write("This is a test with DEBUG", RioLevel.DEBUG);
-    RIOLog.out.Write("This is a test with IO", RioLevel.IO); 
-    RIOLog.out.Write("This is a test with SYSTEM", RioLevel.SYSTEM);
-    RIOLog.out.Write("This is a test with ERROR", RioLevel.ERROR);
-    RIOLog.MoveFileToUsb();
+    new RioLog("OutputLog");
+    RioLog.Init();
+    RioLog.setLogLevel(RioLevel.ERROR);
+    RioLog.out.Write("This is a test with no RIOLevel");
+    RioLog.out.Write("This is a test with DEBUG", RioLevel.DEBUG);
+    RioLog.out.Write("This is a test with IO", RioLevel.IO); 
+    RioLog.out.Write("This is a test with SYSTEM", RioLevel.SYSTEM);
+    RioLog.out.Write("This is a test with ERROR", RioLevel.ERROR);
+    RioLog.MoveFileToUsb();
   }
 
   @Override
