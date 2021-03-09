@@ -13,7 +13,7 @@ import java.awt.*;
 import frc.robot.Constants;
 
 
-public class RIOLog {
+public class RioLog {
 
     private static File m_File, m_Destination, m_Folder, m_USBFolder;// m_subFolder, m_subUSBFolder;
     private static long m_Time;
@@ -25,7 +25,7 @@ public class RIOLog {
     public static RioWritter out = null;
 
 
-    public RIOLog(String fileName) {
+    public RioLog(String fileName) {
         m_Time = System.currentTimeMillis();
         //Gets date to avoid same name files
         m_DateFormatter = new SimpleDateFormat("yyy MMM d");
@@ -423,7 +423,7 @@ public class RIOLog {
                 m_Writer.write(line);
                 m_Writer.close();
     
-                if(level >= RIOLog.getLogLevel()){
+                if(level >= RioLog.getLogLevel()){
                     System.out.println(line);
                 }
             }catch(IOException e){

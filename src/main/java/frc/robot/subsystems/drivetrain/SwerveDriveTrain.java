@@ -68,12 +68,14 @@ public class SwerveDriveTrain extends SubsystemBase {
   public static AHRS gyro;
   final PowerDistributionPanel PDP;
 
+  private static SwerveDriveTrain instance;
+
 /*                                                    
  *                    <Front>
  *         Module 1               Module 2                     
  *        |-----------------------------|                    RULES:
- *        | 1M   |   \Intake/    |   2M |                    1. if you touch you die
- *        |   5R |               | 6R   |                    2. if you mess it up and dont know how to 
+ *        | 0M   |   \Intake/    |   1M |                    1. if you touch you die
+ *        |   4R |               | 5R   |                    2. if you mess it up and dont know how to 
  *        |------                |------|                       fix it ask another team programmer\
  *        |                             |                    3. Follow Rule # 1 and # 2
  *        |                             |  
@@ -81,8 +83,8 @@ public class SwerveDriveTrain extends SubsystemBase {
  *        |                             |                     M = Momentum Motor 
  *        |                             |                     R = Rotation Motor
  *        |------|               |------| 
- *        |   3M |               | 4M   | 
- *        | 7R   |   /Shooter\   |   8R | 
+ *        |   2M |               | 3M   | 
+ *        | 6R   |   /Shooter\   |   7R | 
  *        |-----------------------------| 
  *         Module 3               Module 4
  *                    <Back>     
@@ -106,53 +108,35 @@ public class SwerveDriveTrain extends SubsystemBase {
     //Falcons go up to 40Amps
     //Supply is for motor controller Stator is for motor keeping number low for now
     //Drive Motors                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
-    frontLeftMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-    frontLeftMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    frontRightMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-    frontRightMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    backLeftMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-    backLeftMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    backRightMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-    backRightMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    
-    //Rotation Motors                                                            enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
-    frontLeftRotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-    frontLeftRotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    frontRightRotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-    frontRightRotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    backLeftRotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-    backLeftRotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    backRightRotation.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-    backRightRotation.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
     
     //Adding Momentum Motors to Array
-    momentumMotorArray = new TalonFX[5];
-    momentumMotorArray[1] = frontLeftMomentum;
-    momentumMotorArray[2] = frontRightMomentum;
-    momentumMotorArray[3] = backLeftMomentum;
-    momentumMotorArray[4] = backRightMomentum;
+    momentumMotorArray = new TalonFX[4];
+    momentumMotorArray[0] = frontLeftMomentum;
+    momentumMotorArray[1] = frontRightMomentum;
+    momentumMotorArray[2] = backLeftMomentum;
+    momentumMotorArray[3] = backRightMomentum;
 
     
 
     //Adding Rotation Motors to Array
-    rotationMotorArray = new TalonFX[5];
-    rotationMotorArray[1] = frontLeftRotation;
-    rotationMotorArray[2] = frontRightRotation;
-    rotationMotorArray[3] = backLeftRotation;
-    rotationMotorArray[4] = backRightRotation;
+    rotationMotorArray = new TalonFX[4];
+    rotationMotorArray[0] = frontLeftRotation;
+    rotationMotorArray[1] = frontRightRotation;
+    rotationMotorArray[2] = backLeftRotation;
+    rotationMotorArray[3] = backRightRotation;
 
     
 
     //Adding all Drivetrain Motors to Array
-    motorArray = new TalonFX[9];
-      motorArray[1] = frontLeftMomentum;
-      motorArray[2] = frontRightMomentum;
-      motorArray[3] = backLeftMomentum;
-      motorArray[4] = backRightMomentum;
-      motorArray[5] = frontLeftRotation;
-      motorArray[6] = frontRightRotation;
-      motorArray[7] = backLeftRotation;
-      motorArray[8] = backRightRotation;
+    motorArray = new TalonFX[8];
+      motorArray[0] = frontLeftMomentum;
+      motorArray[1] = frontRightMomentum;
+      motorArray[2] = backLeftMomentum;
+      motorArray[3] = backRightMomentum;
+      motorArray[4] = frontLeftRotation;
+      motorArray[5] = frontRightRotation;
+      motorArray[6] = backLeftRotation;
+      motorArray[7] = backRightRotation;
 
 
     //Declaring Encoders
@@ -162,11 +146,11 @@ public class SwerveDriveTrain extends SubsystemBase {
     backLeftEncoder = new CANCoder(Constants.SENSORS.BACK_LEFT_ENCODER.GetID());
 
     //Adding Encoders to Array
-    encoderArray = new CANCoder[5];
-      encoderArray[1] = frontLeftEncoder;
-      encoderArray[2] = frontRightEncoder;
-      encoderArray[3] = backLeftEncoder;
-      encoderArray[4] = backRightEncoder;
+    encoderArray = new CANCoder[4];
+      encoderArray[0] = frontLeftEncoder;
+      encoderArray[1] = frontRightEncoder;
+      encoderArray[2] = backLeftEncoder;
+      encoderArray[3] = backRightEncoder;
 
 
     //Declaring Modules
@@ -194,6 +178,11 @@ public class SwerveDriveTrain extends SubsystemBase {
     backLeftLocation = new Translation2d(-Constants.SWERVE.LOCATION_FROM_CENTER.get(),Constants.SWERVE.LOCATION_FROM_CENTER.get());
     backRightLocation = new Translation2d(-Constants.SWERVE.LOCATION_FROM_CENTER.get(),-Constants.SWERVE.LOCATION_FROM_CENTER.get());
 
+
+    for (int i = 0; i < motorArray.length; i++) {
+      motorArray[i].configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+      motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    }
     //Swevre Kinematics
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     speeds = new ChassisSpeeds(0,0,0);
@@ -218,15 +207,13 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   //Sets Motor Speeds
   public static void setMotorSpeed(int motorId, double speed){
-    int id = motorId == 0 ? 1 : motorId;
-    motorArray[id].set(ControlMode.PercentOutput, speed);
+    motorArray[motorId].set(ControlMode.PercentOutput, speed);
   }
 
   //Moving all Module Motors
   public static void setModuleSpeed(int moduleId, double rotationSpeed, double momentumSpeed){
-    int id = moduleId == 0 ? 1 : moduleId;
-    motorArray[id].set(ControlMode.PercentOutput, momentumSpeed);
-    motorArray[id+4].set(ControlMode.PercentOutput, rotationSpeed);
+    motorArray[moduleId].set(ControlMode.PercentOutput, momentumSpeed);
+    motorArray[moduleId+4].set(ControlMode.PercentOutput, rotationSpeed);
     //               ^bad way of doing this
   }
 
@@ -259,10 +246,8 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   //Resets Single Module Encoder
   public static void resetModuleEncoder(int encoderId){
-    int id = encoderId == 0 ? 1 : encoderId;
-
-    encoderArray[id].setPosition(0.0);
-    System.out.println("Reseted Module Encoder ID: "+id);
+    encoderArray[encoderId].setPosition(0.0);
+    System.out.println("Reseted Module Encoder ID: "+encoderId);
   }
 
   //Restes all Module Encoders
@@ -275,10 +260,8 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   //Resets Single Motor Encoder
   public static void resetMotorEncoder(int motorId){
-    int id = motorId == 0 ? 1 : motorId;
-
-    motorArray[id].getSensorCollection().setIntegratedSensorPosition(0,0);
-    System.out.println("Reseted Motor Encoder ID: "+id);
+    motorArray[motorId].getSensorCollection().setIntegratedSensorPosition(0,0);
+    System.out.println("Reseted Motor Encoder ID: "+motorId);
   }
 
   //Resets all Motor Encoders
@@ -289,10 +272,21 @@ public class SwerveDriveTrain extends SubsystemBase {
     System.out.println("Rested All Motor Encoders");
   }
 
+  public static SwerveDriveTrain getInstance(){
+    if(instance == null)
+      instance = new SwerveDriveTrain();
+    return instance;
+  }
+
 
   @Override
   public void periodic() {
-    //Displaying Values on Smart Dashboard 
+    //Displaying Values on Smart Dashboard
+     //For later 
+    // for (int i = 0; i < motorArray.length; i++) {
+    //   SmartDashboard.putNumber(Constants.MOTORID, motorArray[i].getSensorCollection().getIntegratedSensorPosition());
+    // }
+
     SmartDashboard.putNumber("Top Left Motor 1", frontLeftMomentum.getSensorCollection().getIntegratedSensorPosition());
     SmartDashboard.putNumber("Top Left Motor 2", frontLeftRotation.getSensorCollection().getIntegratedSensorPosition());
     SmartDashboard.putNumber("Back Left Motor 1", backLeftMomentum.getSensorCollection().getIntegratedSensorPosition());
