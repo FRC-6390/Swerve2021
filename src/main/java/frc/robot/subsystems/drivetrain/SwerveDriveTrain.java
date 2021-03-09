@@ -104,7 +104,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     
     //SAFETY FEATURES FOR MOTORS
     //Falcons go up to 40Amps
-    // Supply is for motor controller Stator is for motor keeping number low for now
+    //Supply is for motor controller Stator is for motor keeping number low for now
     //Drive Motors                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
     frontLeftMomentum.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
     frontLeftMomentum.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
