@@ -4,31 +4,37 @@ public interface Constants {
 
     // DRIVE TRAIN MOTORS
     enum MOTORID {
-        FRONT_LEFT_ROTATION(1),
-        FRONT_LEFT_MOMENTUM(5),
-        FRONT_RIGHT_ROTATION(2),
-        FRONT_RIGHT_MOMENTUM(6),
-        BACK_LEFT_ROTATION(3),
-        BACK_LEFT_MOMENTUM(7),
-        BACK_RIGHT_ROTATION(4),
-        BACK_RIGHT_MOMENTUM(8);
+        FRONT_LEFT_ROTATION(0,"Front left rotation"),
+        FRONT_LEFT_MOMENTUM(4,"Front left momentum"),
+        FRONT_RIGHT_ROTATION(1,"Front right rotation"),
+        FRONT_RIGHT_MOMENTUM(5,"front right momentum"),
+        BACK_LEFT_ROTATION(2,"Back left rotation"),
+        BACK_LEFT_MOMENTUM(6,"Back left momentum"),
+        BACK_RIGHT_ROTATION(3,"Back right rotation"),
+        BACK_RIGHT_MOMENTUM(7,"Back right momentum");
 
         private int id;
-        private MOTORID(int id){
+        private String name;
+        private MOTORID(int id,String name){
             this.id = id;
+            this.name = name;
         }
 
         public int GetID(){
             return id;
         }
+
+        public String GetName(){
+            return name;
+        }
     }
 
     //Swerve Module Values
     enum SWERVE {
-        FRONT_LEFT_MODULE(1),
-        FRONT_RIGHT_MODULE(2),
-        BACK_LEFT_MODULE(3),
-        BACK_RIGHT_MODULE(4),
+        FRONT_LEFT_MODULE(0),
+        FRONT_RIGHT_MODULE(1),
+        BACK_LEFT_MODULE(2),
+        BACK_RIGHT_MODULE(3),
         LOCATION_FROM_CENTER(0.3302),
         GEAR_RATIO(8.16);
 
@@ -59,14 +65,14 @@ public interface Constants {
     //Limit Switches
     //Encoderss
     enum SENSORS {
-        FRONT_LEFT_ENCODER(1),
-        FRONT_RIGHT_ENCODER(2),
-        BACK_LEFT_ENCODER(3),
-        BACK_RIGHT_ENCODER(4),
-        FRONT_LEFT_LIMIT(1), 
-        FRONT_RIGHT_LIMIT(2), 
-        BACK_RIGHT_LIMIT(3),
-        BACK_LEFT_LIMIT(4),
+        FRONT_LEFT_ENCODER(0),
+        FRONT_RIGHT_ENCODER(1),
+        BACK_LEFT_ENCODER(2),
+        BACK_RIGHT_ENCODER(3),
+        FRONT_LEFT_LIMIT(0), 
+        FRONT_RIGHT_LIMIT(1), 
+        BACK_RIGHT_LIMIT(2),
+        BACK_LEFT_LIMIT(3),
         EXTERNAL_ENCODER_RESOLUTION(4096),// maybe 1024
         INTERNAL_ENCODER_RESOLUTION(2048); 
 

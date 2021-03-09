@@ -423,7 +423,7 @@ public class RioLog {
                 m_Writer.write(line);
                 m_Writer.close();
     
-                if(level >= RIOLog.getLogLevel()){
+                if(level >= RioLog.getLogLevel()){
                     System.out.println(line);
                 }
             }catch(IOException e){

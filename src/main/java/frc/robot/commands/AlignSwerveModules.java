@@ -29,8 +29,8 @@ public class AlignSwerveModules extends CommandBase {
         while(!doneMotor){
           int id = rotationMotor.getBaseID(); // may need to switch
           System.out.println("Aligning module ID:" + id);
-            if(SwerveDriveTrain.getLimitSwitchArray().get(id-1).get()){
-              SwerveDriveTrain.getEncoderArray().get(id-1).setPosition(0.0);
+            if(SwerveDriveTrain.getLimitSwitchArray().get(id).get()){
+              SwerveDriveTrain.getEncoderArray().get(id).setPosition(0.0);
               SwerveDriveTrain.setMotorSpeed(id, 0.0);
               System.out.println("Aligned module ID:" + id);
               //Once all motors are alligned loops ends
