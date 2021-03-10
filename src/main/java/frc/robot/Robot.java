@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
     RioLog.out.Write("This is a test with SYSTEM", RioLevel.SYSTEM);
     RioLog.out.Write("This is a test with ERROR", RioLevel.ERROR);
     RioLog.MoveFileToUsb();
+    
 
     driveTrain = SwerveDriveTrain.getInstance();
   }
