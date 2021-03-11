@@ -48,14 +48,6 @@ public class SwerveDriveTrain extends SubsystemBase {
   backLeftModule,
   backRightModule;
 
-  //Limit Switches on Modules
-  private static DigitalInput frontRightLimit,
-  frontLeftLimit,
-  backRightLimit,
-  backLeftLimit,
-  limitSwitchArray[]; //Limit Switch Array
-
-
   //Module Location
   private final Translation2d frontLeftLocation,
   frontRightLocation,
@@ -76,14 +68,14 @@ public class SwerveDriveTrain extends SubsystemBase {
  *        |-----------------------------|                    RULES:
  *        | 0M   |   \Intake/    |   1M |                    1. if you touch you die
  *        |   4R |               | 5R   |                    2. if you mess it up and dont know how to 
- *        |------                |------|                       fix it ask another team programmer\
+ *        |------                |------|                       fix it ask another team programmer
  *        |                             |                    3. Follow Rule # 1 and # 2
  *        |                             |  
  * <left> |         |Revolover|         | <Right>  
  *        |                             |                     M = Momentum Motor 
  *        |                             |                     R = Rotation Motor
  *        |------|               |------| 
- *        |   2M |               | 3M   | 
+ *        |   2M |   |Battery|   | 3M   | 
  *        | 6R   |   /Shooter\   |   7R | 
  *        |-----------------------------| 
  *         Module 3               Module 4
@@ -103,12 +95,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
     backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
-    
-    //SAFETY FEATURES FOR MOTORS
-    //Falcons go up to 40Amps
-    //Supply is for motor controller Stator is for motor keeping number low for now
-    //Drive Motors                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
-    
+  
     //Adding Momentum Motors to Array
     momentumMotorArray = new TalonFX[4];
     momentumMotorArray[0] = frontLeftMomentum;
@@ -159,19 +146,6 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID());
     backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID()); 
 
-    //Declaring Limit Switches
-    frontRightLimit = new DigitalInput(Constants.SENSORS.FRONT_RIGHT_LIMIT.GetID());
-    frontLeftLimit = new DigitalInput(Constants.SENSORS.FRONT_LEFT_LIMIT.GetID());
-    backRightLimit = new DigitalInput(Constants.SENSORS.BACK_RIGHT_LIMIT.GetID());
-    backLeftLimit = new DigitalInput(Constants.SENSORS.BACK_LEFT_LIMIT.GetID());
-
-    //Adding Limit Switches to Array
-    limitSwitchArray = new DigitalInput[4];
-      limitSwitchArray[0] = frontLeftLimit;
-      limitSwitchArray[1] = frontRightLimit;
-      limitSwitchArray[2] = backLeftLimit;
-      limitSwitchArray[3] = backRightLimit;
-
     //Declaring The Modules Location From the Center of The Bot
     frontLeftLocation= new Translation2d(Constants.SWERVE.LOCATION_FROM_CENTER.get(),Constants.SWERVE.LOCATION_FROM_CENTER.get());
     frontRightLocation = new Translation2d(Constants.SWERVE.LOCATION_FROM_CENTER.get(),-Constants.SWERVE.LOCATION_FROM_CENTER.get());
@@ -179,6 +153,11 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightLocation = new Translation2d(-Constants.SWERVE.LOCATION_FROM_CENTER.get(),-Constants.SWERVE.LOCATION_FROM_CENTER.get());
 
 
+    //SAFETY FEATURES FOR MOTORS
+    //Falcons go up to 40Amps
+    //Supply is for motor controller Stator is for motor keeping number low for now
+    //Drive Motors                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
+    
     for (int i = 0; i < motorArray.length; i++) {
       motorArray[i].configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
       motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
@@ -236,11 +215,6 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   public static List<CANCoder> getEncoderArray(){
     List<CANCoder> list = Arrays.asList(encoderArray);
-    return list;
-  }
-
-  public static List<DigitalInput> getLimitSwitchArray(){
-    List<DigitalInput> list = Arrays.asList(limitSwitchArray);
     return list;
   }
 
