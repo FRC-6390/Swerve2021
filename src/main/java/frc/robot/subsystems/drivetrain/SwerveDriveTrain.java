@@ -247,9 +247,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   public static SwerveDriveTrain getInstance(){
-    if(instance == null)
-      instance = new SwerveDriveTrain();
-    return instance;
+    return instance == null ? instance = new SwerveDriveTrain() : instance;
   }
 
 
