@@ -10,12 +10,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -46,7 +46,8 @@ public class SwerveDriveTrain extends SubsystemBase {
   private final SwerveModule frontLeftModule,
   frontRightModule,
   backLeftModule,
-  backRightModule;
+  backRightModule,
+  swerveModuleArray[];
 
   //Module Location
   private final Translation2d frontLeftLocation,
@@ -55,7 +56,6 @@ public class SwerveDriveTrain extends SubsystemBase {
   backRightLocation;
 
   private final SwerveDriveKinematics kinematics;
-  private ChassisSpeeds speeds; 
 
   public static AHRS gyro;
   final PowerDistributionPanel PDP;
@@ -95,37 +95,34 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
     backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
-  
     //Adding Momentum Motors to Array
-    momentumMotorArray = new TalonFX[4];
-    momentumMotorArray[0] = frontLeftMomentum;
-    momentumMotorArray[1] = frontRightMomentum;
-    momentumMotorArray[2] = backLeftMomentum;
-    momentumMotorArray[3] = backRightMomentum;
-
-    
+    momentumMotorArray = new TalonFX[]{
+      frontLeftMomentum,
+      frontRightMomentum,
+      backLeftMomentum,
+      backRightMomentum
+    };
 
     //Adding Rotation Motors to Array
-    rotationMotorArray = new TalonFX[4];
-    rotationMotorArray[0] = frontLeftRotation;
-    rotationMotorArray[1] = frontRightRotation;
-    rotationMotorArray[2] = backLeftRotation;
-    rotationMotorArray[3] = backRightRotation;
-
+    rotationMotorArray = new TalonFX[]{
+      frontLeftRotation,
+      frontRightRotation,
+      backLeftRotation,
+      backRightRotation
+    };
     
-
     //Adding all Drivetrain Motors to Array
-    motorArray = new TalonFX[8];
-      motorArray[0] = frontLeftMomentum;
-      motorArray[1] = frontRightMomentum;
-      motorArray[2] = backLeftMomentum;
-      motorArray[3] = backRightMomentum;
-      motorArray[4] = frontLeftRotation;
-      motorArray[5] = frontRightRotation;
-      motorArray[6] = backLeftRotation;
-      motorArray[7] = backRightRotation;
-
-
+    motorArray = new TalonFX[]{
+      frontLeftMomentum,
+      frontRightMomentum,
+      backLeftMomentum,
+      backRightMomentum,
+      frontLeftRotation,
+      frontRightRotation,
+      backLeftRotation,
+      backRightRotation
+    };
+      
     //Declaring Encoders
     frontRightEncoder = new CANCoder(Constants.SENSORS.FRONT_RIGHT_ENCODER.GetID());
     frontLeftEncoder = new CANCoder(Constants.SENSORS.FRONT_LEFT_ENCODER.GetID());
@@ -133,12 +130,12 @@ public class SwerveDriveTrain extends SubsystemBase {
     backLeftEncoder = new CANCoder(Constants.SENSORS.BACK_LEFT_ENCODER.GetID());
 
     //Adding Encoders to Array
-    encoderArray = new CANCoder[4];
-      encoderArray[0] = frontLeftEncoder;
-      encoderArray[1] = frontRightEncoder;
-      encoderArray[2] = backLeftEncoder;
-      encoderArray[3] = backRightEncoder;
-
+    encoderArray = new CANCoder[]{
+      frontLeftEncoder,
+      frontRightEncoder,
+      backLeftEncoder,
+      backRightEncoder
+    };
 
     //Declaring Modules
     frontLeftModule = new SwerveModule(Constants.SWERVE.FRONT_LEFT_MODULE.GetID());
@@ -146,25 +143,30 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID());
     backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID()); 
 
+    swerveModuleArray = new SwerveModule[]{
+      frontLeftModule,
+      frontRightModule,
+      backLeftModule,
+      backRightModule
+    };
+
     //Declaring The Modules Location From the Center of The Bot
     frontLeftLocation= new Translation2d(Constants.SWERVE.LOCATION_FROM_CENTER.get(),Constants.SWERVE.LOCATION_FROM_CENTER.get());
     frontRightLocation = new Translation2d(Constants.SWERVE.LOCATION_FROM_CENTER.get(),-Constants.SWERVE.LOCATION_FROM_CENTER.get());
     backLeftLocation = new Translation2d(-Constants.SWERVE.LOCATION_FROM_CENTER.get(),Constants.SWERVE.LOCATION_FROM_CENTER.get());
     backRightLocation = new Translation2d(-Constants.SWERVE.LOCATION_FROM_CENTER.get(),-Constants.SWERVE.LOCATION_FROM_CENTER.get());
 
-
     //SAFETY FEATURES FOR MOTORS
     //Falcons go up to 40Amps
     //Supply is for motor controller Stator is for motor keeping number low for now
     //Drive Motors                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
-    
     for (int i = 0; i < motorArray.length; i++) {
       motorArray[i].configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
       motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
     }
+
     //Swevre Kinematics
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
-    speeds = new ChassisSpeeds(0,0,0);
 
     //Gyro
     gyro = new AHRS(Port.kMXP);
@@ -176,12 +178,11 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   //Used for actualy moving the Robot
   public void drive(double xSpeed, double ySpeed, double rotation){
-    var swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
+    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
-    frontLeftModule.setDesiredState(swerveModuleStates[0]);
-    frontRightModule.setDesiredState(swerveModuleStates[1]);
-    backLeftModule.setDesiredState(swerveModuleStates[2]);
-    backRightModule.setDesiredState(swerveModuleStates[3]);
+    for (int i = 0; i < swerveModuleStates.length; i++) {
+      swerveModuleArray[i].setDesiredState(swerveModuleStates[i]);
+    }
   }
 
   //Sets Motor Speeds
@@ -253,24 +254,9 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //Displaying Values on Smart Dashboard
-     //For later 
-    // for (int i = 0; i < motorArray.length; i++) {
-    //   SmartDashboard.putNumber(Constants.MOTORID, motorArray[i].getSensorCollection().getIntegratedSensorPosition());
-    // }
-
-    SmartDashboard.putNumber("Top Left Motor 1", frontLeftMomentum.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Top Left Motor 2", frontLeftRotation.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Back Left Motor 1", backLeftMomentum.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Back Left Motor 2", backLeftRotation.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Top Right Motor 1",frontRightMomentum.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Top Right Motor 2",frontRightRotation.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Back Right Motor 1",backRightMomentum.getSensorCollection().getIntegratedSensorPosition());
-    SmartDashboard.putNumber("Back Right Motor 2",backRightRotation.getSensorCollection().getIntegratedSensorPosition());
-
-    SmartDashboard.putNumber("Forward Velocity", speeds.vyMetersPerSecond);
-    SmartDashboard.putNumber("Strafe Velocity", speeds.vxMetersPerSecond);
-    SmartDashboard.putNumber("Rotation Velocity", speeds.omegaRadiansPerSecond);
+    for (int i = 0; i < motorArray.length; i++) {
+      SmartDashboard.putNumber(Constants.MOTORID.MOTOR_NAME.GetName()[i], motorArray[i].getSensorCollection().getIntegratedSensorPosition());
+    }
 
     SmartDashboard.putNumber("GYRO", gyro.getAngle());
   }

@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AlignSwerveModules;
+import frc.robot.commands.SwerveDrive;
+import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
 
 public class RobotContainer {
   //Declaring Controllers for both XBOX and LOGITECH
@@ -36,11 +38,16 @@ public class RobotContainer {
   XboxLeftStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_LEFT_JOYSTICK_IN.GetButton()),
   XboxRightStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_RIGHT_JOYSTICK_IN.GetButton());
   
-  
+  private SwerveDriveTrain driveTrain;
   
   public RobotContainer() {
-    // Configure the button bindings
+    driveTrain = SwerveDriveTrain.getInstance();
     configureButtonBindings();
+    configureCommands();
+  }
+
+  private void configureCommands() {
+    driveTrain.setDefaultCommand(new SwerveDrive(driveTrain, xbox));
   }
 
   private void configureButtonBindings() {

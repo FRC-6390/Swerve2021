@@ -4,19 +4,24 @@ public interface Constants {
 
     // DRIVE TRAIN MOTORS
     enum MOTORID {
-        FRONT_LEFT_ROTATION(0,"Front left rotation"),
-        FRONT_LEFT_MOMENTUM(4,"Front left momentum"),
-        FRONT_RIGHT_ROTATION(1,"Front right rotation"),
-        FRONT_RIGHT_MOMENTUM(5,"front right momentum"),
-        BACK_LEFT_ROTATION(2,"Back left rotation"),
-        BACK_LEFT_MOMENTUM(6,"Back left momentum"),
-        BACK_RIGHT_ROTATION(3,"Back right rotation"),
-        BACK_RIGHT_MOMENTUM(7,"Back right momentum");
+        FRONT_LEFT_ROTATION(0),
+        FRONT_LEFT_MOMENTUM(4),
+        FRONT_RIGHT_ROTATION(1),
+        FRONT_RIGHT_MOMENTUM(5),
+        BACK_LEFT_ROTATION(2),
+        BACK_LEFT_MOMENTUM(6),
+        BACK_RIGHT_ROTATION(3),
+        BACK_RIGHT_MOMENTUM(7),
+        MOTOR_NAME(new String[]{"Front left rotation","Front left momentum","Front right rotation",
+        "front right momentum","Back left rotation","Back left momentum","Back right rotation","Back right momentum"});
 
         private int id;
-        private String name;
-        private MOTORID(int id,String name){
+        private String[] name;
+        private MOTORID(int id){
             this.id = id;
+        }
+
+        private MOTORID(String[] name){
             this.name = name;
         }
 
@@ -24,7 +29,7 @@ public interface Constants {
             return id;
         }
 
-        public String GetName(){
+        public String[] GetName(){
             return name;
         }
     }

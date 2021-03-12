@@ -98,3 +98,7 @@ PUT CHANGES IN HERE
 
 ~~ March 11, 2021 - Mathias
     Complete overhall of swerve, to many changes to list
+    Alot more changes, we should now make commands in RobotContainer and link them to their
+    subsystems, in swervedrivetrain condenced the smartdash
+    in swervedrive completly changed it to fix the example China sent us
+    
