@@ -23,15 +23,15 @@ import frc.robot.Constants;
 public class SwerveDriveTrain extends SubsystemBase {
   //Initiation
   //DriveTrain Motors
-  private static TalonFX frontLeftMomentum,
+  private static TalonFX frontLeftDrive,
   frontLeftRotation,
-  backLeftMomentum,
+  backLeftDrive,
   backLeftRotation,
-  frontRightMomentum,
+  frontRightDrive,
   frontRightRotation,
-  backRightMomentum,
+  backRightDrive,
   backRightRotation,
-  momentumMotorArray[],   //Motor Arrays
+  driveMotorArray[],   //Motor Arrays
   rotationMotorArray[], 
   motorArray[];
 
@@ -66,19 +66,19 @@ public class SwerveDriveTrain extends SubsystemBase {
  *                    <Front>
  *         Module 1               Module 2                     
  *        |-----------------------------|                    RULES:
- *        | 0M   |   \Intake/    |   1M |                    1. if you touch you die
- *        |   4R |               | 5R   |                    2. if you mess it up and dont know how to 
+ *        |   4R |   \Intake/    | 1D   |                    1. if you touch you die
+ *        | 0D   |               |   5R |                    2. if you mess it up and dont know how to 
  *        |------                |------|                       fix it ask another team programmer
  *        |                             |                    3. Follow Rule # 1 and # 2
  *        |                             |  
  * <left> |         |Revolover|         | <Right>  
- *        |                             |                     M = Momentum Motor 
+ *        |                             |                     D = Drive Motor 
  *        |                             |                     R = Rotation Motor
  *        |------|               |------| 
- *        |   2M |   |Battery|   | 3M   | 
- *        | 6R   |   /Shooter\   |   7R | 
- *        |-----------------------------| 
- *         Module 3               Module 4
+ *        | 6R   |   |Battery|   |   3D |                     Rotation Motors are on the left side of the module when looking from the outside
+ *        |   2D |   /Shooter\   | 7R   |                     Drive Motors are on the right side of the module when looking from the outside
+ *        |-----------------------------|                     The Limit Switches are attached to the rotation motor of each module
+ *         Module 3               Module 4      
  *                    <Back>     
  *               
  */
@@ -86,21 +86,21 @@ public class SwerveDriveTrain extends SubsystemBase {
   public SwerveDriveTrain() {
 
     //Declaring Motors
-    frontLeftMomentum = new TalonFX(Constants.MOTORID.FRONT_LEFT_MOMENTUM.GetID());
+    frontLeftDrive = new TalonFX(Constants.MOTORID.FRONT_LEFT_DRIVE.GetID());
     frontLeftRotation = new TalonFX(Constants.MOTORID.FRONT_LEFT_ROTATION.GetID());
-    backLeftMomentum = new TalonFX(Constants.MOTORID.BACK_LEFT_MOMENTUM.GetID());
+    backLeftDrive = new TalonFX(Constants.MOTORID.BACK_LEFT_DRIVE.GetID());
     backLeftRotation = new TalonFX(Constants.MOTORID.BACK_LEFT_ROTATION.GetID());
-    frontRightMomentum = new TalonFX(Constants.MOTORID.FRONT_RIGHT_MOMENTUM.GetID());
+    frontRightDrive = new TalonFX(Constants.MOTORID.FRONT_RIGHT_DRIVE.GetID());
     frontRightRotation = new TalonFX(Constants.MOTORID.FRONT_RIGHT_ROTATION.GetID());
-    backRightMomentum = new TalonFX(Constants.MOTORID.BACK_RIGHT_MOMENTUM.GetID());
+    backRightDrive = new TalonFX(Constants.MOTORID.BACK_RIGHT_DRIVE.GetID());
     backRightRotation = new TalonFX(Constants.MOTORID.BACK_RIGHT_ROTATION.GetID());
 
-    //Adding Momentum Motors to Array
-    momentumMotorArray = new TalonFX[]{
-      frontLeftMomentum,
-      frontRightMomentum,
-      backLeftMomentum,
-      backRightMomentum
+    //Adding Drive Motors to Array
+    driveMotorArray = new TalonFX[]{
+      frontLeftDrive,
+      frontRightDrive,
+      backLeftDrive,
+      backRightDrive
     };
 
     //Adding Rotation Motors to Array
@@ -113,10 +113,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     
     //Adding all Drivetrain Motors to Array
     motorArray = new TalonFX[]{
-      frontLeftMomentum,
-      frontRightMomentum,
-      backLeftMomentum,
-      backRightMomentum,
+      frontLeftDrive,
+      frontRightDrive,
+      backLeftDrive,
+      backRightDrive,
       frontLeftRotation,
       frontRightRotation,
       backLeftRotation,
@@ -143,6 +143,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID());
     backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID()); 
 
+    //Module Array
     swerveModuleArray = new SwerveModule[]{
       frontLeftModule,
       frontRightModule,
@@ -167,7 +168,6 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     //Swevre Kinematics
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
-
     //Gyro
     gyro = new AHRS(Port.kMXP);
     //Power Distribution Panel
@@ -180,9 +180,10 @@ public class SwerveDriveTrain extends SubsystemBase {
   public void drive(double xSpeed, double ySpeed, double rotation){
     SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
-    for (int i = 0; i < swerveModuleStates.length; i++) {
+
+    for (int i = 0; i < swerveModuleStates.length; i++) 
       swerveModuleArray[i].setDesiredState(swerveModuleStates[i]);
-    }
+    
   }
 
   //Sets Motor Speeds
@@ -191,10 +192,10 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   //Moving all Module Motors
-  public static void setModuleSpeed(int moduleId, double rotationSpeed, double momentumSpeed){
-    motorArray[moduleId].set(ControlMode.PercentOutput, momentumSpeed);
+  public static void setModuleSpeed(int moduleId, double rotationSpeed, double driveSpeed){
+    motorArray[moduleId].set(ControlMode.PercentOutput, driveSpeed);
     motorArray[moduleId+4].set(ControlMode.PercentOutput, rotationSpeed);
-    //               ^bad way of doing this
+    //                 ^ bad way of doing this
   }
 
 
@@ -204,8 +205,8 @@ public class SwerveDriveTrain extends SubsystemBase {
     return list;
   }
 
-  public static List<TalonFX> getMomentumMotorArray(){
-    List<TalonFX> list = Arrays.asList(momentumMotorArray);
+  public static List<TalonFX> getDriveMotorArray(){
+    List<TalonFX> list = Arrays.asList(driveMotorArray);
     return list;
   }
 
@@ -227,9 +228,9 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   //Restes all Module Encoders
   public static void resetModuleEncoders(){
-    for (CANCoder canCoder : encoderArray) {
+    for (CANCoder canCoder : encoderArray)
       canCoder.setPosition(0.0);
-    }
+    
     System.out.println("Rested All Module Encoders");
   }
 
@@ -241,9 +242,9 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   //Resets all Motor Encoders
   public static void resetMotorEncoders(){
-    for (TalonFX motor : motorArray) {
+    for (TalonFX motor : motorArray) 
       motor.getSensorCollection().setIntegratedSensorPosition(0,0);
-    }
+    
     System.out.println("Rested All Motor Encoders");
   }
 
@@ -254,9 +255,10 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    for (int i = 0; i < motorArray.length; i++) {
+    //Displays Motor Values to The Smart Dashboard by looping through motor id's
+    for (int i = 0; i < motorArray.length; i++) 
       SmartDashboard.putNumber(Constants.MOTORID.MOTOR_NAME.GetName()[i], motorArray[i].getSensorCollection().getIntegratedSensorPosition());
-    }
+    
 
     SmartDashboard.putNumber("GYRO", gyro.getAngle());
   }

@@ -17,19 +17,17 @@ import frc.robot.Constants;
 public class SwerveModule {
 
     final int k100msPerSecond = 10;
-    private final TalonFX momentumMotor, rotationMotor;
-    
+    private final TalonFX driveMotor, rotationMotor;
     private final CANCoder moduleEncoder;
-
     private CANCoderConfiguration moduleEncoderConfiguration;
-
-    private TalonFXConfiguration rotationConfiguration, momentumConfiguration;
+    private TalonFXConfiguration rotationConfiguration, driveConfiguration;
 
     public SwerveModule(int ModuleId) {
 
-        momentumMotor = new TalonFX(ModuleId);
+        //Motors
+        driveMotor = new TalonFX(ModuleId);
         rotationMotor = new TalonFX(ModuleId+4);
-        
+        //Module Encoders
         moduleEncoder = new CANCoder(ModuleId);
 
         rotationConfiguration = new TalonFXConfiguration(){{
@@ -43,14 +41,14 @@ public class SwerveModule {
         rotationMotor.configAllSettings(rotationConfiguration);
         rotationMotor.setNeutralMode(NeutralMode.Brake);
 
-        momentumConfiguration = new TalonFXConfiguration(){{
-          slot0.kP = Constants.SWERVE.P_MOMENTUM.get();
-          slot0.kI = Constants.SWERVE.I_MOMENTUM.get();
-          slot0.kD = Constants.SWERVE.D_MOMENTUM.get();
-          slot0.kF = Constants.SWERVE.F_MOMENTUM.get();
+        driveConfiguration = new TalonFXConfiguration(){{
+          slot0.kP = Constants.SWERVE.P_DRIVE.get();
+          slot0.kI = Constants.SWERVE.I_DRIVE.get();
+          slot0.kD = Constants.SWERVE.D_DRIVE.get();
+          slot0.kF = Constants.SWERVE.F_DRIVE.get();
         }};
-        momentumMotor.configAllSettings(momentumConfiguration);
-        momentumMotor.setNeutralMode(NeutralMode.Brake);
+        driveMotor.configAllSettings(driveConfiguration);
+        driveMotor.setNeutralMode(NeutralMode.Brake);
         
         moduleEncoderConfiguration = new CANCoderConfiguration(){{
           magnetOffsetDegrees = Constants.SWERVE.LOCATION_FROM_CENTER.get();
@@ -74,20 +72,19 @@ public class SwerveModule {
 
         double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
         
-        momentumMotor.set(ControlMode.PercentOutput, feetPerSecond / Constants.ROBOT.MAX_SPEED.get());
+        driveMotor.set(ControlMode.PercentOutput, feetPerSecond / Constants.ROBOT.MAX_SPEED.get());
     }
 
     public Rotation2d getAngle() {
       return Rotation2d.fromDegrees(moduleEncoder.getAbsolutePosition());
     }
 
-        //Optimizes the Swerve Drive to Feel Smoother While Driving 
+    //Optimizes the Swerve Drive to Feel Smoother While Driving 
     private static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
       var delta = desiredState.angle.minus(currentAngle);
       if (Math.abs(delta.getDegrees()) > 90.0) {
         return new SwerveModuleState(-desiredState.speedMetersPerSecond,desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
-          } else {
-            return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
-          }
-      }
+      } else return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
+      
+    }
 }
