@@ -15,6 +15,7 @@ public class SwerveDrive extends CommandBase {
   private SwerveDriveTrain driveTrain;
   private XboxController controller;
 
+  //Slew Limmiter smooths out controller inputs
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(6);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(6);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(6);
@@ -31,8 +32,10 @@ public class SwerveDrive extends CommandBase {
   @Override
   public void execute() {
 
+    //Regular Movement 
     double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft)) + Constants.ROBOT.MAX_SPEED.get();
     double leftX = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft)) * Constants.ROBOT.MAX_SPEED.get();
+    //Rotation
     double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight)) * Constants.ROBOT.MAX_SPEED.get();
 
     driveTrain.drive(leftX, leftY, rightX);

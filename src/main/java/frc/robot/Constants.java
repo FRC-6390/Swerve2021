@@ -5,15 +5,15 @@ public interface Constants {
     // DRIVE TRAIN MOTORS
     enum MOTORID {
         FRONT_LEFT_ROTATION(0),
-        FRONT_LEFT_MOMENTUM(4),
+        FRONT_LEFT_DRIVE(4),
         FRONT_RIGHT_ROTATION(1),
-        FRONT_RIGHT_MOMENTUM(5),
+        FRONT_RIGHT_DRIVE(5),
         BACK_LEFT_ROTATION(2),
-        BACK_LEFT_MOMENTUM(6),
+        BACK_LEFT_DRIVE(6),
         BACK_RIGHT_ROTATION(3),
-        BACK_RIGHT_MOMENTUM(7),
-        MOTOR_NAME(new String[]{"Front left rotation","Front left momentum","Front right rotation",
-        "front right momentum","Back left rotation","Back left momentum","Back right rotation","Back right momentum"});
+        BACK_RIGHT_DRIVE(7),
+        MOTOR_NAME(new String[]{"Front left rotation","Front left drive","Front right rotation",
+        "front right drive","Back left rotation","Back left frive","Back right rotation","Back right drive"});
 
         private int id;
         private String[] name;
@@ -45,10 +45,10 @@ public interface Constants {
         P_ROTATION(0.0),
         I_ROTATION(0.0),
         D_ROTATION(0.0),
-        P_MOMENTUM(0.0),
-        I_MOMENTUM(0.0),
-        D_MOMENTUM(0.0),
-        F_MOMENTUM(0.0);
+        P_DRIVE(0.0),
+        I_DRIVE(0.0),
+        D_DRIVE(0.0),
+        F_DRIVE(0.0);
 
         private int id;
         private double doubles;
@@ -193,7 +193,7 @@ public interface Constants {
     enum ROBOT{
         WHEEL_RADIUS(0.0508),
         MAX_SPEED(10.0),
-        MAX_ANGULAR_SPEED(3.145),
+        MAX_ANGULAR_SPEED(Math.PI),
         MAX_ANGULAR_ACCELERATION(6.29);
 
         private double id;
