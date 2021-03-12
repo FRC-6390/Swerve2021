@@ -36,7 +36,14 @@ public interface Constants {
         BACK_LEFT_MODULE(2),
         BACK_RIGHT_MODULE(3),
         LOCATION_FROM_CENTER(0.3302),
-        GEAR_RATIO(8.16);
+        GEAR_RATIO(8.16),
+        P_ROTATION(0.0),
+        I_ROTATION(0.0),
+        D_ROTATION(0.0),
+        P_MOMENTUM(0.0),
+        I_MOMENTUM(0.0),
+        D_MOMENTUM(0.0),
+        F_MOMENTUM(0.0);
 
         private int id;
         private double doubles;
@@ -73,7 +80,7 @@ public interface Constants {
         FRONT_RIGHT_LIMIT(1), 
         BACK_RIGHT_LIMIT(2),
         BACK_LEFT_LIMIT(3),
-        EXTERNAL_ENCODER_RESOLUTION(4096),// maybe 1024
+        EXTERNAL_ENCODER_RESOLUTION(4096),
         INTERNAL_ENCODER_RESOLUTION(2048); 
 
 
@@ -180,7 +187,7 @@ public interface Constants {
     //Robot Details
     enum ROBOT{
         WHEEL_RADIUS(0.0508),
-        MAX_SPEED(3.0),
+        MAX_SPEED(10.0),
         MAX_ANGULAR_SPEED(3.145),
         MAX_ANGULAR_ACCELERATION(6.29);
 

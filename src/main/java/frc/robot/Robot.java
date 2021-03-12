@@ -12,11 +12,11 @@ public class Robot extends TimedRobot {
   public static SwerveDrive swerve;
   public static RioLog fileManager;
   public static SwerveDriveTrain driveTrain;
-  public static Camera camera;
+  //public static Camera camera;
 
   @Override
   public void robotInit() {
-    // swerve = new SwerveDrive();
+    swerve = new SwerveDrive();
     // driveTrain = new SwerveDriveTrain();
     
     new RioLog("OutputLog");
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    //swerve.schedule();
+    swerve.schedule();
 
   }
 

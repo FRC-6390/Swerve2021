@@ -1,8 +1,14 @@
 package frc.robot.subsystems.drivetrain;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
@@ -10,6 +16,7 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -17,84 +24,77 @@ public class SwerveModule {
     final int k100msPerSecond = 10;
     private final TalonFX momentumMotor, rotationMotor;
     
-    private final TalonFXSensorCollection momentumEncoder, rotationEncoder;
+    private final CANCoder moduleEncoder;
 
-    private final PIDController momentumController = new PIDController(1, 0,0);
+    private CANCoderConfiguration moduleEncoderConfiguration;
 
-    private final SimpleMotorFeedforward momentumFeedforward = new SimpleMotorFeedforward(1, 3);
-    private final SimpleMotorFeedforward rotationFeedforward = new SimpleMotorFeedforward(1, 0.5);
-
-    private final ProfiledPIDController rotationController = new ProfiledPIDController(1, 0,0,new TrapezoidProfile.Constraints(Constants.ROBOT.MAX_ANGULAR_SPEED.get(), Constants.ROBOT.MAX_ANGULAR_ACCELERATION.get()));
-
+    private TalonFXConfiguration rotationConfiguration, momentumConfiguration;
 
     public SwerveModule(int ModuleId) {
 
         momentumMotor = new TalonFX(ModuleId);
         rotationMotor = new TalonFX(ModuleId+4);
         
-        momentumEncoder = momentumMotor.getSensorCollection();
-        rotationEncoder = rotationMotor.getSensorCollection();
+        moduleEncoder = new CANCoder(ModuleId);
 
-        rotationController.enableContinuousInput(-Math.PI, Math.PI);
+        rotationConfiguration = new TalonFXConfiguration(){{
+          slot0.kP = Constants.SWERVE.P_ROTATION.get();
+          slot0.kI = Constants.SWERVE.I_ROTATION.get();
+          slot0.kD = Constants.SWERVE.D_ROTATION.get();
+          remoteFilter0.remoteSensorDeviceID = ModuleId;
+          remoteFilter0.remoteSensorSource = RemoteSensorSource.CANCoder;
+          primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
+        }};
+        rotationMotor.configAllSettings(rotationConfiguration);
+        rotationMotor.setNeutralMode(NeutralMode.Brake);
+
+        momentumConfiguration = new TalonFXConfiguration(){{
+          slot0.kP = Constants.SWERVE.P_MOMENTUM.get();
+          slot0.kI = Constants.SWERVE.I_MOMENTUM.get();
+          slot0.kD = Constants.SWERVE.D_MOMENTUM.get();
+          slot0.kF = Constants.SWERVE.F_MOMENTUM.get();
+        }};
+        momentumMotor.configAllSettings(momentumConfiguration);
+        momentumMotor.setNeutralMode(NeutralMode.Brake);
         
-        distanceToUnits(0); // to make not complain
-    }
-
-
-    public SwerveModuleState getState(){
-        return new SwerveModuleState(velocityToUnits(unitsToDistance(momentumEncoder.getIntegratedSensorPosition())) , new Rotation2d(rotationEncoder.getIntegratedSensorPosition()));
-    }
+        moduleEncoderConfiguration = new CANCoderConfiguration(){{
+          magnetOffsetDegrees = Constants.SWERVE.LOCATION_FROM_CENTER.get();
+        }};
+        moduleEncoder.configAllSettings(moduleEncoderConfiguration);
+      }
 
     public void setDesiredState(SwerveModuleState desiredState){
-        SwerveModuleState state = optimize(desiredState, new Rotation2d(rotationEncoder.getIntegratedSensorPosition()));
 
-        final double momentumOutput = momentumController.calculate(velocityToUnits(unitsToDistance(momentumEncoder.getIntegratedSensorPosition())), state.speedMetersPerSecond);
-        final double momentumFeed = momentumFeedforward.calculate(state.speedMetersPerSecond);
-        final double rotationOutput = rotationController.calculate(rotationEncoder.getIntegratedSensorPosition(),state.angle.getRadians());
-        final double rotationFeed = rotationFeedforward.calculate(rotationController.getSetpoint().velocity);
+        Rotation2d currentRotation = getAngle();
+        SwerveModuleState state = optimize(desiredState, currentRotation);
 
-        momentumMotor.set(ControlMode.PercentOutput, momentumOutput+momentumFeed);
-        rotationMotor.set(ControlMode.PercentOutput, rotationOutput+rotationFeed);
-    }
+        Rotation2d rotationDelta = state.angle.minus(currentRotation);
 
-    //converts units to meters
-    private int distanceToUnits(double positionMeters){
-      double wheelRotations = positionMeters/(2 * Math.PI * Constants.ROBOT.WHEEL_RADIUS.get());
-      double motorRotations = wheelRotations * Constants.SWERVE.GEAR_RATIO.get();
-      int sensorCounts = (int)(motorRotations *  Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution());
-      return sensorCounts;
-    }
-
-    //converts velocity to native Units
-    int motorRotationsPer100ms = 0;
-    private int velocityToUnits(double velocityMetersPerSecond){
-      double wheelRotationsPerSecond = velocityMetersPerSecond/(2* Math.PI * Constants.ROBOT.WHEEL_RADIUS.get());
-      double motorRotationsPerSecond = wheelRotationsPerSecond * Constants.SWERVE.GEAR_RATIO.get();
-      double motorRotationsPer100ms = motorRotationsPerSecond / k100msPerSecond;
-      int sensorCountsPer100ms = (int)(motorRotationsPer100ms * Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution());
-      return sensorCountsPer100ms;
- 
- 
-    }
-
-    //Converts Native Units to Meters
-    private double unitsToDistance(double sensorCounts){
-      double motorRotations = (double)sensorCounts / Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution();
-      double wheelRotations = motorRotations / Constants.SWERVE.GEAR_RATIO.get();
-      double positionMeters = wheelRotations * (2 * Math.PI * Constants.ROBOT.WHEEL_RADIUS.get());
-      return positionMeters;
-    }
+        double deltaTicks = (rotationDelta.getDegrees() / 360) * Constants.SENSORS.EXTERNAL_ENCODER_RESOLUTION.GetResolution();
     
-    //Optimizes the Swerve Drive to Feel Smoother While Driving 
-    private static SwerveModuleState optimize(
-      SwerveModuleState desiredState, Rotation2d currentAngle) {
-        var delta = desiredState.angle.minus(currentAngle);
-          if (Math.abs(delta.getDegrees()) > 90.0) {
-            return new SwerveModuleState(
-            -desiredState.speedMetersPerSecond,
-            desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
+        double currentTicks = moduleEncoder.getPosition() / moduleEncoder.configGetFeedbackCoefficient();
+        double desiredTicks = currentTicks + deltaTicks;
+
+        rotationMotor.set(ControlMode.Position, desiredTicks);
+
+        double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
+        
+        momentumMotor.set(ControlMode.PercentOutput, feetPerSecond / Constants.ROBOT.MAX_SPEED.get());
+
+
+    }
+
+    public Rotation2d getAngle() {
+      return Rotation2d.fromDegrees(moduleEncoder.getAbsolutePosition());
+    }
+
+        //Optimizes the Swerve Drive to Feel Smoother While Driving 
+    private static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
+      var delta = desiredState.angle.minus(currentAngle);
+      if (Math.abs(delta.getDegrees()) > 90.0) {
+        return new SwerveModuleState(-desiredState.speedMetersPerSecond,desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
           } else {
-              return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
-            }
-  }
+            return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
+          }
+      }
 }
