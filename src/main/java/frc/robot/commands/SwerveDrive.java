@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
@@ -32,11 +30,13 @@ public class SwerveDrive extends CommandBase {
   @Override
   public void execute() {
 
+    //Tennery used to control the deadzone
     //Regular Movement 
-    double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft)) + Constants.ROBOT.MAX_SPEED.get();
-    double leftX = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft)) * Constants.ROBOT.MAX_SPEED.get();
+    double leftY = (controller.getY(GenericHID.Hand.kLeft) > Constants.ROBOT.DEAD_ZONE_LEFT.get()) ? (-xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft)) + Constants.ROBOT.MAX_SPEED.get()) : 0;
+    double leftX = (controller.getX(GenericHID.Hand.kLeft) > Constants.ROBOT.DEAD_ZONE_LEFT.get()) ? (-yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft)) + Constants.ROBOT.MAX_SPEED.get()) : 0;
     //Rotation
-    double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight)) * Constants.ROBOT.MAX_SPEED.get();
+    double rightX = (controller.getX(GenericHID.Hand.kRight) > Constants.ROBOT.DEAD_ZONE_RIGHT.get()) ? (-rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight)) + Constants.ROBOT.MAX_SPEED.get()) : 0;
+
 
     driveTrain.drive(leftX, leftY, rightX);
     
