@@ -22,7 +22,7 @@ public class SwerveModule {
     private CANCoderConfiguration moduleEncoderConfiguration;
     private TalonFXConfiguration rotationConfiguration, driveConfiguration;
     private int ModuleId;
-    public SwerveModule(int ModuleId) {
+    public SwerveModule(int ModuleId, Rotation2d offset) {
       this.ModuleId = ModuleId;
         //Motors
         driveMotor = new TalonFX(ModuleId);
@@ -50,10 +50,10 @@ public class SwerveModule {
         driveMotor.configAllSettings(driveConfiguration);
         driveMotor.setNeutralMode(NeutralMode.Brake);
         
-        // moduleEncoderConfiguration = new CANCoderConfiguration(){{
-        //   magnetOffsetDegrees = Constants.SWERVE.LOCATION_FROM_CENTER.get();
-        // }};
-        // moduleEncoder.configAllSettings(moduleEncoderConfiguration);
+        moduleEncoderConfiguration = new CANCoderConfiguration(){{
+          magnetOffsetDegrees = offset.getDegrees();
+        }};
+        moduleEncoder.configAllSettings(moduleEncoderConfiguration);
       }
 
     public void setDesiredState(SwerveModuleState desiredState){

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.Constants;
 import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
@@ -141,10 +142,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     };
 
     //Declaring Modules
-    frontLeftModule = new SwerveModule(Constants.SWERVE.FRONT_LEFT_MODULE.GetID());
-    frontRightModule = new SwerveModule(Constants.SWERVE.FRONT_RIGHT_MODULE.GetID());
-    backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID());
-    backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID()); 
+    frontLeftModule = new SwerveModule(Constants.SWERVE.FRONT_LEFT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.FRONT_LEFT_OFFSET.get()));
+    frontRightModule = new SwerveModule(Constants.SWERVE.FRONT_RIGHT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.FRONT_RIGHT_OFFSET.get()));
+    backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.BACK_LEFT_OFFSET.get()));
+    backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.BACK_RIGHT_OFFSET.get())); 
 
     //Module Array
     swerveModuleArray = new SwerveModule[]{
@@ -172,13 +173,13 @@ public class SwerveDriveTrain extends SubsystemBase {
     //Swevre Kinematics
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     //Gyro
-    gyro = new AHRS(Port.kMXP);
+    gyro = new AHRS(SerialPort.Port.kUSB);
     //Power Distribution Panel
     pdp = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
   }
 
-  private void startup(){
+  public static void startup(){
     gyro.reset();
     resetModuleEncoders();
   }
@@ -236,7 +237,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   //Restes all Module Encoders
   public static void resetModuleEncoders(){
     for (CANCoder canCoder : encoderArray)
-      canCoder.setPosition(0.0);
+      canCoder.setPosition(0.0, 0);
     
       RioLog.out.Write("Rested All Module Encoders", RioLevel.SYSTEM);
   }

@@ -42,6 +42,10 @@ public interface Constants {
         BACK_LEFT_MODULE(2),
         BACK_RIGHT_MODULE(3),
         LOCATION_FROM_CENTER(0.3302),
+        FRONT_LEFT_OFFSET(-45.0),//ok
+        FRONT_RIGHT_OFFSET(-273.5),
+        BACK_LEFT_OFFSET(-165.0),
+        BACK_RIGHT_OFFSET(282.0),
         GEAR_RATIO(8.16),
         P_ROTATION(1.0),
         I_ROTATION(0.0),
