@@ -1,8 +1,6 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
@@ -32,6 +30,7 @@ public class SwerveDrive extends CommandBase {
   @Override
   public void execute() {
 
+    //Tennery used to control the deadzone
     //Regular Movement 
     double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft) >= 0.1 || controller.getY(GenericHID.Hand.kLeft) <= -0.1 ? controller.getY(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();
     double leftX = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft) >= 0.1 || controller.getX(GenericHID.Hand.kLeft) <= -0.1 ? controller.getX(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();

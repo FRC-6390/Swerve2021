@@ -194,7 +194,9 @@ public interface Constants {
         WHEEL_RADIUS(0.0508),
         MAX_SPEED(3.0),
         MAX_ANGULAR_SPEED(Math.PI),
-        MAX_ANGULAR_ACCELERATION(6.29);
+        MAX_ANGULAR_ACCELERATION(6.29),
+        DEAD_ZONE_LEFT(0.2),
+        DEAD_ZONE_RIGHT(0.2);
 
         private double id;
         private ROBOT(double id){
