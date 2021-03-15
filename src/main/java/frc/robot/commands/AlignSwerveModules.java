@@ -27,19 +27,19 @@ public class AlignSwerveModules extends CommandBase {
       RioLog.out.Write("Started to align a new module");
       boolean doneMotor = false;
         //if motor is not alligned goes through while loop to allign it 
-        int id = rotationMotor.getDeviceID();
+        int id = rotationMotor.getDeviceID() - 4;
         RioLog.out.Write("Aligning module ID:" + id);
         while(!doneMotor){
           
-            if(rotationMotor.isFwdLimitSwitchClosed() == 0 ? true : false){
+            if(rotationMotor.isRevLimitSwitchClosed() == 0){
               SwerveDriveTrain.getEncoderArray().get(id).setPosition(0.0);
-              SwerveDriveTrain.setMotorSpeed(id, 0.0);
+              SwerveDriveTrain.setMotorSpeed(id + 4, 0.0);
               RioLog.out.Write("Aligned module ID:" + id);
               //Once all motors are alligned loops ends
               doneMotor = true;
             }
             else{
-              SwerveDriveTrain.setMotorSpeed(id, 0.1);
+              SwerveDriveTrain.setMotorSpeed(id+4, 0.2);
             }
         }
     }

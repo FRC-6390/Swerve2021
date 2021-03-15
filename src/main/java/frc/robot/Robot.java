@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     SwerveDriveTrain.startup();
-    swerveDrive.schedule();
+    //swerveDrive.schedule();
   }
 
   @Override
