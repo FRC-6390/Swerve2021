@@ -164,10 +164,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     //Falcons go up to 40Amps
     //Supply is for motor controller Stator is for motor keeping number low for now
     //Drive Motors                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
-    for (int i = 0; i < motorArray.length; i++) {
-      motorArray[i].configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-      motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    }
+    // for (int i = 0; i < motorArray.length; i++) {
+    //   motorArray[i].configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    //   motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    // }
 
     //Swevre Kinematics
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
@@ -278,11 +278,12 @@ public class SwerveDriveTrain extends SubsystemBase {
     for (int i = 0; i < motorArray.length; i++) 
       SmartDashboard.putNumber(Constants.MOTORID.MOTOR_NAME.GetName()[i], motorArray[i].getSensorCollection().getIntegratedSensorPosition());
     
-      SmartDashboard.putNumber("module 0", encoderArray[0].getPosition());
-      SmartDashboard.putNumber("module 1", encoderArray[1].getPosition());
-      SmartDashboard.putNumber("module 2", encoderArray[2].getPosition());
-      SmartDashboard.putNumber("module 3", encoderArray[3].getPosition());
+      SmartDashboard.putNumber("module 0", swerveModuleArray[0].getAngle().getDegrees());
+      SmartDashboard.putNumber("module 1", swerveModuleArray[1].getAngle().getDegrees());
+      SmartDashboard.putNumber("module 2", swerveModuleArray[2].getAngle().getDegrees());
+      SmartDashboard.putNumber("module 3", swerveModuleArray[3].getAngle().getDegrees());
 
+      
     SmartDashboard.putNumber("GYRO", gyro.getAngle());
   }
 }

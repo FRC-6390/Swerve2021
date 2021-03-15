@@ -22,7 +22,10 @@ public class AlignSwerveModules extends CommandBase {
 
   @Override
   public void execute() {
-    SwerveDriveTrain.setMotorSpeed(0, 50);
+    SwerveDriveTrain.setMotorSpeed(4, 0.25);
+    SwerveDriveTrain.setMotorSpeed(5, 0.25);
+    SwerveDriveTrain.setMotorSpeed(6, 0.25);
+    SwerveDriveTrain.setMotorSpeed(7, 0.25);
     //Loops through Rotation Array 
     // for (TalonFX rotationMotor : SwerveDriveTrain.getRotationMotorArray()) {
     //   RioLog.out.Write("Started to align a new module");
