@@ -42,7 +42,7 @@ public interface Constants {
         BACK_RIGHT_MODULE(3),
         LOCATION_FROM_CENTER(0.3302),
         GEAR_RATIO(8.16),
-        P_ROTATION(0.0),
+        P_ROTATION(1.0),
         I_ROTATION(0.0),
         D_ROTATION(0.0),
         P_DRIVE(0.0),
