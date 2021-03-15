@@ -79,7 +79,7 @@ public class SwerveModule {
       return Rotation2d.fromDegrees(moduleEncoder.getAbsolutePosition());
     }
 
-    //Optimizes the Swerve Drive to Feel Smoother While Driving 
+      //Optimizes the Swerve Drive to Feel Smoother While Driving 
     private static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
       var delta = desiredState.angle.minus(currentAngle);
       if (Math.abs(delta.getDegrees()) > 90.0) {

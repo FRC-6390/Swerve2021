@@ -33,10 +33,10 @@ public class SwerveDrive extends CommandBase {
   public void execute() {
 
     //Regular Movement 
-    double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft)) + Constants.ROBOT.MAX_SPEED.get();
-    double leftX = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft)) * Constants.ROBOT.MAX_SPEED.get();
+    double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft) >= 0.1 || controller.getY(GenericHID.Hand.kLeft) <= -0.1 ? controller.getY(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();
+    double leftX = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft) >= 0.1 || controller.getX(GenericHID.Hand.kLeft) <= -0.1 ? controller.getX(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();
     //Rotation
-    double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight)) * Constants.ROBOT.MAX_SPEED.get();
+    double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= 0.1 || controller.getX(GenericHID.Hand.kRight) <= -0.1 ? controller.getX(GenericHID.Hand.kRight) : 0) * Constants.ROBOT.MAX_SPEED.get();
 
     driveTrain.drive(leftX, leftY, rightX);
     

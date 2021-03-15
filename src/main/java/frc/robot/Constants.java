@@ -13,7 +13,7 @@ public interface Constants {
         BACK_RIGHT_ROTATION(3),
         BACK_RIGHT_DRIVE(7),
         MOTOR_NAME(new String[]{"Front left rotation","Front left drive","Front right rotation",
-        "front right drive","Back left rotation","Back left frive","Back right rotation","Back right drive"});
+        "front right drive","Back left rotation","Back left drive","Back right rotation","Back right drive"});
 
         private int id;
         private String[] name;
@@ -192,7 +192,7 @@ public interface Constants {
     //Robot Details
     enum ROBOT{
         WHEEL_RADIUS(0.0508),
-        MAX_SPEED(10.0),
+        MAX_SPEED(3.0),
         MAX_ANGULAR_SPEED(Math.PI),
         MAX_ANGULAR_ACCELERATION(6.29);
 

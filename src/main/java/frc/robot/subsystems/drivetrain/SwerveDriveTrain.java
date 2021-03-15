@@ -12,6 +12,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.files.RioLog;
+import frc.robot.files.RioLog.RioLevel;
 
 public class SwerveDriveTrain extends SubsystemBase {
   //Initiation
@@ -43,7 +46,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   encoderArray[]; //External Encoder Array
 
   //Swerve Modules
-  private final SwerveModule frontLeftModule,
+  private static SwerveModule frontLeftModule,
   frontRightModule,
   backLeftModule,
   backRightModule,
@@ -57,8 +60,8 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   private final SwerveDriveKinematics kinematics;
 
-  public static AHRS gyro;
-  final PowerDistributionPanel PDP;
+  private static AHRS gyro;
+  private static PowerDistributionPanel pdp;
 
   private static SwerveDriveTrain instance;
 
@@ -171,14 +174,18 @@ public class SwerveDriveTrain extends SubsystemBase {
     //Gyro
     gyro = new AHRS(Port.kMXP);
     //Power Distribution Panel
-    PDP = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
+    pdp = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
+  }
+
+  private void startup(){
     gyro.reset();
+    resetModuleEncoders();
   }
 
   //Used for actualy moving the Robot
   public void drive(double xSpeed, double ySpeed, double rotation){
-    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
+    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, Rotation2d.fromDegrees(-gyro.getAngle())));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
 
     for (int i = 0; i < swerveModuleStates.length; i++) 
@@ -199,7 +206,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
 
-  //Get For the Array
+  //Gets For the Array
   public static List<TalonFX> getMotorArray(){
     List<TalonFX> list = Arrays.asList(motorArray);
     return list;
@@ -223,7 +230,7 @@ public class SwerveDriveTrain extends SubsystemBase {
   //Resets Single Module Encoder
   public static void resetModuleEncoder(int encoderId){
     encoderArray[encoderId].setPosition(0.0);
-    System.out.println("Reseted Module Encoder ID: "+encoderId);
+    RioLog.out.Write("Reseted Module Encoder ID: "+encoderId, RioLevel.SYSTEM);
   }
 
   //Restes all Module Encoders
@@ -231,25 +238,37 @@ public class SwerveDriveTrain extends SubsystemBase {
     for (CANCoder canCoder : encoderArray)
       canCoder.setPosition(0.0);
     
-    System.out.println("Rested All Module Encoders");
+      RioLog.out.Write("Rested All Module Encoders", RioLevel.SYSTEM);
   }
 
   //Resets Single Motor Encoder
   public static void resetMotorEncoder(int motorId){
     motorArray[motorId].getSensorCollection().setIntegratedSensorPosition(0,0);
-    System.out.println("Reseted Motor Encoder ID: "+motorId);
+    RioLog.out.Write("Reseted Motor Encoder ID: "+motorId, RioLevel.SYSTEM);
   }
 
   //Resets all Motor Encoders
   public static void resetMotorEncoders(){
     for (TalonFX motor : motorArray) 
       motor.getSensorCollection().setIntegratedSensorPosition(0,0);
-    
-    System.out.println("Rested All Motor Encoders");
+      RioLog.out.Write("Rested All Motor Encoders", RioLevel.SYSTEM);
+  }
+
+  public static List<SwerveModule> getModuleArray(){
+    List<SwerveModule> list = Arrays.asList(swerveModuleArray);
+    return list;
   }
 
   public static SwerveDriveTrain getInstance(){
     return instance == null ? instance = new SwerveDriveTrain() : instance;
+  }
+
+  public static AHRS getGyro(){
+    return gyro;
+  }
+
+  public static PowerDistributionPanel getPDP(){
+    return pdp;
   }
 
 
@@ -259,6 +278,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     for (int i = 0; i < motorArray.length; i++) 
       SmartDashboard.putNumber(Constants.MOTORID.MOTOR_NAME.GetName()[i], motorArray[i].getSensorCollection().getIntegratedSensorPosition());
     
+      SmartDashboard.putNumber("module 0", encoderArray[0].getPosition());
+      SmartDashboard.putNumber("module 1", encoderArray[1].getPosition());
+      SmartDashboard.putNumber("module 2", encoderArray[2].getPosition());
+      SmartDashboard.putNumber("module 3", encoderArray[3].getPosition());
 
     SmartDashboard.putNumber("GYRO", gyro.getAngle());
   }

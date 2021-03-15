@@ -37,17 +37,14 @@ public class RobotContainer {
   XboxStart = new JoystickButton(xbox, Constants.XBOX.XBOX_START.GetButton()),
   XboxLeftStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_LEFT_JOYSTICK_IN.GetButton()),
   XboxRightStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_RIGHT_JOYSTICK_IN.GetButton());
-  
-  private SwerveDriveTrain driveTrain;
-  
+   
   public RobotContainer() {
-    driveTrain = SwerveDriveTrain.getInstance();
     configureButtonBindings();
     configureCommands();
   }
 
   private void configureCommands() {
-    driveTrain.setDefaultCommand(new SwerveDrive(driveTrain, xbox));
+    
   }
 
   private void configureButtonBindings() {

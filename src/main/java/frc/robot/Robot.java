@@ -2,20 +2,27 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.SwerveDrive;
 import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
+import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
 import frc.robot.vission.Camera;
 
 public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
+  private SwerveDrive swerveDrive;
+  public static SwerveDriveTrain driveTrain;
   public static Camera camera;
 
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
+    driveTrain = SwerveDriveTrain.getInstance();
+    swerveDrive = new SwerveDrive(driveTrain, RobotContainer.xbox);
+
     new RioLog("OutputLog");
     RioLog.Init();
-    RioLog.setLogLevel(RioLevel.ERROR);    
+    RioLog.setLogLevel(RioLevel.DEBUG);    
   }
 
   @Override
@@ -36,7 +43,9 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    swerveDrive.schedule();
+  }
 
   @Override
   public void teleopPeriodic() {}
