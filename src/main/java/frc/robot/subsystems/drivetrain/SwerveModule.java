@@ -11,19 +11,19 @@ import com.ctre.phoenix.sensors.CANCoderConfiguration;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Constants;
 
 public class SwerveModule {
 
-    final int k100msPerSecond = 10;
     private final TalonFX driveMotor, rotationMotor;
     private final CANCoder moduleEncoder;
     private CANCoderConfiguration moduleEncoderConfiguration;
     private TalonFXConfiguration rotationConfiguration, driveConfiguration;
-
+    private int ModuleId;
     public SwerveModule(int ModuleId) {
-
+      this.ModuleId = ModuleId;
         //Motors
         driveMotor = new TalonFX(ModuleId);
         rotationMotor = new TalonFX(ModuleId+4);
@@ -50,10 +50,10 @@ public class SwerveModule {
         driveMotor.configAllSettings(driveConfiguration);
         driveMotor.setNeutralMode(NeutralMode.Brake);
         
-        moduleEncoderConfiguration = new CANCoderConfiguration(){{
-          magnetOffsetDegrees = Constants.SWERVE.LOCATION_FROM_CENTER.get();
-        }};
-        moduleEncoder.configAllSettings(moduleEncoderConfiguration);
+        // moduleEncoderConfiguration = new CANCoderConfiguration(){{
+        //   magnetOffsetDegrees = Constants.SWERVE.LOCATION_FROM_CENTER.get();
+        // }};
+        // moduleEncoder.configAllSettings(moduleEncoderConfiguration);
       }
 
     public void setDesiredState(SwerveModuleState desiredState){
@@ -64,7 +64,7 @@ public class SwerveModule {
         Rotation2d rotationDelta = state.angle.minus(currentRotation);
 
         double deltaTicks = (rotationDelta.getDegrees() / 360) * Constants.SENSORS.EXTERNAL_ENCODER_RESOLUTION.GetResolution();
-    
+        //SmartDashboard.putNumber(ModuleId+"", Constants.SENSORS.EXTERNAL_ENCODER_RESOLUTION.GetResolution());
         double currentTicks = moduleEncoder.getPosition() / moduleEncoder.configGetFeedbackCoefficient();
         double desiredTicks = currentTicks + deltaTicks;
 
