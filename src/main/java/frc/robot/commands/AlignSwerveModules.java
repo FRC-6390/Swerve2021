@@ -31,7 +31,7 @@ public class AlignSwerveModules extends CommandBase {
         RioLog.out.Write("Aligning module ID:" + id);
         while(!doneMotor){
           
-            if(rotationMotor.isFwdLimitSwitchClosed() == 0 ? true : false){
+            if(rotationMotor.isFwdLimitSwitchClosed() == 1){
               SwerveDriveTrain.getEncoderArray().get(id).setPosition(0.0);
               SwerveDriveTrain.setMotorSpeed(id, 0.0);
               RioLog.out.Write("Aligned module ID:" + id);

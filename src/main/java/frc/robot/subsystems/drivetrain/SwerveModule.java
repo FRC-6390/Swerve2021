@@ -75,6 +75,12 @@ public class SwerveModule {
         driveMotor.set(ControlMode.PercentOutput, feetPerSecond / Constants.ROBOT.MAX_SPEED.get());
     }
 
+    public double getRawAngle() {
+      double rawAngle = moduleEncoder.getAbsolutePosition();
+      SmartDashboard.putNumber(String.valueOf(ModuleId), rawAngle);
+      return rawAngle;
+    }
+
     public Rotation2d getAngle() {
       return Rotation2d.fromDegrees(moduleEncoder.getAbsolutePosition());
     }
