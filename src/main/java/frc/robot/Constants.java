@@ -44,7 +44,7 @@ public interface Constants {
         LOCATION_FROM_CENTER(0.3302),
         FRONT_LEFT_OFFSET(320.5),   //Good                Do Not Change Values
         FRONT_RIGHT_OFFSET(255.0),  //Good                   If You Change
-        BACK_LEFT_OFFSET(189.5),    //Good                      You Wll
+        BACK_LEFT_OFFSET(189.5),    //Good                      You Will
         BACK_RIGHT_OFFSET(282.0),   //Good                        DIE
         GEAR_RATIO(8.16),
         P_ROTATION(1.0),
