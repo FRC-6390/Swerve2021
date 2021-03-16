@@ -33,12 +33,12 @@ public class SwerveDrive extends CommandBase {
     //Tennery used to control the deadzone
     //Regular Movement 
     double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getY(GenericHID.Hand.kLeft) <= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getY(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();
-    double leftX = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kLeft) <= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();
+    double leftX = yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kLeft) <= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();
     //Rotation
     double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * Constants.ROBOT.MAX_SPEED.get();
 
-    driveTrain.drive(0.0, 0.2, 0.0);
-    
+    driveTrain.drive(leftX *  0.00, leftY * 0.0, rightX * 0.2);
+    //driveTrain.setMotorSpeed(3, 0.2);
     //Displays joystick values on Smart Dashboard
     SmartDashboard.putNumber("Left Y", leftY);
     SmartDashboard.putNumber("Left X", leftX);

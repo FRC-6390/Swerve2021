@@ -13,7 +13,6 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
@@ -193,8 +192,11 @@ public class SwerveDriveTrain extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, Rotation2d.fromDegrees(-gyro.getAngle())));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
 
-    for (int i = 0; i < swerveModuleStates.length; i++) 
+    for (int i = 0; i < swerveModuleStates.length; i++){
       swerveModuleArray[i].setDesiredState(swerveModuleStates[i]);
+      SmartDashboard.putNumber(String.valueOf(i), swerveModuleArray[i].getRawAngle());
+
+    }
     
   }
 
@@ -282,11 +284,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     //Displays Motor Values to The Smart Dashboard by looping through motor id's
     for (int i = 0; i < motorArray.length; i++) 
       SmartDashboard.putNumber(Constants.MOTORID.MOTOR_NAME.GetName()[i], motorArray[i].getSensorCollection().getIntegratedSensorPosition());
-    
-      SmartDashboard.putNumber("module 0", swerveModuleArray[0].getAngle().getDegrees());
-      SmartDashboard.putNumber("module 1", swerveModuleArray[1].getAngle().getDegrees());
-      SmartDashboard.putNumber("module 2", swerveModuleArray[2].getAngle().getDegrees());
-      SmartDashboard.putNumber("module 3", swerveModuleArray[3].getAngle().getDegrees());
+ 
 
       
     SmartDashboard.putNumber("GYRO", gyro.getAngle());

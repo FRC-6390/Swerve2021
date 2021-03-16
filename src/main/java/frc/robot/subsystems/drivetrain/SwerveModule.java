@@ -60,12 +60,11 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState desiredState){
 
         Rotation2d currentRotation = getAngle();
-        SwerveModuleState state = optimize(desiredState, currentRotation);
+        SwerveModuleState state = desiredState;
 
         Rotation2d rotationDelta = state.angle.minus(currentRotation);
 
         double deltaTicks = (rotationDelta.getDegrees() / 360) * Constants.SENSORS.EXTERNAL_ENCODER_RESOLUTION.GetResolution();
-        //SmartDashboard.putNumber(ModuleId+"", Constants.SENSORS.EXTERNAL_ENCODER_RESOLUTION.GetResolution());
         double currentTicks = moduleEncoder.getPosition() / moduleEncoder.configGetFeedbackCoefficient();
         double desiredTicks = currentTicks + deltaTicks;
 
@@ -77,9 +76,7 @@ public class SwerveModule {
     }
 
     public double getRawAngle() {
-      double rawAngle = moduleEncoder.getAbsolutePosition();
-      SmartDashboard.putNumber(String.valueOf(ModuleId), rawAngle);
-      return rawAngle;
+      return  moduleEncoder.getAbsolutePosition();
     }
 
     public Rotation2d getAngle() {
