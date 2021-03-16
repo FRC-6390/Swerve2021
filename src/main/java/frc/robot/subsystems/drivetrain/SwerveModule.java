@@ -60,7 +60,7 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState desiredState){
 
         Rotation2d currentRotation = getAngle();
-        SwerveModuleState state = desiredState;
+        SwerveModuleState state = optimize(desiredState, currentRotation);
 
         Rotation2d rotationDelta = state.angle.minus(currentRotation);
 
