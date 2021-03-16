@@ -172,7 +172,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     //   motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
     // }
       for (int i = 0; i < rotationMotorArray.length; i++) {
-        rotationMotorArray[i].configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        rotationMotorArray[i].configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
       }
     //Swevre Kinematics
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);

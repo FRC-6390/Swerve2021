@@ -51,7 +51,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //Assign Buttons to Commands Here
     XboxA.whenPressed(new ResetDevices(), true);
-    XboxB.whenPressed(new AlignSwerveModules(), true);
+    XboxB.whenPressed(new AlignSwerveModules(), false);
   }
 
   /**
