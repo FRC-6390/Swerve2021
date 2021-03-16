@@ -56,6 +56,7 @@ public class SwerveModule {
         moduleEncoder.configAllSettings(moduleEncoderConfiguration);
       }
 
+      
     public void setDesiredState(SwerveModuleState desiredState){
 
         Rotation2d currentRotation = getAngle();
