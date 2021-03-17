@@ -30,12 +30,12 @@ public class SwerveDrive extends CommandBase {
   @Override
   public void execute() {
 
-    //Tennery used to control the deadzone
-    //Regular Movement 
-    double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getY(GenericHID.Hand.kLeft) <= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getY(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();
-    double leftX = yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kLeft) <= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kLeft) : 0) * Constants.ROBOT.MAX_SPEED.get();
+    //Tennery used to control the deadzone     if less than max and more than -min then 0 else move
+    //Regular Movement                            {^ deadzone                     }    
+    double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft) <= Constants.ROBOT.DEAD_ZONE_MAX.get() && controller.getY(GenericHID.Hand.kLeft) >= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? 0 : controller.getY(GenericHID.Hand.kLeft)) * Constants.ROBOT.MAX_SPEED.get();
+    double leftX = yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft) <= Constants.ROBOT.DEAD_ZONE_MAX.get() && controller.getX(GenericHID.Hand.kLeft) >= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? 0 : controller.getX(GenericHID.Hand.kLeft)) * Constants.ROBOT.MAX_SPEED.get();
     //Rotation
-    double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * Constants.ROBOT.MAX_SPEED.get();
+    double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight) <= Constants.ROBOT.DEAD_ZONE_MAX.get() && controller.getX(GenericHID.Hand.kRight) >= -Constants.ROBOT.DEAD_ZONE_MIN.get() ? 0 : controller.getX(GenericHID.Hand.kRight)) * Constants.ROBOT.MAX_SPEED.get();
 
     driveTrain.drive(leftX *  0.0, leftY * 0.2, rightX * 0.0);
     //driveTrain.setMotorSpeed(3, 0.2);
