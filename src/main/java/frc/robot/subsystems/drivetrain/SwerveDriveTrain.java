@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.Constants;
@@ -142,18 +143,12 @@ public class SwerveDriveTrain extends SubsystemBase {
       backRightEncoder
     };
 
-    //Declaring Modules
-    frontLeftModule = new SwerveModule(Constants.SWERVE.FRONT_LEFT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.FRONT_LEFT_OFFSET.get()));
-    frontRightModule = new SwerveModule(Constants.SWERVE.FRONT_RIGHT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.FRONT_RIGHT_OFFSET.get()));
-    backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.BACK_LEFT_OFFSET.get()));
-    backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.BACK_RIGHT_OFFSET.get())); 
-
     //Module Array
     swerveModuleArray = new SwerveModule[]{
-      frontLeftModule,
-      frontRightModule,
-      backLeftModule,
-      backRightModule
+      frontLeftModule = new SwerveModule(Constants.SWERVE.FRONT_LEFT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.FRONT_LEFT_OFFSET.get())),
+      frontRightModule = new SwerveModule(Constants.SWERVE.FRONT_RIGHT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.FRONT_RIGHT_OFFSET.get())),
+      backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.BACK_LEFT_OFFSET.get())),
+      backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID(), Rotation2d.fromDegrees(Constants.SWERVE.BACK_RIGHT_OFFSET.get())) 
     };
 
     //Declaring The Modules Location From the Center of The Bot
@@ -170,9 +165,6 @@ public class SwerveDriveTrain extends SubsystemBase {
     //   motorArray[i].configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
     //   motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
     // }
-      for (int i = 0; i < rotationMotorArray.length; i++) {
-        rotationMotorArray[i].configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
-      }
     //Swevre Kinematics
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     //Gyro
@@ -189,7 +181,7 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   //Used for actualy moving the Robot
   public void drive(double xSpeed, double ySpeed, double rotation){
-    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, Rotation2d.fromDegrees(-gyro.getAngle())));
+    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
 
     for (int i = 0; i < swerveModuleStates.length; i++){
