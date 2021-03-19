@@ -41,19 +41,19 @@ public interface Constants {
         FRONT_RIGHT_MODULE(1),
         BACK_LEFT_MODULE(2),
         BACK_RIGHT_MODULE(3),
-        LOCATION_FROM_CENTER(0.3302),
-        FRONT_LEFT_OFFSET(320.5),   //Good                Do Not Change Values
-        FRONT_RIGHT_OFFSET(255.0),  //Good                   If You Change
-        BACK_LEFT_OFFSET(189.5),    //Good                      You Wll
-        BACK_RIGHT_OFFSET(282.0),   //Good                        DIE
+        LOCATION_FROM_CENTER(0.254),
+        FRONT_LEFT_OFFSET(232.0),   //Good   320.5             Do Not Change Values
+        FRONT_RIGHT_OFFSET(165.0),  //Good   255.0           If You Change
+        BACK_LEFT_OFFSET(98.0),    //Good   189.5              You Wll
+        BACK_RIGHT_OFFSET(194.0),   //Good   282.0                DIE
         GEAR_RATIO(8.16),
         P_ROTATION(1.0),
         I_ROTATION(0.0),
         D_ROTATION(0.0),
-        P_DRIVE(0.0),
-        I_DRIVE(0.0),
-        D_DRIVE(0.0),
-        F_DRIVE(0.0);
+        P_DRIVE(15.0),
+        I_DRIVE(0.01),
+        D_DRIVE(0.1),
+        F_DRIVE(0.2);
 
         private int id;
         private double doubles;
@@ -197,11 +197,11 @@ public interface Constants {
     //Robot Details
     enum ROBOT{
         WHEEL_RADIUS(0.0508),
-        MAX_SPEED(3.0),
+        MAX_SPEED(0.8),
         MAX_ANGULAR_SPEED(Math.PI),
         MAX_ANGULAR_ACCELERATION(6.29),
-        DEAD_ZONE_MAX(0.5),
-        DEAD_ZONE_MIN(-0.5);
+        DEAD_ZONE_MAX(0.25),
+        DEAD_ZONE_MIN(-0.25);
 
         private double id;
         private ROBOT(double id){
