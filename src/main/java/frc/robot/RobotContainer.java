@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AlignSwerveModules;
 import frc.robot.commands.ResetDevices;
-import frc.robot.commands.SwerveDrive;
-import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
 
 public class RobotContainer {
   //Declaring Controllers for both XBOX and LOGITECH
@@ -37,8 +35,16 @@ public class RobotContainer {
   XboxBack = new JoystickButton(xbox, Constants.XBOX.XBOX_BACK.GetButton()),
   XboxStart = new JoystickButton(xbox, Constants.XBOX.XBOX_START.GetButton()),
   XboxLeftStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_LEFT_JOYSTICK_IN.GetButton()),
-  XboxRightStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_RIGHT_JOYSTICK_IN.GetButton());
-   
+  XboxRightStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_RIGHT_JOYSTICK_IN.GetButton()),
+  XboxPOV_Top = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP.GetPOV()),
+  XboxPOV_Top_Right = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP_RIGHT.GetPOV()),
+  XboxPOV_Top_Left = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP_LEFT.GetPOV()),
+  XboxPOV_Bottom = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM.GetPOV()),
+  XboxPOV_Bottom_Right = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_RIGHT.GetPOV()),
+  XboxPOV_Bottom_Left = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_LEFT.GetPOV()),
+  XboxPOV_Right = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_RIGHT.GetPOV()),
+  XboxPOV_Left = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_LEFT.GetPOV());
+
   public RobotContainer() {
     configureButtonBindings();
     configureCommands();

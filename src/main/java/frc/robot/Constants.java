@@ -141,6 +141,10 @@ public interface Constants {
             return id;
         }
 
+        public int GetPOV(){
+            return id;
+        }
+
         public int Get(){
             return id;
         }
@@ -164,6 +168,15 @@ public interface Constants {
         XBOX_LEFT_TRIGGER(3),
         XBOX_RIGHT_AXIS_Y(5),
         XBOX_RIGHT_AXIS_X(4),
+        XBOX_POV_TOP(11),
+        XBOX_POV_TOP_RIGHT(12),
+        XBOX_POV_RIGHT(13),
+        XBOX_POV_BOTTOM_RIGHT(14),
+        XBOX_POV_BOTTOM(15),
+        XBOX_POV_BOTTOM_LEFT(16),
+        XBOX_POV_LEFT(17),
+        XBOX_POV_TOP_LEFT(18),
+        XBOX_POV(11),
         XBOX_PORT_ID(0);
 
         private int id;
@@ -183,6 +196,10 @@ public interface Constants {
             return id;
         }
 
+        public int GetPOV() {
+            return id;
+        }
+
         double Threshold = 0.5;
         public void setThreshold(double Threshold){
             this.Threshold = Threshold;
@@ -197,7 +214,7 @@ public interface Constants {
     //Robot Details
     enum ROBOT{
         WHEEL_RADIUS(0.0508),
-        MAX_SPEED(3.0),
+        MAX_SPEED(0.3),
         MAX_ANGULAR_SPEED(Math.PI),
         MAX_ANGULAR_ACCELERATION(6.29),
         DEAD_ZONE_MAX(0.5),
