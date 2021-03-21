@@ -102,7 +102,12 @@ PUT CHANGES IN HERE
     subsystems, in swervedrivetrain condenced the smartdash
     in swervedrive completly changed it to fix the example China sent us
 
-~~ MArch 11, 2021 - Mohammad
+~~ March 11, 2021 - Mohammad
     cleaned code changed all variable names with momentum to drive since momentum sounds annouying to say
     added coments, general house keeping    
     Changed the robot diagram to be more accurate
+
+~~ March 20, 2021 - Mohammad
+    Mathias and I have been working on the robot over spring break and have managed to get it driving field orientated within the
+    first week. A lot has changed as we used many programming resources to be able to program it propperly and correctly. I have also 
+    created a tag for the code labeled v1.0  

@@ -115,6 +115,7 @@ public interface Constants {
 
     //Logitech Controler Buttons and Axises
     enum JOYSTICK {
+        // Buttons
         JOYSTICK_BUTTON_1(1),
         JOYSTICK_BUTTON_2(2),
         JOYSTICK_BUTTON_3(3),
@@ -127,9 +128,22 @@ public interface Constants {
         JOYSTICK_BUTTON_10(10),
         JOYSTICK_BUTTON_11(11),
         JOYSTICK_BUTTON_12(12),
+        // POV
+        JOYSTICK_POV_TOP(13),
+        JOYSTICK_POV_TOP_RIGHT(15),
+        JOYSTICK_POV_RIGHT(16),
+        JOYSTICK_POV_BOTTOM_RIGHT(17),
+        JOYSTICK_POV_BOTTOM(18),
+        JOYSTICK_POV_BOTTOM_LEFT(19),
+        JOYSTICK_POV_LEFT(20),
+        JOYSTICK_POV_TOP_LEFT(21),
+        JOYSTICK_POV(22),
+        // Axis
         JOYSTICK_AXIS_Y(1),
         JOYSTICK_AXIS_Z(2),
+        // Throttle
         JOYSTICK_AXIS_THROTTLE(3),
+        // ID
         JOYSTICK_PORT_ID(1);
 
         private int id;
@@ -152,6 +166,7 @@ public interface Constants {
     
     //Xbox Controller Buttons and Axises
     enum XBOX {
+        // Buttons
         XBOX_A(1),
         XBOX_B(2),
         XBOX_X(3),
@@ -162,12 +177,9 @@ public interface Constants {
         XBOX_START(8),
         XBOX_LEFT_JOYSTICK_IN(9),
         XBOX_RIGHT_JOYSTICK_IN(10),
-        XBOX_LEFT_AXIS_Y(1),
-        XBOX_LEFT_AXIS_X(0),
         XBOX_RIGHT_TRIGGER(2),
         XBOX_LEFT_TRIGGER(3),
-        XBOX_RIGHT_AXIS_Y(5),
-        XBOX_RIGHT_AXIS_X(4),
+        // POV
         XBOX_POV_TOP(11),
         XBOX_POV_TOP_RIGHT(12),
         XBOX_POV_RIGHT(13),
@@ -177,6 +189,12 @@ public interface Constants {
         XBOX_POV_LEFT(17),
         XBOX_POV_TOP_LEFT(18),
         XBOX_POV(11),
+        // Axis
+        XBOX_LEFT_AXIS_Y(1),
+        XBOX_LEFT_AXIS_X(0),
+        XBOX_RIGHT_AXIS_Y(5),
+        XBOX_RIGHT_AXIS_X(4),
+        // ID
         XBOX_PORT_ID(0);
 
         private int id;
