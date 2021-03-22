@@ -42,10 +42,10 @@ public interface Constants {
         BACK_LEFT_MODULE(2),
         BACK_RIGHT_MODULE(3),
         LOCATION_FROM_CENTER(0.3302),
-        FRONT_LEFT_OFFSET(232.0),   //Good   320.5         Do Not Change Values
-        FRONT_RIGHT_OFFSET(165.0),  //Good   255.0           If You Change
-        BACK_LEFT_OFFSET(98.0),    //Good   189.5              You Wll
-        BACK_RIGHT_OFFSET(194.0),   //Good   282.0                DIE
+        FRONT_LEFT_OFFSET(231.5),   //Good           Do Not Change Values
+        FRONT_RIGHT_OFFSET(164.0),  //Good              If You Change
+        BACK_LEFT_OFFSET(103.0),    //Good                You Wll
+        BACK_RIGHT_OFFSET(193.0),   //Good                  DIE
         GEAR_RATIO(8.16),
         P_ROTATION(1.0),
         I_ROTATION(0.0),
