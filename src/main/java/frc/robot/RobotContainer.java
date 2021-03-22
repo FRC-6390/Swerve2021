@@ -12,7 +12,9 @@ public class RobotContainer {
   public static XboxController xbox = new XboxController(Constants.XBOX.XBOX_PORT_ID.Get());
 
   //LOGITECH CONTROLER
-  public JoystickButton button1 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_1.GetButton()),
+  public JoystickButton 
+  // Buttons
+  button1 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_1.GetButton()),
   button2 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_2.GetButton()),
   button3 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_3.GetButton()),
   button4 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_4.GetButton()),
@@ -23,10 +25,21 @@ public class RobotContainer {
   button9 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_9.GetButton()),
   button10 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_10.GetButton()),
   button11 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_11.GetButton()),
-  button12 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_12.GetButton());
+  button12 = new JoystickButton(stick, Constants.JOYSTICK.JOYSTICK_BUTTON_12.GetButton()),
+  // POV
+  POV_T = new JoystickButton(xbox, Constants.JOYSTICK.JOYSTICK_POV_TOP.GetPOV()),
+  POV_TR = new JoystickButton(xbox, Constants.JOYSTICK.JOYSTICK_POV_TOP_RIGHT.GetPOV()),
+  POV_TL = new JoystickButton(xbox, Constants.JOYSTICK.JOYSTICK_POV_TOP_LEFT.GetPOV()),
+  POV_B = new JoystickButton(xbox, Constants.JOYSTICK.JOYSTICK_POV_BOTTOM.GetPOV()),
+  POV_BR = new JoystickButton(xbox, Constants.JOYSTICK.JOYSTICK_POV_BOTTOM_RIGHT.GetPOV()),
+  POV_BL = new JoystickButton(xbox, Constants.JOYSTICK.JOYSTICK_POV_BOTTOM_LEFT.GetPOV()),
+  POV_R = new JoystickButton(xbox, Constants.JOYSTICK.JOYSTICK_POV_BOTTOM_RIGHT.GetPOV()),
+  POV_L = new JoystickButton(xbox, Constants.JOYSTICK.JOYSTICK_POV_LEFT.GetPOV());
   
   //XBOX CONTROLER
-  public JoystickButton XboxA = new JoystickButton(xbox, Constants.XBOX.XBOX_A.GetButton()),
+  public JoystickButton 
+  // Buttons
+  XboxA = new JoystickButton(xbox, Constants.XBOX.XBOX_A.GetButton()),
   XboxB = new JoystickButton(xbox, Constants.XBOX.XBOX_B.GetButton()),
   XboxX = new JoystickButton(xbox, Constants.XBOX.XBOX_X.GetButton()),
   XboxY = new JoystickButton(xbox, Constants.XBOX.XBOX_Y.GetButton()),
@@ -36,14 +49,15 @@ public class RobotContainer {
   XboxStart = new JoystickButton(xbox, Constants.XBOX.XBOX_START.GetButton()),
   XboxLeftStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_LEFT_JOYSTICK_IN.GetButton()),
   XboxRightStickIn = new JoystickButton(xbox, Constants.XBOX.XBOX_RIGHT_JOYSTICK_IN.GetButton()),
-  XboxPOV_Top = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP.GetPOV()),
-  XboxPOV_Top_Right = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP_RIGHT.GetPOV()),
-  XboxPOV_Top_Left = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP_LEFT.GetPOV()),
-  XboxPOV_Bottom = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM.GetPOV()),
-  XboxPOV_Bottom_Right = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_RIGHT.GetPOV()),
-  XboxPOV_Bottom_Left = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_LEFT.GetPOV()),
-  XboxPOV_Right = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_RIGHT.GetPOV()),
-  XboxPOV_Left = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_LEFT.GetPOV());
+  // POV
+  XboxPOV_T = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP.GetPOV()),
+  XboxPOV_TR = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP_RIGHT.GetPOV()),
+  XboxPOV_TL = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_TOP_LEFT.GetPOV()),
+  XboxPOV_B = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM.GetPOV()),
+  XboxPOV_BR = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_RIGHT.GetPOV()),
+  XboxPOV_BL = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_LEFT.GetPOV()),
+  XboxPOV_R = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_BOTTOM_RIGHT.GetPOV()),
+  XboxPOV_L = new JoystickButton(xbox, Constants.XBOX.XBOX_POV_LEFT.GetPOV());
 
   public RobotContainer() {
     configureButtonBindings();
