@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
@@ -200,6 +201,25 @@ public class SwerveDriveTrain extends SubsystemBase {
 
     }
     
+  }
+
+  //Auto Drive
+  public void autoDrive(double time, double xSpeed, double ySpeed, double rotation){
+    Timer timer = new Timer();
+    timer.start();
+    
+    while(timer.get() < time){
+      System.out.println(timer.get());
+      SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
+      SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
+
+      for (int i = 0; i < swerveModuleStates.length; i++){
+        swerveModuleArray[i].setDesiredState(swerveModuleStates[i]);
+        SmartDashboard.putNumber(String.valueOf(i), swerveModuleArray[i].getRawAngle());
+
+      }
+   }
+   timer.stop();
   }
 
   //Sets Motor Speeds

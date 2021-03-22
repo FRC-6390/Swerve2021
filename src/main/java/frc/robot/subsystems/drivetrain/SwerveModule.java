@@ -24,7 +24,7 @@ public class SwerveModule {
     private CANCoderConfiguration moduleEncoderConfiguration;
     private TalonFXConfiguration rotationConfiguration, driveConfiguration;
     private int ModuleId;
-    final double distanceperpulse = Math.PI*6/360 /Constants.SWERVE.GEAR_RATIO.get();
+    final double distanceperpulse = Math.PI * 6 / 360 /Constants.SWERVE.GEAR_RATIO.get();
 
 
     
