@@ -13,6 +13,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -70,6 +71,8 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   private static AHRS gyro;
   private static PowerDistributionPanel pdp;
+
+  private static Preferences pref;
 
   private static SwerveDriveTrain instance;
 
@@ -180,6 +183,8 @@ public class SwerveDriveTrain extends SubsystemBase {
     //Power Distribution Panel
     pdp = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
+    pref = Preferences.getInstance();
+
   }
 
 
@@ -263,6 +268,15 @@ public class SwerveDriveTrain extends SubsystemBase {
   public static void resetMotorEncoder(int motorId){
     motorArray[motorId].getSensorCollection().setIntegratedSensorPosition(0,0);
     RioLog.out.Write("Reseted Motor Encoder ID: "+motorId, RioLevel.SYSTEM);
+  }
+
+  public static void setOffset(){
+    swerveModuleArray = new SwerveModule[]{
+      frontLeftModule = new SwerveModule(Constants.SWERVE.FRONT_LEFT_MODULE.GetID(), Rotation2d.fromDegrees(pref.getDouble("FrontLeft", 0.0))),
+      frontRightModule = new SwerveModule(Constants.SWERVE.FRONT_RIGHT_MODULE.GetID(), Rotation2d.fromDegrees(pref.getDouble("FrontRight", 0.0))),
+      backRightModule = new SwerveModule(Constants.SWERVE.BACK_LEFT_MODULE.GetID(), Rotation2d.fromDegrees(pref.getDouble("BackLeft", 0.0))),
+      backLeftModule = new SwerveModule(Constants.SWERVE.BACK_RIGHT_MODULE.GetID(), Rotation2d.fromDegrees(pref.getDouble("BackRight", 0.0))) 
+    };
   }
 
   //Resets all Motor Encoders

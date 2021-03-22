@@ -37,7 +37,7 @@ public class SwerveDrive extends CommandBase {
     //Rotation
     double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * 0.8;
 
-    driveTrain.drive(leftY *  0.2, leftX * 0.2, rightX*0.2);
+  driveTrain.drive(0.05, leftX * 0.0, rightX*0.0);
     //driveTrain.setMotorSpeed(3, 0.2);
     //Displays joystick values on Smart Dashboard
     SmartDashboard.putNumber("Left Y", leftY);
