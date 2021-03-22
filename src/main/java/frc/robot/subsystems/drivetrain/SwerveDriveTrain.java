@@ -13,10 +13,12 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
@@ -62,6 +64,9 @@ public class SwerveDriveTrain extends SubsystemBase {
   backRightLocation;
 
   private final SwerveDriveKinematics kinematics;
+
+  private static SwerveDriveOdometry odometry;
+  private static Pose2d robotPosition;
 
   private static AHRS gyro;
   private static PowerDistributionPanel pdp;
@@ -169,13 +174,18 @@ public class SwerveDriveTrain extends SubsystemBase {
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     //Gyro
     gyro = new AHRS(SerialPort.Port.kUSB);
+
+    robotPosition = new Pose2d(0,0, new Rotation2d());
+    odometry = new SwerveDriveOdometry(kinematics, gyro.getRotation2d(), robotPosition);
     //Power Distribution Panel
     pdp = new PowerDistributionPanel(Constants.PDP_DEVICE_ID);
 
   }
 
+
+
   public static void startup(){
-    gyro.reset();
+    resetGyro();
     resetModuleEncoders();
   }
 
@@ -204,6 +214,15 @@ public class SwerveDriveTrain extends SubsystemBase {
     //                 ^ bad way of doing this
   }
 
+  public static void resetRobotPosition(){
+    robotPosition = new Pose2d(0,0, new Rotation2d());
+    odometry.resetPosition(robotPosition, gyro.getRotation2d());
+  }
+
+  public static void resetGyro(){
+    gyro.reset();
+    odometry.resetPosition(robotPosition, gyro.getRotation2d());
+  }
 
   //Gets For the Array
   public static List<TalonFX> getMotorArray(){
@@ -270,6 +289,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     return pdp;
   }
 
+  public static Pose2d getRobotPosition(){
+    return robotPosition;
+  }
+
 
   @Override
   public void periodic() {
@@ -277,8 +300,12 @@ public class SwerveDriveTrain extends SubsystemBase {
     for (int i = 0; i < motorArray.length; i++) 
       SmartDashboard.putNumber(Constants.MOTORID.MOTOR_NAME.GetName()[i], motorArray[i].getSensorCollection().getIntegratedSensorPosition());
  
+      robotPosition = odometry.update(gyro.getRotation2d(), frontLeftModule.getState(), frontRightModule.getState(),backLeftModule.getState(), backRightModule.getState());
+      SmartDashboard.putNumber("Robot Position (X)", odometry.getPoseMeters().getX());
+      SmartDashboard.putNumber("Robot Position (Y)", odometry.getPoseMeters().getY());
+      SmartDashboard.putNumber("Robot Position (Angle)", odometry.getPoseMeters().getRotation().getDegrees());
 
-      
+
     SmartDashboard.putNumber("GYRO", gyro.getAngle());
   }
 }

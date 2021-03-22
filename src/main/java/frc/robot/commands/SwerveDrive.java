@@ -16,7 +16,7 @@ public class SwerveDrive extends CommandBase {
   //Slew Limmiter smooths out controller inputs
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(1);
   
   public SwerveDrive(SwerveDriveTrain driveTrain, XboxController controller) {
     this.driveTrain = driveTrain;

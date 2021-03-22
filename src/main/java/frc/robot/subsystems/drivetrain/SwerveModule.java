@@ -9,6 +9,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +24,10 @@ public class SwerveModule {
     private CANCoderConfiguration moduleEncoderConfiguration;
     private TalonFXConfiguration rotationConfiguration, driveConfiguration;
     private int ModuleId;
+    final double distanceperpulse = Math.PI*6/360 /Constants.SWERVE.GEAR_RATIO.get();
+
+
+    
     public SwerveModule(int ModuleId, Rotation2d offset) {
       this.ModuleId = ModuleId;
         //Motors
@@ -73,6 +79,10 @@ public class SwerveModule {
         double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
         
         driveMotor.set(ControlMode.PercentOutput, feetPerSecond / Constants.ROBOT.MAX_SPEED.get());
+    }
+
+    public SwerveModuleState getState() {
+      return new SwerveModuleState(driveMotor.getSelectedSensorVelocity()/distanceperpulse, getAngle());
     }
 
     public double getRawAngle() {
