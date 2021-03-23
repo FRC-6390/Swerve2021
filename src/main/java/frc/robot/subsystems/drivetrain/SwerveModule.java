@@ -43,7 +43,7 @@ public class SwerveModule {
           primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
         }};
         rotationMotor.configAllSettings(rotationConfiguration);
-        rotationMotor.setNeutralMode(NeutralMode.Coast);
+        rotationMotor.setNeutralMode(NeutralMode.Brake);
 
         driveConfiguration = new TalonFXConfiguration(){{
           slot0.kP = Constants.SWERVE.P_DRIVE.get();
@@ -52,7 +52,7 @@ public class SwerveModule {
           slot0.kF = Constants.SWERVE.F_DRIVE.get();
         }};
         driveMotor.configAllSettings(driveConfiguration);
-        driveMotor.setNeutralMode(NeutralMode.Coast);
+        driveMotor.setNeutralMode(NeutralMode.Brake);
         
         moduleEncoderConfiguration = new CANCoderConfiguration(){{
           magnetOffsetDegrees = offset.getDegrees();

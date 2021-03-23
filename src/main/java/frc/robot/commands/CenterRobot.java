@@ -10,7 +10,7 @@ public class CenterRobot extends CommandBase {
 
   @Override
   public void initialize() {
-    drivetrain = SwerveDriveTrain.getInstance();
+   // drivetrain = SwerveDriveTrain.getInstance();
   }
 
   @Override
