@@ -5,19 +5,22 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
+import frc.robot.subsystems.drivetrain.SwerveAuto;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
+import frc.robot.subsystems.drivetrain.SwerveTele;
 import frc.robot.vission.Camera;
 
 public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private SwerveDrive swerveDrive;
-  public static SwerveDriveTrain driveTrain;
+  public static SwerveDriveTrain driveTrain, autoDrive;
   public static Camera camera;
 
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
-    driveTrain = SwerveDriveTrain.getInstance();
+    driveTrain = SwerveTele.getInstance();
+    autoDrive = SwerveAuto.getInstance();
     swerveDrive = new SwerveDrive(driveTrain, RobotContainer.xbox);
 
     new RioLog("OutputLog");

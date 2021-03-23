@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AlignSwerveModules;
 import frc.robot.commands.ResetDevices;
-import frc.robot.commands.Auto;
+import frc.robot.commands.autonomous.Auto;
 
 public class RobotContainer {
   //Declaring Controllers for both XBOX and LOGITECH
@@ -73,8 +73,7 @@ public class RobotContainer {
     //Assign Buttons to Commands Here
     XboxA.whenPressed(new ResetDevices(), true);
     XboxB.whenPressed(new AlignSwerveModules(), false);
-    XboxY.whenPressed(new Auto(), true);
-    XboxX.whenPressed(new Auto(), true);
+    XboxY.whenPressed(new Auto(Robot.autoDrive), true);
   }
 
   /**
