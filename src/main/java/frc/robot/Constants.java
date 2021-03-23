@@ -46,7 +46,8 @@ public interface Constants {
         FRONT_RIGHT_OFFSET(164.0),  //Good              If You Change
         BACK_LEFT_OFFSET(103.0),    //Good                You Wll
         BACK_RIGHT_OFFSET(193.0),   //Good                  DIE
-        GEAR_RATIO(8.16),
+        DRIVE_GEAR_RATIO(8.16),
+        ROTATION_GEAR_RATIO(12.8),
         P_ROTATION(1.0),
         I_ROTATION(0.0),
         D_ROTATION(0.0),

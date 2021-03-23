@@ -339,7 +339,6 @@ public class SwerveDriveTrain extends SubsystemBase {
       SmartDashboard.putNumber("Robot Position (Y)", odometry.getPoseMeters().getY());
       SmartDashboard.putNumber("Robot Position (Angle)", odometry.getPoseMeters().getRotation().getDegrees());
 
-
-    SmartDashboard.putNumber("GYRO", gyro.getAngle());
+      SmartDashboard.putNumber("GYRO", gyro.getAngle());
   }
 }

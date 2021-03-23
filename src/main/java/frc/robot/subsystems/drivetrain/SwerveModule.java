@@ -80,11 +80,11 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-      double turnRadians = ((2.0 * Math.PI) / (kTurningMotorGearRatio * kEncoderCPR)) * rotationMotor.getSensorCollection().getIntegratedSensorPosition()
+      double turnRadians = ((2.0 * Math.PI) / (Constants.SWERVE.ROTATION_GEAR_RATIO.get() * Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution())) * rotationMotor.getSensorCollection().getIntegratedSensorPosition();
       return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSensorCollection().getIntegratedSensorVelocity()), new Rotation2d(turnRadians));
     }
 
-    public double getRawAngle() {
+    public double getRawAngle() { 
       return  moduleEncoder.getAbsolutePosition();
     }
 
@@ -103,7 +103,7 @@ public class SwerveModule {
 
     private double nativeUnitsToDistanceMeters(double sensorCounts){
       double motorRotations = (double)sensorCounts / Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution();
-      double wheelRotations = motorRotations / Constants.SWERVE.GEAR_RATIO.get();
+      double wheelRotations = motorRotations / Constants.SWERVE.DRIVE_GEAR_RATIO.get();
       double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(2));
       return positionMeters;
     }
