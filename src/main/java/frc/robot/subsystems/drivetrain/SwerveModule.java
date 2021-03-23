@@ -43,7 +43,7 @@ public class SwerveModule {
           primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
         }};
         rotationMotor.configAllSettings(rotationConfiguration);
-        rotationMotor.setNeutralMode(NeutralMode.Brake);
+        rotationMotor.setNeutralMode(NeutralMode.Coast);
 
         driveConfiguration = new TalonFXConfiguration(){{
           slot0.kP = Constants.SWERVE.P_DRIVE.get();
@@ -52,7 +52,7 @@ public class SwerveModule {
           slot0.kF = Constants.SWERVE.F_DRIVE.get();
         }};
         driveMotor.configAllSettings(driveConfiguration);
-        driveMotor.setNeutralMode(NeutralMode.Brake);
+        driveMotor.setNeutralMode(NeutralMode.Coast);
         
         moduleEncoderConfiguration = new CANCoderConfiguration(){{
           magnetOffsetDegrees = offset.getDegrees();
@@ -80,8 +80,8 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-      double turnRadians = ((2.0 * Math.PI) / (Constants.SWERVE.ROTATION_GEAR_RATIO.get() * Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution())) * rotationMotor.getSensorCollection().getIntegratedSensorPosition();
-      return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSensorCollection().getIntegratedSensorVelocity()), new Rotation2d(turnRadians));
+      double turnRadians = ((2.0 * Math.PI) / (Constants.SWERVE.ROTATION_GEAR_RATIO.get() * Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution())) * rotationMotor.getSelectedSensorPosition();
+      return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorVelocity()*10), new Rotation2d(turnRadians));
     }
 
     public double getRawAngle() { 

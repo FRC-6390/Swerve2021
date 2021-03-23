@@ -30,10 +30,10 @@ import frc.robot.Constants;
 import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
 
-public class SwerveDriveTrain extends SubsystemBase {
+public abstract class SwerveDriveTrain extends SubsystemBase {
   //Initiation
   //DriveTrain Motors
-  private static TalonFX frontLeftDrive,
+  static TalonFX frontLeftDrive,
   frontLeftRotation,
   backLeftDrive,
   backLeftRotation,
@@ -46,36 +46,34 @@ public class SwerveDriveTrain extends SubsystemBase {
   motorArray[];
 
   //External Encoders on modules
-  private static CANCoder frontRightEncoder,
+  static CANCoder frontRightEncoder,
   frontLeftEncoder,
   backRightEncoder,
   backLeftEncoder,
   encoderArray[]; //External Encoder Array
 
   //Swerve Modules
-  private static SwerveModule frontLeftModule,
+  static SwerveModule frontLeftModule,
   frontRightModule,
   backLeftModule,
   backRightModule,
   swerveModuleArray[];
 
   //Module Location
-  private final Translation2d frontLeftLocation,
+  final Translation2d frontLeftLocation,
   frontRightLocation,
   backLeftLocation,
   backRightLocation;
 
-  private final SwerveDriveKinematics kinematics;
+  final SwerveDriveKinematics kinematics;
 
-  private static SwerveDriveOdometry odometry;
-  private static Pose2d robotPosition;
+  static SwerveDriveOdometry odometry;
+  static Pose2d robotPosition;
 
-  private static AHRS gyro;
-  private static PowerDistributionPanel pdp;
+  static AHRS gyro;
+  static PowerDistributionPanel pdp;
 
-  private static Preferences pref;
-
-  private static SwerveDriveTrain instance;
+  static Preferences pref;
 
 /*                                                    
  *                    <Front>
@@ -195,37 +193,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     resetModuleEncoders();
   }
 
-  //Used for actualy moving the Robot
-  public void drive(double xSpeed, double ySpeed, double rotation){
-    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
-    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
+  public void drive(double xSpeed, double ySpeed, double rotation, double time){}
 
-    for (int i = 0; i < swerveModuleStates.length; i++){
-      swerveModuleArray[i].setDesiredState(swerveModuleStates[i]);
-      SmartDashboard.putNumber(String.valueOf(i), swerveModuleArray[i].getRawAngle());
+  public void drive(double xSpeed, double ySpeed, double rotation){}
 
-    }
-    
-  }
-
-  //Auto Drive
-  public void autoDrive(double time, double xSpeed, double ySpeed, double rotation){
-    Timer timer = new Timer();
-    timer.start();
-    
-    while(timer.get() < time){
-      System.out.println(timer.get());
-      SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
-      SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
-
-      for (int i = 0; i < swerveModuleStates.length; i++){
-        swerveModuleArray[i].setDesiredState(swerveModuleStates[i]);
-        SmartDashboard.putNumber(String.valueOf(i), swerveModuleArray[i].getRawAngle());
-
-      }
-   }
-   timer.stop();
-  }
 
   //Sets Motor Speeds
   public static void setMotorSpeed(int motorId, double speed){
@@ -309,10 +280,6 @@ public class SwerveDriveTrain extends SubsystemBase {
   public static List<SwerveModule> getModuleArray(){
     List<SwerveModule> list = Arrays.asList(swerveModuleArray);
     return list;
-  }
-
-  public static SwerveDriveTrain getInstance(){
-    return instance == null ? instance = new SwerveDriveTrain() : instance;
   }
 
   public static AHRS getGyro(){
