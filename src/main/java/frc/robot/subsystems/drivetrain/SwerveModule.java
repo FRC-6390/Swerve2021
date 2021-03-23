@@ -80,7 +80,7 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-      double turnRadians = ((2.0 * Math.PI) / (kTurningMotorGearRatio * kEncoderCPR)) * rotationMotor.getSensorCollection().getIntegratedSensorPosition()
+      double turnRadians = ((2.0 * Math.PI) / (kTurningMotorGearRatio * kEncoderCPR)) * rotationMotor.getSensorCollection().getIntegratedSensorPosition();
       return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSensorCollection().getIntegratedSensorVelocity()), new Rotation2d(turnRadians));
     }
 
