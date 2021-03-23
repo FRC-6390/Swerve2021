@@ -74,6 +74,7 @@ public class RobotContainer {
     XboxA.whenPressed(new ResetDevices(), true);
     XboxB.whenPressed(new AlignSwerveModules(), false);
     XboxY.whenPressed(new Auto(), true);
+    XboxX.whenPressed(new Auto(), true);
   }
 
   /**
