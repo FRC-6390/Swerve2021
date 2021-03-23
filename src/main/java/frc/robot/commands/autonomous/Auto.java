@@ -5,21 +5,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class Auto extends CommandBase {
   public SwerveDriveTrain drivetrain;
-  public Auto(SwerveDriveTrain driveTrain) {
-    this.drivetrain = driveTrain;
+  public Auto() {
   }
 
   @Override
   public void initialize() {
+    drivetrain = SwerveDriveTrain.getInstance();
   }
 
   @Override
   public void execute() {
-    drivetrain.drive(0.01, 0.0, 0.0, 1.0);  //forward
-    drivetrain.drive(0.0, 0.01, 0.0, 1.0);  //left
-    drivetrain.drive(0.015, 0.0, 0.02, 2.0);//forward + rotate
-    drivetrain.drive(0.0, 0.01, 0.0, 1.0);  //left
-    drivetrain.drive(-0.01, 0.0, 0.0, 2.0); //backwards
+    drivetrain.autoDrive(1.0, 0.01, 0.0, 0.0);  //forward
+    drivetrain.autoDrive(1.0, 0.0, 0.01, 0.0);  //left
+    drivetrain.autoDrive(2.0, 0.015, 0.0, 0.02);//forward + rotate
+    drivetrain.autoDrive(1.0, 0.0, 0.01, 0.0);  //left
+    drivetrain.autoDrive(2.0, -0.01, 0.0, 0.0); //backwards
   }
 
   @Override

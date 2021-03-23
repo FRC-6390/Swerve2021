@@ -73,7 +73,7 @@ public class RobotContainer {
     //Assign Buttons to Commands Here
     XboxA.whenPressed(new ResetDevices(), true);
     XboxB.whenPressed(new AlignSwerveModules(), false);
-    XboxY.whenPressed(new Auto(Robot.autoDrive), true);
+    XboxY.whenPressed(new Auto(), true);
   }
 
   /**
