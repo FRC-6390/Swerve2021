@@ -24,16 +24,19 @@ public class SwerveModule {
     private CANCoderConfiguration moduleEncoderConfiguration;
     private TalonFXConfiguration rotationConfiguration, driveConfiguration;
     private int ModuleId;
-    private Encoder test;
     
     public SwerveModule(int ModuleId, Rotation2d offset) {
       this.ModuleId = ModuleId;
         //Motors
         driveMotor = new TalonFX(ModuleId);
         rotationMotor = new TalonFX(ModuleId+4);
+
+        rotationMotor.configFactoryDefault();
+        driveMotor.configFactoryDefault();
         //Module Encoders
         moduleEncoder = new CANCoder(ModuleId);
-
+        moduleEncoder.configFactoryDefault();
+        
         rotationConfiguration = new TalonFXConfiguration(){{
           slot0.kP = Constants.SWERVE.P_ROTATION.get();
           slot0.kI = Constants.SWERVE.I_ROTATION.get();
@@ -64,7 +67,7 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState desiredState){
 
         Rotation2d currentRotation = getAngle();
-        SwerveModuleState state = optimize(desiredState, currentRotation);
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation);
 
         Rotation2d rotationDelta = state.angle.minus(currentRotation);
 
@@ -92,13 +95,8 @@ public class SwerveModule {
       return Rotation2d.fromDegrees(moduleEncoder.getAbsolutePosition());
     }
 
-      //Optimizes the Swerve Drive to Feel Smoother While Driving 
-    private static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
-      var delta = desiredState.angle.minus(currentAngle);
-      if (Math.abs(delta.getDegrees()) > 90.0) {
-        return new SwerveModuleState(-desiredState.speedMetersPerSecond,desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
-      } else return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
-      
+    public double getWheelMovedMeters(){
+      return nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorPosition());
     }
 
     private double nativeUnitsToDistanceMeters(double sensorCounts){
