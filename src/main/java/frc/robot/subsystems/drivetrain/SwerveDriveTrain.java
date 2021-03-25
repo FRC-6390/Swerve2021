@@ -347,7 +347,7 @@ public class SwerveDriveTrain extends SubsystemBase {
     for (int i = 0; i < motorArray.length; i++) 
       SmartDashboard.putNumber(Constants.MOTORID.MOTOR_NAME.GetName()[i], motorArray[i].getSensorCollection().getIntegratedSensorPosition());
  
-      robotPosition = odometry.update(gyro.getRotation2d(), frontLeftModule.getState(), frontRightModule.getState(),backLeftModule.getState(), backRightModule.getState());
+      robotPosition = odometry.update(gyro.getRotation2d(), frontLeftModule.getState(), frontRightModule.getState(), backLeftModule.getState(), backRightModule.getState());
       SmartDashboard.putNumber("Robot Position (X)", odometry.getPoseMeters().getX());
       SmartDashboard.putNumber("Robot Position (Y)", odometry.getPoseMeters().getY());
       SmartDashboard.putNumber("Robot Position (Angle)", odometry.getPoseMeters().getRotation().getDegrees());
