@@ -56,7 +56,7 @@ public class SwerveModule {
         }};
         driveMotor.configAllSettings(driveConfiguration);
         driveMotor.setNeutralMode(NeutralMode.Brake);
-        
+        //if(ModuleId == 3) driveMotor.setInverted(true);
         moduleEncoderConfiguration = new CANCoderConfiguration(){{
           magnetOffsetDegrees = offset.getDegrees();
         }};
@@ -80,12 +80,14 @@ public class SwerveModule {
         double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
         
         driveMotor.set(ControlMode.PercentOutput, feetPerSecond / Constants.ROBOT.MAX_SPEED.get());
-    }
 
-    public SwerveModuleState getState() {
-      double turnRadians = ((2.0 * Math.PI) / (Constants.SWERVE.ROTATION_GEAR_RATIO.get() * Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution())) * rotationMotor.getSelectedSensorPosition();
-      return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorVelocity()*10), new Rotation2d(turnRadians));
-    }
+        SmartDashboard.putString(ModuleId+" Test", ""+nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorPosition()*10));
+      }
+  
+      public SwerveModuleState getState() {
+        double turnRadians = ((2.0 * Math.PI) / (Constants.SENSORS.EXTERNAL_ENCODER_RESOLUTION.GetResolution())) * moduleEncoder.getPosition();
+        return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorVelocity()*10), new Rotation2d(turnRadians));
+      }
 
     public double getRawAngle() { 
       return  moduleEncoder.getAbsolutePosition();
