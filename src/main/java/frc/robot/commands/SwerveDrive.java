@@ -16,7 +16,7 @@ public class SwerveDrive extends CommandBase {
   //Slew Limmiter smooths out controller inputs
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(1);
+  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
   
   public SwerveDrive(SwerveDriveTrain driveTrain, XboxController controller) {
     this.driveTrain = driveTrain;
@@ -37,7 +37,7 @@ public class SwerveDrive extends CommandBase {
     //Rotation
     double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * 0.8;
 
-    driveTrain.  drive(leftY*0.2, leftX * 0.2, rightX*0.2);
+    driveTrain.drive(leftY*0.1, leftX * 0.1, rightX*0.1);
     //driveTrain.setMotorSpeed(3, 0.2);
     //Displays joystick values on Smart Dashboard
     SmartDashboard.putNumber("Left Y", leftY);
