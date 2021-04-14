@@ -34,22 +34,22 @@ public class SwerveDrive extends CommandBase {
     //Regular Movement 
     double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getY(GenericHID.Hand.kLeft) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getY(GenericHID.Hand.kLeft) : 0) * 0.8;
     double leftX = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kLeft) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kLeft) : 0) * 0.8;
-    double rightY = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * 0.8;
+    //double rightY = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * 0.8;
     //Rotation
     double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * 0.8;
 
     //choose between tank drive and swerve drive
-    if(controller.getBumperPressed(GenericHID.Hand.kRight)){
-      driveTrain.tankDriveLeft(leftY * 0.2);
-      driveTrain.tankDriveRight(rightY * 0.2);
-    }
-    else if(controller.getBumperReleased(GenericHID.Hand.kRight)){
-      driveTrain.drive(leftY * 0.2, leftX * 0.2, rightX * 0.2);
-    }
+    // if(controller.getBumperPressed(GenericHID.Hand.kRight)){
+    //   driveTrain.tankDriveLeft(leftY * 0.2);
+    //   driveTrain.tankDriveRight(rightY * 0.2);
+    // }
+    // else if(controller.getBumperReleased(GenericHID.Hand.kRight)){
+    driveTrain.drive(leftY * 0.2, leftX * 0.2, rightX * 0.2);
+    // }
     //Displays joystick values on Smart Dashboard
     SmartDashboard.putNumber("Left Y", leftY);
     SmartDashboard.putNumber("Left X", leftX);
-    SmartDashboard.putNumber("Right Y", rightY);
+    //SmartDashboard.putNumber("Right Y", rightY);
     SmartDashboard.putNumber("Right X", rightX);
   }
 
