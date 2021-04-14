@@ -13,7 +13,7 @@ import java.awt.*;
 import frc.robot.Constants;
 
 
-public class RioLog {
+public class RioLogs {
 
     private static File m_File, m_Destination, m_Folder, m_USBFolder;// m_subFolder, m_subUSBFolder;
     private static long m_Time;
