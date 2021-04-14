@@ -170,10 +170,10 @@ public class SwerveDriveTrain extends SubsystemBase {
     //Falcons go up to 40Amps
     //Supply is for motor controller Stator is for motor keeping number low for now
     //Drive Motors                                                               enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)
-    for (int i = 0; i < motorArray.length; i++) {
-      motorArray[i].configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
-      motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
-    }
+    // for (int i = 0; i < motorArray.length; i++) {
+    //   motorArray[i].configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,      30,                35,                1.0));
+    //   motorArray[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,      20,                25,                0.5));
+    // }
 
     //Swevre Kinematics
     kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
@@ -197,15 +197,15 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   //used for tank drive
-  public void tankDriveLeft(double speed){
-    frontLeftDrive.set(ControlMode.PercentOutput, speed);
-    backLeftDrive.set(ControlMode.PercentOutput, speed);
-  }
+  // public void tankDriveLeft(double speed){
+  //   frontLeftDrive.set(ControlMode.PercentOutput, speed);
+  //   backLeftDrive.set(ControlMode.PercentOutput, speed);
+  // }
 
-  public void tankDriveRight(double speed){
-    frontRightDrive.set(ControlMode.PercentOutput, -speed);
-    backRightDrive.set(ControlMode.PercentOutput, -speed);
-  }
+  // public void tankDriveRight(double speed){
+  //   frontRightDrive.set(ControlMode.PercentOutput, -speed);
+  //   backRightDrive.set(ControlMode.PercentOutput, -speed);
+  // }
 
   //Used for actualy moving the Robot
   public void drive(double xSpeed, double ySpeed, double rotation){
