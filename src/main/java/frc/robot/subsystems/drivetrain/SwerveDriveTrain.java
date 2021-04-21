@@ -197,15 +197,15 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   //used for tank drive
-  // public void tankDriveLeft(double speed){
-  //   frontLeftDrive.set(ControlMode.PercentOutput, speed);
-  //   backLeftDrive.set(ControlMode.PercentOutput, speed);
-  // }
+  public void tankDriveLeft(double speed){
+    frontLeftDrive.set(ControlMode.PercentOutput, speed);
+    backLeftDrive.set(ControlMode.PercentOutput, speed);
+  }
 
-  // public void tankDriveRight(double speed){
-  //   frontRightDrive.set(ControlMode.PercentOutput, -speed);
-  //   backRightDrive.set(ControlMode.PercentOutput, -speed);
-  // }
+  public void tankDriveRight(double speed){
+    frontRightDrive.set(ControlMode.PercentOutput, -speed);
+    backRightDrive.set(ControlMode.PercentOutput, -speed);
+  }
 
   //Used for actualy moving the Robot
   public void drive(double xSpeed, double ySpeed, double rotation){
