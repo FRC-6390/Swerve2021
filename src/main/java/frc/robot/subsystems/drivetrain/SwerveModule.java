@@ -46,6 +46,7 @@ public class SwerveModule {
           remoteFilter0.remoteSensorSource = RemoteSensorSource.CANCoder;
           primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
         }};
+        
         rotationMotor.configAllSettings(rotationConfiguration);
         rotationMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -64,6 +65,10 @@ public class SwerveModule {
         moduleEncoderConfiguration = new CANCoderConfiguration(){{
           magnetOffsetDegrees = offset.getDegrees();
         }};
+
+        // driveMotor.configClosedloopRamp(100);
+        // rotationMotor.configOpenloopRamp(100);
+
         moduleEncoder.configAllSettings(moduleEncoderConfiguration);
       }
 

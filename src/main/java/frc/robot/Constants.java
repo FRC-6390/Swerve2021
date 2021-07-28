@@ -48,9 +48,9 @@ public interface Constants {
         BACK_RIGHT_OFFSET(193.0),   //Good                  DIE
         DRIVE_GEAR_RATIO(8.16),
         ROTATION_GEAR_RATIO(12.8),
-        P_ROTATION(1.0),
-        I_ROTATION(0.0),
-        D_ROTATION(0.0),
+        P_ROTATION(0.24),
+        I_ROTATION(0.001),
+        D_ROTATION(0.2),
         P_DRIVE(0.0),
         I_DRIVE(0.0),
         D_DRIVE(0.0),
