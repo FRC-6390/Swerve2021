@@ -191,7 +191,9 @@ public class SwerveDriveTrain extends SubsystemBase {
 
 
 
-  public static void startup(){
+  public static void startUp(){
+    resetRobotPosition();
+    System.out.println("\nran");
     resetGyro();
     resetModuleEncoders();
   }

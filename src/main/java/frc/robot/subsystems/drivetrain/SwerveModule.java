@@ -24,6 +24,7 @@ public class SwerveModule {
     private CANCoderConfiguration moduleEncoderConfiguration;
     private TalonFXConfiguration rotationConfiguration, driveConfiguration;
     private int ModuleId;
+    private boolean inverted;
     
     public SwerveModule(int ModuleId, Rotation2d offset) {
       this.ModuleId = ModuleId;
@@ -56,7 +57,10 @@ public class SwerveModule {
         }};
         driveMotor.configAllSettings(driveConfiguration);
         driveMotor.setNeutralMode(NeutralMode.Brake);
-        //if(ModuleId == 3) driveMotor.setInverted(true);
+
+        if(ModuleId == 1 || ModuleId == 2) inverted = true;
+
+
         moduleEncoderConfiguration = new CANCoderConfiguration(){{
           magnetOffsetDegrees = offset.getDegrees();
         }};
@@ -86,7 +90,7 @@ public class SwerveModule {
   
       public SwerveModuleState getState() {
         double turnRadians = ((2.0 * Math.PI) / (Constants.SENSORS.EXTERNAL_ENCODER_RESOLUTION.GetResolution())) * moduleEncoder.getPosition();
-        return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorVelocity()*10), new Rotation2d(turnRadians));
+        return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorVelocity()*10), new Rotation2d( inverted == true ? -turnRadians: turnRadians));
       }
 
     public double getRawAngle() { 
@@ -105,7 +109,7 @@ public class SwerveModule {
       double motorRotations = (double)sensorCounts / Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution();
       double wheelRotations = motorRotations / Constants.SWERVE.DRIVE_GEAR_RATIO.get();
       double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(2));
-      return positionMeters;
+      return inverted == true ? -positionMeters : positionMeters;
     }
 }
 

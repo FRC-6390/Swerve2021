@@ -42,7 +42,7 @@ public interface Constants {
         BACK_LEFT_MODULE(2),
         BACK_RIGHT_MODULE(3),
         LOCATION_FROM_CENTER(0.3302),
-        FRONT_LEFT_OFFSET(231.5),   //Good           Do Not Change Values
+        FRONT_LEFT_OFFSET(230.0),   //Good           Do Not Change Values
         FRONT_RIGHT_OFFSET(164.0),  //Good              If You Change
         BACK_LEFT_OFFSET(103.0),    //Good                You Wll
         BACK_RIGHT_OFFSET(193.0),   //Good                  DIE

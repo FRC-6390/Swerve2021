@@ -6,7 +6,7 @@ import frc.robot.commands.SwerveDrive;
 import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
-import frc.robot.vission.Camera;
+import frc.robot.subsystems.vission.Camera;
 
 public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
@@ -22,7 +22,9 @@ public class Robot extends TimedRobot {
 
     new RioLog("OutputLog");
     RioLog.Init();
-    RioLog.setLogLevel(RioLevel.DEBUG);    
+    RioLog.setLogLevel(RioLevel.DEBUG);
+    
+    
   }
 
   @Override
@@ -31,7 +33,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -44,12 +47,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    SwerveDriveTrain.startup();
-    swerveDrive.schedule();
+   swerveDrive.schedule();
+    driveTrain.startUp();
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    //SwerveDriveTrain.setMotorSpeed(7, 0.2);
+  }
 
   @Override
   public void testInit() {
