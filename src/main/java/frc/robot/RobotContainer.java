@@ -7,6 +7,7 @@ import frc.robot.commands.AlignSwerveModules;
 import frc.robot.commands.LimeLightAim;
 import frc.robot.commands.ResetDevices;
 import frc.robot.commands.autonomous.Auto;
+import frc.robot.commands.autonomous.PointAtoB;
 
 public class RobotContainer {
   //Declaring Controllers for both XBOX and LOGITECH
@@ -77,6 +78,7 @@ public class RobotContainer {
     XboxY.whenPressed(new Auto(), true);    
     XboxBumperRight.whileHeld(new LimeLightAim(true));
     XboxBumperRight.whenReleased(new LimeLightAim(false));
+    XboxBumperLeft.whenPressed(new PointAtoB());
 
   }
 

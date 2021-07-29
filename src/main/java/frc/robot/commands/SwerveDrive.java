@@ -62,7 +62,7 @@ public class SwerveDrive extends CommandBase {
     //   driveTrain.tankDriveRight(rightY * 0.2);
     // }
   
-    driveTrain.drive(leftY * 0.1, leftX * 0.1, rightX * 0.1);
+   // driveTrain.drive(leftY * 0.1, leftX * 0.1, rightX * 0.1);
 
     //Displays joystick values on Smart Dashboard
     SmartDashboard.putNumber("Left Y", leftY);

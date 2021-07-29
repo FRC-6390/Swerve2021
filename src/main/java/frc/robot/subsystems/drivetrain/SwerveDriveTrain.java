@@ -222,6 +222,18 @@ public class SwerveDriveTrain extends SubsystemBase {
     
   }
 
+  public void driveToPosition(DesiredPosition desiredPosition){
+    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(desiredPosition.getXspeed(), desiredPosition.getYspeed(), desiredPosition.getThetaSpeed(), gyro.getRotation2d()));
+    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
+
+    for (int i = 0; i < swerveModuleStates.length; i++){
+      swerveModuleArray[i].setDesiredState(swerveModuleStates[i]);
+      SmartDashboard.putNumber(String.valueOf(i), swerveModuleArray[i].getRawAngle());
+
+    }
+    desiredPosition.updatePosition(robotPosition);
+  }
+
   //Auto Drive
   public void autoDrive(double time, double xSpeed, double ySpeed, double rotation){
     Timer timer = new Timer();
