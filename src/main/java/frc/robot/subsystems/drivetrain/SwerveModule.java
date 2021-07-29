@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorTimeBase;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -59,16 +60,10 @@ public class SwerveModule {
         driveMotor.configAllSettings(driveConfiguration);
         driveMotor.setNeutralMode(NeutralMode.Brake);
 
-        if(ModuleId == 1 || ModuleId == 2) inverted = true;
-
-
         moduleEncoderConfiguration = new CANCoderConfiguration(){{
           magnetOffsetDegrees = offset.getDegrees();
         }};
-
-        // driveMotor.configClosedloopRamp(100);
-        // rotationMotor.configOpenloopRamp(100);
-
+        
         moduleEncoder.configAllSettings(moduleEncoderConfiguration);
       }
 
@@ -90,12 +85,10 @@ public class SwerveModule {
         
         driveMotor.set(ControlMode.PercentOutput, feetPerSecond / Constants.ROBOT.MAX_SPEED.get());
 
-        SmartDashboard.putString(ModuleId+" Test", ""+nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorPosition()*10));
       }
   
       public SwerveModuleState getState() {
-        double turnRadians = ((2.0 * Math.PI) / (Constants.SENSORS.EXTERNAL_ENCODER_RESOLUTION.GetResolution())) * moduleEncoder.getPosition();
-        return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorVelocity()*10), new Rotation2d( inverted == true ? -turnRadians: turnRadians));
+        return new SwerveModuleState(nativeUnitsToDistanceMeters(driveMotor.getSelectedSensorVelocity()*10), getAngle());
       }
 
     public double getRawAngle() { 
