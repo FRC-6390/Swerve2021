@@ -111,3 +111,6 @@ PUT CHANGES IN HERE
     Mathias and I have been working on the robot over spring break and have managed to get it driving field orientated within the
     first week. A lot has changed as we used many programming resources to be able to program it propperly and correctly. I have also 
     created a tag for the code labeled v1.0  
+
+~~ July 29, 2021 - Mohammad and Mathias
+    We are currently working on odometry auto routines... Problem with our modules are fixed. We are also working on limelight to work on swerve drive :)
