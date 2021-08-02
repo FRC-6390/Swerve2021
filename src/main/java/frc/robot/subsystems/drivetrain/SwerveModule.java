@@ -108,6 +108,6 @@ public class SwerveModule {
       double wheelRotations = motorRotations / Constants.SWERVE.DRIVE_GEAR_RATIO.get();
       double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(2));
       return inverted == true ? -positionMeters : positionMeters;
-    }
+    } 
 }
 

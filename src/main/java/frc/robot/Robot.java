@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.SwerveDrive;
@@ -23,8 +25,7 @@ public class Robot extends TimedRobot {
     new RioLog("OutputLog");
     RioLog.Init();
     RioLog.setLogLevel(RioLevel.DEBUG);
-    
-    
+
   }
 
   @Override
@@ -34,26 +35,30 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    SwerveDriveTrain.getMotorArray().forEach(motor -> motor.setNeutralMode(NeutralMode.Coast));
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+  }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void teleopInit() {
-   swerveDrive.schedule();
-    driveTrain.startUp();
+    swerveDrive.schedule();
+    SwerveDriveTrain.startUp();
   }
 
   @Override
   public void teleopPeriodic() {
-    //SwerveDriveTrain.setMotorSpeed(7, 0.2);
+    // SwerveDriveTrain.setMotorSpeed(7, 0.2);
   }
 
   @Override
@@ -62,5 +67,6 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 }

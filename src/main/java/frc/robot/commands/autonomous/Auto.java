@@ -12,7 +12,7 @@ public class Auto extends CommandBase {
   public void initialize() {
     drivetrain = SwerveDriveTrain.getInstance();
   }
-
+  
   @Override
   public void execute() {
     drivetrain.autoDrive(1.0, 0.01, 0.0, 0.0);  //forward
