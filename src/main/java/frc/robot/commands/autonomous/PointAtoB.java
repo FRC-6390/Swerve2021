@@ -1,30 +1,40 @@
 package frc.robot.commands.autonomous;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drivetrain.DesiredPosition;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
 
-public class PointAtoB extends CommandBase{
+public class PointAtoB extends CommandBase {
 
-    public SwerveDriveTrain drivetrain;
-    DesiredPosition desiredPosition;
+  public SwerveDriveTrain drivetrain;
+  private List<DesiredPosition> desiredPositions;
 
-    public PointAtoB(){
+  public PointAtoB() {
 
-    }
+  }
 
-    @Override
+  @Override
   public void initialize() {
     drivetrain = SwerveDriveTrain.getInstance();
     Pose2d pos = SwerveDriveTrain.getRobotPosition();
-    desiredPosition = new DesiredPosition(SwerveDriveTrain.getRobotPosition(),new Pose2d(pos.getX()+1, 0, Rotation2d.fromDegrees(0.0)));
+    desiredPositions = new ArrayList<>();
+     desiredPositions.add(DesiredPosition.fromCoordinates((pos.getX()+1.0) , 0.0, 0.0));
   }
 
   @Override
   public void execute() {
-    drivetrain.driveToPosition(desiredPosition);
+    DesiredPosition desiredPosition;
+    for (int i = 0; i < desiredPositions.size(); i++) {
+      desiredPosition = desiredPositions.get(i);
+      drivetrain.driveToPosition(desiredPosition);
+      if(!desiredPosition.atDesiredPosition(SwerveDriveTrain.getRobotPosition()))
+        i--;
+    }
   }
 
   @Override
@@ -33,6 +43,6 @@ public class PointAtoB extends CommandBase{
 
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
