@@ -43,8 +43,8 @@ public class LimeLightAim extends CommandBase {
   public void initialize() {
     if (held == true)
     {
-        kP = 0.0005;
-        kpDistance = 0.05;
+        kP = 0.014;
+        kpDistance = 0.08;
         rotation_adjust = 0.0;
         tx = txvalue.getDouble(0.0);
         ty = tyvalue.getDouble(0.0);
@@ -61,14 +61,14 @@ public class LimeLightAim extends CommandBase {
   @Override
   public void execute() {
       tx = txvalue.getDouble(0.0);
-      ty = tyvalue.getDouble(0);
+      ty = tyvalue.getDouble(0.0);
       tv = tvvalue.getDouble(0.0);
       heading_error = -tx;
       rotation = kP * -tx;
-      distance_error = ty;
-      distance_adjust = kpDistance * distance_error;
-      
-      Robot.driveTrain.drive(0, distance_adjust, rotation);
+      //distance_error = ty;
+      //distance_adjust = kpDistance * distance_error;
+      Robot.driveTrain.drive(0, 0, rotation);
+      //Robot.driveTrain.drive(0, 0, -rotation);
   }
 
   @Override
