@@ -25,7 +25,6 @@ public class SwerveModule {
     private CANCoderConfiguration moduleEncoderConfiguration;
     private TalonFXConfiguration rotationConfiguration, driveConfiguration;
     private int ModuleId;
-    private boolean inverted;
     
     public SwerveModule(int ModuleId, Rotation2d offset) {
       this.ModuleId = ModuleId;
@@ -107,7 +106,7 @@ public class SwerveModule {
       double motorRotations = (double)sensorCounts / Constants.SENSORS.INTERNAL_ENCODER_RESOLUTION.GetResolution();
       double wheelRotations = motorRotations / Constants.SWERVE.DRIVE_GEAR_RATIO.get();
       double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(2));
-      return inverted == true ? -positionMeters : positionMeters;
+      return positionMeters;
     } 
 }
 

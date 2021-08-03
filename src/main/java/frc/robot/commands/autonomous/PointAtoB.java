@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.drivetrain.DesiredPosition;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
-import frc.robot.subsystems.drivetrain.DesiredPosition.DesiredPositionSpeeds;
+import frc.robot.subsystems.drivetrain.DesiredPosition.DesiredPID;
 
 public class PointAtoB extends CommandBase {
 
@@ -33,8 +33,8 @@ public class PointAtoB extends CommandBase {
     drivetrain = SwerveDriveTrain.getInstance();
     Pose2d pos = SwerveDriveTrain.getRobotPosition();
     desiredList = new ArrayList<>();
-     desiredList.add(DesiredPosition.fromCoordinates((pos.getX()+1.0) , 0.0, 180.0, new DesiredPositionSpeeds(0.01,0.01,0.01,0.02),0.1, 2));
-     desiredList.add(DesiredPosition.fromCoordinates((pos.getX()-1.0) , 0.0, 0.0, new DesiredPositionSpeeds(0.01,0.01,0.01,0.02),0.1, 2));
+     desiredList.add(DesiredPosition.fromCords((pos.getX()+1.0) , 0.0, 180.0, new DesiredPID()));
+     desiredList.add(DesiredPosition.fromCords((pos.getX()-1.0) , 0.0, 0.0, new DesiredPID()));
      desiredIterator = desiredList.iterator();
      desiredPosition = desiredIterator.next();
   }

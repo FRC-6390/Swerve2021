@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch DesiredPosition2",
+      "request": "launch",
+      "mainClass": "frc.robot.subsystems.drivetrain.DesiredPosition2",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
       "name": "Launch DesiredPosition",
       "request": "launch",
       "mainClass": "frc.robot.subsystems.drivetrain.DesiredPosition",

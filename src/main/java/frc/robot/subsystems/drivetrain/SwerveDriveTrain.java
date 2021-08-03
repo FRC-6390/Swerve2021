@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
+import frc.robot.subsystems.drivetrain.DesiredPosition.DesiredSpeeds;
 
 public class SwerveDriveTrain extends SubsystemBase {
   // Initiation
@@ -184,9 +185,9 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   public void driveToPosition(DesiredPosition desiredPosition) {
-    double[] speeds = desiredPosition.getSpeed(robotPosition);
-    System.out.printf("X-%f%nY-%f%nTheta-%f%n",speeds[0],speeds[1],speeds[2]);
-    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds[0],speeds[1], speeds[2],gyro.getRotation2d()));
+    DesiredSpeeds speeds = desiredPosition.getDesiredSpeeds(robotPosition);
+    System.out.printf("X-%f%nY-%f%nTheta-%f%n",speeds.x,speeds.y,speeds.theta);
+    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds.x,speeds.y,speeds.theta,gyro.getRotation2d()));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
 
     for (int i = 0; i < swerveModuleStates.length; i++) {
