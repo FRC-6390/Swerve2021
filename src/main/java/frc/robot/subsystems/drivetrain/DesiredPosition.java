@@ -1,174 +1,170 @@
 package frc.robot.subsystems.drivetrain;
 
+import java.util.Arrays;
+import java.util.List;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DesiredPosition {
 
-    //brain hurt but brain got it working so the sacrifice was necessary
+    public Pose2d desiredCord;
+    public List<DesiredSettings> settings;
+    public DesiredPID pid;
+    public DesiredSpeeds desiredSpeeds;
 
-    private static final double DEFAULT_THRESHOLD = 0.05;
-
-    private Pose2d desiredPos;
-    private DesiredPositionSpeeds desiredSpeeds;
-    private double threshold;
-
-    public DesiredPosition(Pose2d desiredPos) {
-        this(desiredPos, new DesiredPositionSpeeds());
+    public DesiredPosition(Pose2d desiredCord, DesiredSettings... settings){
+        this(desiredCord, new DesiredPID(), settings);
     }
 
-    public DesiredPosition(Pose2d desiredPos, DesiredPositionSpeeds desiredSpeeds) {
-        this(desiredPos, desiredSpeeds, DEFAULT_THRESHOLD);
+    public DesiredPosition(Pose2d desiredCord, DesiredPID pid, DesiredSettings... settings){
+        this.desiredCord = desiredCord;
+        this.settings = Arrays.asList(settings);
+        desiredSpeeds = new DesiredSpeeds();
+
     }
 
-    public DesiredPosition(Pose2d desiredPos, DesiredPositionSpeeds desiredSpeeds, double threshold) {
-        this.desiredPos = desiredPos;
-        this.desiredSpeeds = desiredSpeeds;
-        this.threshold = threshold;
+    public DesiredSpeeds getDesiredSpeeds(Pose2d currentPosition){
+
+        if(!settings.isEmpty()){
+            if(settings.contains(DesiredSettings.Ignore_Rotation)){
+                desiredSpeeds.theta = 0.0;
+            }else if(settings.contains(DesiredSettings.Point_To_Heading)){
+                desiredCord = pointToHeading(currentPosition);
+            }
+        }else{
+            desiredSpeeds.x = calculateSpeed(calculateDistance(currentPosition.getX(), desiredCord.getX()));
+            desiredSpeeds.y = calculateSpeed(calculateDistance(currentPosition.getY(), desiredCord.getY()));
+            desiredSpeeds.theta = calculateSpeed(calculateDistance(currentPosition.getRotation().getDegrees(), desiredCord.getRotation().getDegrees()));    
+        }
+        return desiredSpeeds; 
     }
 
-    public Pose2d getDesiredPosition() {
-        return desiredPos;
-    }
-    /**
-     * gets all the values relating to the robot
-     * @param currentPos the current robot position
-     * @return all values related to the robot (current x, current y, current theta, speed x, speed y, speed theta, distance x, distance y, distance theta)
-     */
-    public double[] getValues(Pose2d currentPos) {
-
-        double[] distances = getDistances(currentPos);
-        double[] speeds = getSpeed(currentPos);
-
-        return new double[] { currentPos.getX(), currentPos.getY(), currentPos.getRotation().getDegrees(),speeds[0],speeds[1],speeds[2],distances[0],distances[1],distances[2]};
+    public Pose2d pointToHeading(Pose2d currentPosition){
+        return new Pose2d(desiredCord.getX(), desiredCord.getY(), Rotation2d.fromDegrees(angleFromCoordinate(desiredCord.getX(), desiredCord.getY(), currentPosition.getX(), currentPosition.getY())));
     }
 
-    /**
-     * gets the speed of the robot in each dimension within the speed limit givin
-     * @param currentPos the current robot position
-     * @return speeds (x,y,theta)
-     */
-    public double[] getSpeed(Pose2d currentPos) {
+    //https://stackoverflow.com/questions/3932502/calculate-angle-between-two-latitude-longitude-points
+    public double angleFromCoordinate(double x1, double y1, double x2,double y2) {
 
-        double[] distances = getDistances(currentPos); 
-        double[] speeds = new double[distances.length];
-        
-        for (int i = 0; i < speeds.length; i++) {
-            if(i != distances.length-1)
-                speeds[i] = (Math.abs(distances[i]) <= desiredSpeeds.drive[0] ? desiredSpeeds.drive[0] : Math.abs(distances[i])) >= desiredSpeeds.drive[1] ? desiredSpeeds.drive[1] : Math.abs(distances[i]);
-            else
-                speeds[i] = (Math.abs(distances[i]) <= desiredSpeeds.rotation[0] ? desiredSpeeds.rotation[0] : Math.abs(distances[i])) >= desiredSpeeds.rotation[1] ? desiredSpeeds.rotation[1] : Math.abs(distances[i]);
-            
-            if(distances[i] < 0)
-                speeds[i] *= -1;
+        double ydiff = (y2 - y1);
+
+        double y = Math.sin(ydiff) * Math.cos(x2);
+        double x = Math.cos(x1) * Math.sin(x2) - Math.sin(x1)* Math.cos(x2) * Math.cos(ydiff);
+
+        double brng = Math.atan2(y, x);
+
+        brng = (Math.toDegrees(brng) + 360) % 360;
+        brng = 360 - brng; // count degrees counter-clockwise - remove to make clockwise
+
+        // brng = Math.toDegrees(brng);
+        // brng = (brng + 360) % 360;
+        // brng = 360 - brng; // count degrees counter-clockwise - remove to make clockwise
+
+        return brng;
+    }
+
+    public double calculateDistance(double currentLocation, double desiredLocation){
+        return desiredLocation - currentLocation;
+    }
+
+    public double calculateSpeed(double error){
+        double dt = Timer.getFPGATimestamp() - pid.timeStamp;
+        if(Math.abs(error) < pid.iLimit)
+            pid.sum += error * dt;
+        double errorRate = (error - pid.prevError) / dt;
+        double output = (pid.p * error) + (pid.i * pid.sum) + (pid.d * errorRate);
+        pid.timeStamp = Timer.getFPGATimestamp();
+        pid.prevError = error;
+        return output;
+    }
+
+    public boolean atDesiredPosition(Pose2d currentPosition){
+        return desiredSpeeds.getTotal() < pid.threshold;
+    }
+
+    public static DesiredPosition fromCords(double x, double y, double theta){
+        return fromCords(x,y,theta, new DesiredPID());
+    }
+
+    public static DesiredPosition fromCords(double x, double y, double theta, DesiredPID pid){
+        return new DesiredPosition(new Pose2d(x,y,Rotation2d.fromDegrees(theta)), pid);
+    }
+
+    public static enum DesiredSettings{
+        Ignore_Rotation, Point_To_Heading
+    }
+
+
+    public static class DesiredSpeeds{
+
+        public double x;
+        public double y;
+        public double theta;
+
+        public DesiredSpeeds(){
+            this.x = 0;
+            this.y = 0;
+            this.theta = 0;
         }
 
-       return speeds;
-    }
-
-    /**
-     * gets how far away the robot is in each dimension in meters and degrees for theta
-     * @param currentPos the current robot position
-     * @return the distance in meter from its desired location (x,y,theta)
-     */
-    public double[] getDistances(Pose2d currentPos) {
-        double distanceX = desiredPos.getX() - currentPos.getX();
-        double distanceY = desiredPos.getY() - currentPos.getY();
-        double distanceTheta = desiredPos.getRotation().getDegrees() - currentPos.getRotation().getDegrees(); 
-
-        return new double[] { distanceX,distanceY,distanceTheta};
-    }
-
-    /**
-     * Checks distances to see if all are within the threshold indacating it has reached it's location
-     * @param currentPos the current robot position
-     * @return whether or not the robot has reached its desired position
-     */
-    public boolean atDesiredPosition(Pose2d currentPos){
-
-        boolean[] thresholds =  thresholdCheck(getDistances(currentPos));
-       
-        for (int i = 0; i < thresholds.length; i++){
-            if(!thresholds[i])
-                return false;
-        } 
-
-        return true;
-    }
-
-    /**
-     * Compares the distance to the threshold
-     * @param distances distances x, y, theta
-     * @return boolean array (x,y,theta)
-     */
-    public boolean[] thresholdCheck(double[] distances){
-        boolean[] thresholds = new boolean[distances.length];
-        for (int i = 0; i < distances.length; i++) {
-            thresholds[i] = Math.abs(distances[i]) < threshold;
-        }
-
-        return thresholds;
-    }
-
-    public static DesiredPosition fromCoordinates(double x, double y, double theta){
-        return fromCoordinates(x, y, theta, new DesiredPositionSpeeds());
-    }
-
-    public static DesiredPosition fromCoordinates(double x, double y, double theta, DesiredPositionSpeeds speeds){
-        return fromCoordinates(x, y, theta, speeds, DEFAULT_THRESHOLD);
-    }
-
-    public static DesiredPosition fromCoordinates(double x, double y, double theta, DesiredPositionSpeeds speeds, double threshold){
-        return new DesiredPosition(new Pose2d(x,y,Rotation2d.fromDegrees(theta)),speeds, threshold);
-    }
-
-    public static class DesiredPositionSpeeds {
-
-        private static final double[] DEFAULT_SPEEDS = new double[] {0.1,0.3};
-
-        public double[] drive, rotation;
-
-        public DesiredPositionSpeeds(){
-            this(DEFAULT_SPEEDS, DEFAULT_SPEEDS);
-        }
-
-        public DesiredPositionSpeeds(double[] drive, double[] rotation){
-            this.drive = drive;
-            this.rotation = rotation;
-        }
-
-        public DesiredPositionSpeeds(double minDrive, double maxDrive, double minRotation, double maxRotation){
-            this.drive = new double[]{minDrive, maxDrive};
-            this.rotation =new double[]{minRotation, maxRotation};
+        public double getTotal(){
+            return (x+y+theta);
         }
         
     }
- 
-    //Simulated testing
 
-    // public static void main(String[] args) {
-    //     DesiredPosition desiredPosition = new DesiredPosition(new Pose2d(10, 10, Rotation2d.fromDegrees(90.0)));
-    //     double[] values = desiredPosition.getValues(new Pose2d(2, 0, Rotation2d.fromDegrees(0.0)));
-    //     for (int i = 0; i <= 20; i++) {
-    //         values = desiredPosition.getValues(new Pose2d(0.1*i, 0.1*i, Rotation2d.fromDegrees(9*i)));
-    //         System.out.printf("====%d====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n", i,values[0], values[1], values[2],values[3], values[4], values[5],values[6], values[7], values[8]);
+    public static class DesiredPID{
 
-    //     }
+        private static final double DEFAULT_P = 0.01;
+        private static final double DEFAULT_I = 0.001;
+        private static final double DEFAULT_D = 0;
+        private static final double DEFAULT_I_LIMIT = 0.1;
+        private static final double DEFAULT_THRESHOLD = 0.001;
 
-    //     int t = 1;
-    //     System.out.println("\nsimulated test\n");
-    //     Pose2d currentPos = new Pose2d(0, 0, Rotation2d.fromDegrees(0.0));
-    //     double[] speed = desiredPosition.getSpeed(currentPos);
-    //     double[] data = desiredPosition.getValues(currentPos);
-    //     while(!desiredPosition.atDesiredPosition(currentPos)){
-    //         speed = desiredPosition.getSpeed(currentPos);
-    //         data = desiredPosition.getValues(currentPos);
-    //         currentPos = new Pose2d(currentPos.getX()+speed[0], currentPos.getY()+speed[1], Rotation2d.fromDegrees(currentPos.getRotation().getDegrees()+speed[2]));
-    //         System.out.printf("====%d====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n", t,data[0], data[1], data[2],speed[0], speed[1], speed[2],data[6], data[7], data[8]);
-    //         t++;
-    //     }
-    //     System.out.printf("====DONE====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n",data[0], data[1], data[2],speed[0], speed[1], speed[2],data[6], data[7], data[8]);
+
+        public double p;
+        public double i;
+        public double d;
+        public double iLimit;
+        public double prevError = 0;
+        public double sum = 0;
+        public double timeStamp = Timer.getFPGATimestamp();
+        public double threshold;
+
+        public DesiredPID(){
+            this(DEFAULT_P, DEFAULT_I, DEFAULT_D);
+        }
+
+        public DesiredPID(double p, double i, double d){
+           this(p, i, d, DEFAULT_I_LIMIT, DEFAULT_THRESHOLD);
+        }
+
+        public DesiredPID(double p, double i, double d, double iLimit, double threshold){
+            this.p = p;
+            this.i = i;
+            this.d = d;
+            this.iLimit = iLimit;
+            this.threshold = threshold;
+        }
+
+        public static DesiredPID fromValues(double p, double i, double d){
+            return fromValues(p, i, d, DEFAULT_I_LIMIT, DEFAULT_THRESHOLD);
+        }
+
+        public static DesiredPID fromValues(double p, double i, double d, double iLimit, double threshold){
+            return new DesiredPID(p, i, d, iLimit, threshold);
+        }
         
-    // }
+    }
+
+    public static void main(String[] args) {
+        new DesiredPosition(null, new DesiredPID()).run();
+    }
+
+    public void run(){
+        System.out.println(calculateSpeed(1));
+    }
+    
 }

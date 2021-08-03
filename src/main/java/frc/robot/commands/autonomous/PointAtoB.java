@@ -1,18 +1,26 @@
 package frc.robot.commands.autonomous;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.drivetrain.DesiredPosition;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
+import frc.robot.subsystems.drivetrain.DesiredPosition.DesiredPID;
 
 public class PointAtoB extends CommandBase {
 
   public SwerveDriveTrain drivetrain;
-  private List<DesiredPosition> desiredPositions;
+  private List<DesiredPosition> desiredList;
+  private Iterator<DesiredPosition> desiredIterator;
+  private DesiredPosition desiredPosition;
+  private boolean done;
+
 
   public PointAtoB() {
 
@@ -20,29 +28,39 @@ public class PointAtoB extends CommandBase {
 
   @Override
   public void initialize() {
+    Robot.runningCommand = true;
+    done = false;
     drivetrain = SwerveDriveTrain.getInstance();
     Pose2d pos = SwerveDriveTrain.getRobotPosition();
-    desiredPositions = new ArrayList<>();
-     desiredPositions.add(DesiredPosition.fromCoordinates((pos.getX()+1.0) , 0.0, 0.0));
+    desiredList = new ArrayList<>();
+     desiredList.add(DesiredPosition.fromCords((pos.getX()+1.0) , 0.0, 180.0, new DesiredPID()));
+     desiredList.add(DesiredPosition.fromCords((pos.getX()-1.0) , 0.0, 0.0, new DesiredPID()));
+     desiredIterator = desiredList.iterator();
+     desiredPosition = desiredIterator.next();
   }
+
 
   @Override
   public void execute() {
-    DesiredPosition desiredPosition;
-    for (int i = 0; i < desiredPositions.size(); i++) {
-      desiredPosition = desiredPositions.get(i);
-      drivetrain.driveToPosition(desiredPosition);
-      if(!desiredPosition.atDesiredPosition(SwerveDriveTrain.getRobotPosition()))
-        i--;
-    }
+    drivetrain.driveToPosition(desiredPosition);
+    if(desiredPosition.atDesiredPosition(SwerveDriveTrain.getRobotPosition())){
+      if(desiredIterator.hasNext()){
+        desiredPosition = desiredIterator.next();
+      }else{
+        done = true;
+      }
+    } 
   }
 
   @Override
   public void end(boolean interrupted) {
+    Robot.runningCommand = false;
   }
 
   @Override
   public boolean isFinished() {
-    return true;
+    return done;
   }
+
+ 
 }

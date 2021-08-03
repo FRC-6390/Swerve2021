@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.files.RioLog;
 import frc.robot.files.RioLog.RioLevel;
+import frc.robot.subsystems.drivetrain.DesiredPosition.DesiredSpeeds;
 
 public class SwerveDriveTrain extends SubsystemBase {
   // Initiation
@@ -184,8 +185,9 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   public void driveToPosition(DesiredPosition desiredPosition) {
-    double[] speeds = desiredPosition.getSpeed(robotPosition);
-    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds[0],speeds[0], speeds[0],gyro.getRotation2d()));
+    DesiredSpeeds speeds = desiredPosition.getDesiredSpeeds(robotPosition);
+    System.out.printf("X-%f%nY-%f%nTheta-%f%n",speeds.x,speeds.y,speeds.theta);
+    SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds.x,speeds.y,speeds.theta,gyro.getRotation2d()));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
 
     for (int i = 0; i < swerveModuleStates.length; i++) {
@@ -332,9 +334,6 @@ public class SwerveDriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // Displays Motor Values to The Smart Dashboard by looping through motor id's
-    for (int i = 0; i < motorArray.length; i++)
-      SmartDashboard.putNumber(Constants.MOTORID.MOTOR_NAME.GetName()[i],
-          motorArray[i].getSensorCollection().getIntegratedSensorPosition());
     robotPosition = odometry.update(gyro.getRotation2d(), frontLeftModule.getState(), frontRightModule.getState(),
         backLeftModule.getState(), backRightModule.getState());
     SmartDashboard.putNumber("Robot Position (X)", odometry.getPoseMeters().getX());
