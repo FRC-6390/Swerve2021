@@ -1,12 +1,15 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.commands.autonomous.PointAtoB;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class SwerveDrive extends CommandBase {
 
@@ -34,11 +37,28 @@ public class SwerveDrive extends CommandBase {
     //Regular Movement 
     double leftY = -xspeedLimiter.calculate(controller.getY(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getY(GenericHID.Hand.kLeft) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getY(GenericHID.Hand.kLeft) : 0) * 0.8;
     double leftX = -yspeedLimiter.calculate(controller.getX(GenericHID.Hand.kLeft) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kLeft) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kLeft) : 0) * 0.8;
-    //double rightY = -xspeedLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * 0.8;
     //Rotation
     double rightX = -rotLimiter.calculate(controller.getX(GenericHID.Hand.kRight) >= Constants.ROBOT.DEAD_ZONE_MAX.get() || controller.getX(GenericHID.Hand.kRight) <= Constants.ROBOT.DEAD_ZONE_MIN.get() ? controller.getX(GenericHID.Hand.kRight) : 0) * 0.8;
 
-    //true = Swerve
+    if(!Robot.runningCommand)
+      driveTrain.drive(leftY * 0.1, leftX * 0.1, rightX * 0.1);
+
+    //Displays joystick values on Smart Dashboard
+    SmartDashboard.putNumber("Left Y", leftY);
+    SmartDashboard.putNumber("Left X", leftX);
+    SmartDashboard.putNumber("Right X", rightX);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+
+  //true = Swerve
     //false = Tank
     // boolean driveMode = false;
 
@@ -61,22 +81,4 @@ public class SwerveDrive extends CommandBase {
     //   driveTrain.tankDriveLeft(leftY * 0.2);
     //   driveTrain.tankDriveRight(rightY * 0.2);
     // }
-  
-   // driveTrain.drive(leftY * 0.1, leftX * 0.1, rightX * 0.1);
-
-    //Displays joystick values on Smart Dashboard
-    SmartDashboard.putNumber("Left Y", leftY);
-    SmartDashboard.putNumber("Left X", leftX);
-    //SmartDashboard.putNumber("Right Y", rightY);
-    SmartDashboard.putNumber("Right X", rightX);
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 }

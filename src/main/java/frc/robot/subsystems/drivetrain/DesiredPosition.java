@@ -8,24 +8,27 @@ public class DesiredPosition {
 
     //brain hurt but brain got it working so the sacrifice was necessary
 
-    private static final double DEFAULT_THRESHOLD = 0.05;
+    private static final double DEFAULT_DRIVE_THRESHOLD = 0.1;
+    private static final double DEFAULT_ROTATION_THRESHOLD = 2;
+
 
     private Pose2d desiredPos;
     private DesiredPositionSpeeds desiredSpeeds;
-    private double threshold;
+    private double driveThreshold, rotationThreshold;
 
     public DesiredPosition(Pose2d desiredPos) {
         this(desiredPos, new DesiredPositionSpeeds());
     }
 
     public DesiredPosition(Pose2d desiredPos, DesiredPositionSpeeds desiredSpeeds) {
-        this(desiredPos, desiredSpeeds, DEFAULT_THRESHOLD);
+        this(desiredPos, desiredSpeeds, DEFAULT_DRIVE_THRESHOLD,DEFAULT_ROTATION_THRESHOLD);
     }
 
-    public DesiredPosition(Pose2d desiredPos, DesiredPositionSpeeds desiredSpeeds, double threshold) {
+    public DesiredPosition(Pose2d desiredPos, DesiredPositionSpeeds desiredSpeeds, double driveThreshold, double rotationThreshold) {
         this.desiredPos = desiredPos;
         this.desiredSpeeds = desiredSpeeds;
-        this.threshold = threshold;
+        this.driveThreshold = driveThreshold;
+        this.rotationThreshold = rotationThreshold;
     }
 
     public Pose2d getDesiredPosition() {
@@ -52,19 +55,25 @@ public class DesiredPosition {
     public double[] getSpeed(Pose2d currentPos) {
 
         double[] distances = getDistances(currentPos); 
-        double[] speeds = new double[distances.length];
+        double[] speeds = new double[]{0.01,0.0,0.0};
         
-        for (int i = 0; i < speeds.length; i++) {
-            if(i != distances.length-1)
-                speeds[i] = (Math.abs(distances[i]) <= desiredSpeeds.drive[0] ? desiredSpeeds.drive[0] : Math.abs(distances[i])) >= desiredSpeeds.drive[1] ? desiredSpeeds.drive[1] : Math.abs(distances[i]);
-            else
-                speeds[i] = (Math.abs(distances[i]) <= desiredSpeeds.rotation[0] ? desiredSpeeds.rotation[0] : Math.abs(distances[i])) >= desiredSpeeds.rotation[1] ? desiredSpeeds.rotation[1] : Math.abs(distances[i]);
-            
-            if(distances[i] < 0)
-                speeds[i] *= -1;
-        }
+        speeds[0] = calculatedSpeed(distances[0], desiredSpeeds.drive[0], desiredSpeeds.drive[1],driveThreshold);
+        speeds[1] = calculatedSpeed(distances[1], desiredSpeeds.drive[0], desiredSpeeds.drive[1],driveThreshold);
+        speeds[2] = calculatedSpeed(distances[2], desiredSpeeds.rotation[0], desiredSpeeds.rotation[1],rotationThreshold);
 
        return speeds;
+    }
+
+    public double calculatedSpeed(double distance, double minSpeed, double maxSpeed, double threshold){
+        if(Math.abs(distance) < threshold){
+            return 0.0;
+        }
+            double speed = (Math.abs(distance) <= minSpeed ? minSpeed : Math.abs(distance)) >= maxSpeed ? maxSpeed : Math.abs(distance);
+            if(distance < 0){
+                speed *= -1;
+            }
+
+            return speed;
     }
 
     /**
@@ -87,12 +96,14 @@ public class DesiredPosition {
      */
     public boolean atDesiredPosition(Pose2d currentPos){
 
-        boolean[] thresholds =  thresholdCheck(getDistances(currentPos));
-       
-        for (int i = 0; i < thresholds.length; i++){
-            if(!thresholds[i])
-                return false;
-        } 
+        double[] distances = getDistances(currentPos); 
+        
+        if(!thresholdCheck(distances[0],driveThreshold))
+            return false;
+        if(!thresholdCheck(distances[1],driveThreshold))
+            return false;
+        if(!thresholdCheck(distances[2],rotationThreshold))
+            return false;
 
         return true;
     }
@@ -102,13 +113,8 @@ public class DesiredPosition {
      * @param distances distances x, y, theta
      * @return boolean array (x,y,theta)
      */
-    public boolean[] thresholdCheck(double[] distances){
-        boolean[] thresholds = new boolean[distances.length];
-        for (int i = 0; i < distances.length; i++) {
-            thresholds[i] = Math.abs(distances[i]) < threshold;
-        }
-
-        return thresholds;
+    public boolean thresholdCheck(double distance, double threshold){
+            return Math.abs(distance) < threshold;
     }
 
     public static DesiredPosition fromCoordinates(double x, double y, double theta){
@@ -116,16 +122,21 @@ public class DesiredPosition {
     }
 
     public static DesiredPosition fromCoordinates(double x, double y, double theta, DesiredPositionSpeeds speeds){
-        return fromCoordinates(x, y, theta, speeds, DEFAULT_THRESHOLD);
+        return fromCoordinates(x, y, theta, speeds, DEFAULT_DRIVE_THRESHOLD, DEFAULT_ROTATION_THRESHOLD);
     }
 
-    public static DesiredPosition fromCoordinates(double x, double y, double theta, DesiredPositionSpeeds speeds, double threshold){
-        return new DesiredPosition(new Pose2d(x,y,Rotation2d.fromDegrees(theta)),speeds, threshold);
+    public static DesiredPosition fromCoordinates(double x, double y, double theta, DesiredPositionSpeeds speeds, double driveThreshold, double rotationThreshold){
+        return new DesiredPosition(new Pose2d(x,y,Rotation2d.fromDegrees(theta)),speeds, driveThreshold, rotationThreshold);
+    }
+
+    public void printValues(Pose2d currentPose){
+        double[] values = getValues(currentPose);
+        System.out.printf("%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n",values[0], values[1], values[2],values[3], values[4], values[5],values[6], values[7], values[8]);
     }
 
     public static class DesiredPositionSpeeds {
 
-        private static final double[] DEFAULT_SPEEDS = new double[] {0.1,0.3};
+        private static final double[] DEFAULT_SPEEDS = new double[] {0.05,0.05};
 
         public double[] drive, rotation;
 
@@ -147,28 +158,28 @@ public class DesiredPosition {
  
     //Simulated testing
 
-    // public static void main(String[] args) {
-    //     DesiredPosition desiredPosition = new DesiredPosition(new Pose2d(10, 10, Rotation2d.fromDegrees(90.0)));
-    //     double[] values = desiredPosition.getValues(new Pose2d(2, 0, Rotation2d.fromDegrees(0.0)));
-    //     for (int i = 0; i <= 20; i++) {
-    //         values = desiredPosition.getValues(new Pose2d(0.1*i, 0.1*i, Rotation2d.fromDegrees(9*i)));
-    //         System.out.printf("====%d====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n", i,values[0], values[1], values[2],values[3], values[4], values[5],values[6], values[7], values[8]);
+    public static void main(String[] args) {
+        DesiredPosition desiredPosition = new DesiredPosition(new Pose2d(1, 1, Rotation2d.fromDegrees(0.0)), new DesiredPositionSpeeds(0.05,0.05,0.05,0.05));
+        double[] values = desiredPosition.getValues(new Pose2d(2, 0, Rotation2d.fromDegrees(0.0)));
+        for (int i = 0; i <= 20; i++) {
+            values = desiredPosition.getValues(new Pose2d(0.1*i, 0.1*i, Rotation2d.fromDegrees(9*i)));
+            System.out.printf("====%d====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n", i,values[0], values[1], values[2],values[3], values[4], values[5],values[6], values[7], values[8]);
 
-    //     }
+        }
 
-    //     int t = 1;
-    //     System.out.println("\nsimulated test\n");
-    //     Pose2d currentPos = new Pose2d(0, 0, Rotation2d.fromDegrees(0.0));
-    //     double[] speed = desiredPosition.getSpeed(currentPos);
-    //     double[] data = desiredPosition.getValues(currentPos);
-    //     while(!desiredPosition.atDesiredPosition(currentPos)){
-    //         speed = desiredPosition.getSpeed(currentPos);
-    //         data = desiredPosition.getValues(currentPos);
-    //         currentPos = new Pose2d(currentPos.getX()+speed[0], currentPos.getY()+speed[1], Rotation2d.fromDegrees(currentPos.getRotation().getDegrees()+speed[2]));
-    //         System.out.printf("====%d====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n", t,data[0], data[1], data[2],speed[0], speed[1], speed[2],data[6], data[7], data[8]);
-    //         t++;
-    //     }
-    //     System.out.printf("====DONE====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n",data[0], data[1], data[2],speed[0], speed[1], speed[2],data[6], data[7], data[8]);
+        int t = 1;
+        System.out.println("\nsimulated test\n");
+        Pose2d currentPos = new Pose2d(0, 0, Rotation2d.fromDegrees(0.0));
+        double[] speed = desiredPosition.getSpeed(currentPos);
+        double[] data = desiredPosition.getValues(currentPos);
+        while(!desiredPosition.atDesiredPosition(currentPos)){
+            speed = desiredPosition.getSpeed(currentPos);
+            data = desiredPosition.getValues(currentPos);
+            currentPos = new Pose2d(currentPos.getX()+speed[0], currentPos.getY()+speed[1], Rotation2d.fromDegrees(currentPos.getRotation().getDegrees()+speed[2]));
+            System.out.printf("====%d====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n", t,data[0], data[1], data[2],speed[0], speed[1], speed[2],data[6], data[7], data[8]);
+            t++;
+        }
+        System.out.printf("====DONE====%nX - (%f), Y - (%f), Theta -(%f)%nX speed - (%f), Y speed - (%f), Theta speed - (%f)%nX distance - (%f), Y distance - (%f), Theta distance - (%f)%n",data[0], data[1], data[2],speed[0], speed[1], speed[2],data[6], data[7], data[8]);
         
-    // }
+    }
 }

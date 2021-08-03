@@ -15,13 +15,14 @@ public class Robot extends TimedRobot {
   private SwerveDrive swerveDrive;
   public static SwerveDriveTrain driveTrain, autoDrive;
   public static Camera camera;
+  public static boolean runningCommand;
 
   @Override
   public void robotInit() {
     robotContainer = new RobotContainer();
     driveTrain = SwerveDriveTrain.getInstance();
     swerveDrive = new SwerveDrive(driveTrain, RobotContainer.xbox);
-
+    runningCommand = false;
     new RioLog("OutputLog");
     RioLog.Init();
     RioLog.setLogLevel(RioLevel.DEBUG);
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    CommandScheduler.getInstance().cancelAll();
     SwerveDriveTrain.getMotorArray().forEach(motor -> motor.setNeutralMode(NeutralMode.Coast));
   }
 
@@ -69,4 +71,5 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
 }
