@@ -7,16 +7,12 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight extends SubsystemBase{
-
     public boolean held, done;
     private NetworkTable table;
     public NetworkTableEntry pipeline, ledMode, camMode, txvalue, tyvalue;
     public double kP, tx, ty, heading_error, distance_error, rotation_adjust, distance_adjust, rotation, kpAim, kpDistance;
 
     public LimeLight(boolean isHeld) {
-      // new Thread(() -> {
-      
-      // }).start();
         held = isHeld;
         table = NetworkTableInstance.getDefault().getTable("limelight");
         ledMode = table.getEntry("ledMode");
@@ -33,5 +29,6 @@ public class LimeLight extends SubsystemBase{
       @Override
       public void periodic() 
       {
+        
       }
 }
