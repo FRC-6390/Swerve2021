@@ -168,10 +168,11 @@ public class SwerveDriveTrain extends SubsystemBase {
   }
 
   // Used for actualy moving the Robot
-  public void drive(double xSpeed, double ySpeed, double rotation) {
-    SwerveModuleState[] swerveModuleStates = kinematics
-        .toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
-    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
+  public void drive(double xSpeed, double ySpeed, double rotation, boolean field) {
+    SwerveModuleState[] swerveModuleStates = field ? kinematics
+    .toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d())) : kinematics
+    .toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, rotation));
+      SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
 
     for (int i = 0; i < swerveModuleStates.length; i++) {
       swerveModuleArray[i].setDesiredState(swerveModuleStates[i]);

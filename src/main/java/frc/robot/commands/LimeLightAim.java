@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -18,8 +19,8 @@ public class LimeLightAim extends CommandBase {
 
   public boolean held, done;
   private NetworkTable table;
-  public NetworkTableEntry pipeline, ledMode, camMode, txvalue, tyvalue, tvvalue, tVertvalue, tHorvalue;
-  public double kP, tx, ty, tv, heading_error, distance_error, rotation_adjust, distance_adjust, rotation, kpAim, kpDistance;
+  public NetworkTableEntry pipeline, ledMode, camMode, txvalue, tavalue, tyvalue, tvvalue, tVertvalue, tHorvalue;
+  public double tx, ta, ty, tv, heading_error, distance_error, rotation_adjust, distance_adjust, desiredArea, rotation, sideways, pAim, pDrive, pSideways;
 
   public LimeLightAim(LimeLight limelight, XboxController controller) {
     this.limelight = limelight;
@@ -35,6 +36,7 @@ public class LimeLightAim extends CommandBase {
     txvalue = table.getEntry("tx");
     tyvalue = table.getEntry("ty");
     tvvalue = table.getEntry("tv");
+    tavalue = table.getEntry("ta");
     tVertvalue = table.getEntry("thor");
     tHorvalue = table.getEntry("tvert");
   }
@@ -43,18 +45,24 @@ public class LimeLightAim extends CommandBase {
   public void initialize() {
     if (held == true)
     {
-        kP = 0.008;
-        kpDistance = 0.08;
-        rotation_adjust = 0.0;
-        tx = txvalue.getDouble(0.0);
-        ty = tyvalue.getDouble(0.0);
-        camMode.setDouble(0.0);
-        done = false;
+      Robot.runningCommand = true;
+      pDrive = 0.015;
+      pSideways = 0.0018;
+      pAim = 0.002;
+      rotation_adjust = 0.0;
+      desiredArea = 2.0;
+      tx = txvalue.getDouble(0.0);
+      ty = tyvalue.getDouble(0.0);
+      ta = tavalue.getDouble(0.0);
+      camMode.setDouble(0.0);
+      
+      done = false;
     }
     else if(held == false)
     {
-        camMode.setDouble(1.0);
-        done = true;
+      Robot.runningCommand = false;
+      camMode.setDouble(1.0);
+      done = true;
     }
   }
 
@@ -63,12 +71,25 @@ public class LimeLightAim extends CommandBase {
       tx = txvalue.getDouble(0.0);
       ty = tyvalue.getDouble(0.0);
       tv = tvvalue.getDouble(0.0);
-      heading_error = -tx;
-      rotation = kP * -tx;
-      distance_error = ty;
-      distance_adjust = kpDistance * distance_error;
-      Robot.driveTrain.drive(0, distance_adjust, 0);
-      //Robot.driveTrain.drive(0, 0, -rotation);
+      ta = tavalue.getDouble(0.0);
+
+      rotation = pAim * -tx;
+      sideways = pSideways * -tx;
+    
+      // distance_error = ty;
+      // distance_adjust = pDrive * distance_error;
+      distance_adjust = (desiredArea - ta) * pDrive;
+
+      if(tx == 0.0){
+        Robot.driveTrain.drive(0, 0, 0.04, false);
+      }
+      else if(tx != 0.0){
+        Robot.driveTrain.drive(distance_adjust, sideways, 0, false);
+      }
+      // else if(ta >= 1.5){
+      //   Robot.driveTrain.drive(distance_adjust, 0, rotation, false);
+      // }
+      
   }
 
   @Override
