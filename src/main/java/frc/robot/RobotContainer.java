@@ -78,7 +78,7 @@ public class RobotContainer {
     XboxY.whenPressed(new Auto(), true);
     XboxBumperRight.whileHeld(new LimeLightAim(true));
     XboxBumperRight.whenReleased(new LimeLightAim(false));
-    // XboxBumperLeft.whenPressed(new PointAtoB());
+    XboxBumperLeft.whenPressed(new PointAtoB());
 
   }
 
