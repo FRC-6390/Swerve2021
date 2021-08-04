@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.drivetrain.DesiredPosition;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
-import frc.robot.subsystems.drivetrain.DesiredPosition.DesiredPID;
+import frc.robot.subsystems.drivetrain.DesiredPosition.DesiredSettings;
 
 public class PointAtoB extends CommandBase {
 
@@ -21,34 +18,33 @@ public class PointAtoB extends CommandBase {
   private DesiredPosition desiredPosition;
   private boolean done;
 
-
   public PointAtoB() {
-
+    
   }
 
-  @Override
+  @Override 
   public void initialize() {
-    Robot.runningCommand = true;
     done = false;
+    Robot.runningCommand = true;
     drivetrain = SwerveDriveTrain.getInstance();
-    Pose2d pos = SwerveDriveTrain.getRobotPosition();
-    desiredList = new ArrayList<>();
-     desiredList.add(DesiredPosition.fromCords((pos.getX()+1.0) , 0.0, 180.0, new DesiredPID()));
-     desiredList.add(DesiredPosition.fromCords((pos.getX()-1.0) , 0.0, 0.0, new DesiredPID()));
-     desiredIterator = desiredList.iterator();
-     desiredPosition = desiredIterator.next();
+    desiredList = new ArrayList<>(){{
+      add(DesiredPosition.fromCords(1.0 , 0.5, 90.0));
+      add(DesiredPosition.fromCords(-1.0,-0.5, -90.0));
+    }};
+    desiredIterator = desiredList.iterator();
+    desiredPosition = desiredIterator.next();
   }
 
 
   @Override
   public void execute() {
     drivetrain.driveToPosition(desiredPosition);
-    if(desiredPosition.atDesiredPosition(SwerveDriveTrain.getRobotPosition())){
-      if(desiredIterator.hasNext()){
+    if(desiredPosition.atDesiredPosition()){
+      if(desiredIterator.hasNext())
         desiredPosition = desiredIterator.next();
-      }else{
+      else
         done = true;
-      }
+      
     } 
   }
 

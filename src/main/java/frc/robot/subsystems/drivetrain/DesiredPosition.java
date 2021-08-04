@@ -11,33 +11,46 @@ public class DesiredPosition {
 
     public Pose2d desiredCord;
     public List<DesiredSettings> settings;
-    public DesiredPID pid;
+    public DesiredPID drivePid, rotationPid;
     public DesiredSpeeds desiredSpeeds;
 
     public DesiredPosition(Pose2d desiredCord, DesiredSettings... settings){
-        this(desiredCord, new DesiredPID(), settings);
+        this(desiredCord, new DesiredPID(false), new DesiredPID(true), settings);
     }
 
-    public DesiredPosition(Pose2d desiredCord, DesiredPID pid, DesiredSettings... settings){
+    public DesiredPosition(Pose2d desiredCord, DesiredPID drivePid, DesiredPID rotationPid, DesiredSettings... settings){
         this.desiredCord = desiredCord;
+        this.drivePid = drivePid;
+        this.rotationPid = rotationPid;
         this.settings = Arrays.asList(settings);
-        desiredSpeeds = new DesiredSpeeds();
-
+        this.desiredSpeeds = new DesiredSpeeds();
     }
 
     public DesiredSpeeds getDesiredSpeeds(Pose2d currentPosition){
 
-        if(!settings.isEmpty()){
-            if(settings.contains(DesiredSettings.Ignore_Rotation)){
-                desiredSpeeds.theta = 0.0;
-            }else if(settings.contains(DesiredSettings.Point_To_Heading)){
-                desiredCord = pointToHeading(currentPosition);
-            }
-        }else{
-            desiredSpeeds.x = calculateSpeed(calculateDistance(currentPosition.getX(), desiredCord.getX()));
-            desiredSpeeds.y = calculateSpeed(calculateDistance(currentPosition.getY(), desiredCord.getY()));
-            desiredSpeeds.theta = calculateSpeed(calculateDistance(currentPosition.getRotation().getDegrees(), desiredCord.getRotation().getDegrees()));    
+        double xDistance = calculateDistance(currentPosition.getX(), desiredCord.getX());
+        double yDistance = calculateDistance(currentPosition.getY(), desiredCord.getY());
+        double thetaDistance = calculateDistance(currentPosition.getRotation().getDegrees(), desiredCord.getRotation().getDegrees());
+
+        if(settings.contains(DesiredSettings.Point_To_Heading)){
+            desiredCord = pointToHeading(currentPosition);
         }
+        
+        if(settings.contains(DesiredSettings.Ignore_Drive)){
+            desiredSpeeds.x = 0.0;
+            desiredSpeeds.y = 0.0;
+        }else{
+            desiredSpeeds.x = drivePid.calculateSpeed(xDistance);
+            desiredSpeeds.y = drivePid.calculateSpeed(yDistance);
+        }
+        
+        if(settings.contains(DesiredSettings.Ignore_Rotation)){
+            desiredSpeeds.theta = 0.0;
+        }else{
+            desiredSpeeds.theta = rotationPid.calculateSpeed(thetaDistance);    
+        }
+    
+        
         return desiredSpeeds; 
     }
 
@@ -69,102 +82,136 @@ public class DesiredPosition {
         return desiredLocation - currentLocation;
     }
 
-    public double calculateSpeed(double error){
-        double dt = Timer.getFPGATimestamp() - pid.timeStamp;
-        if(Math.abs(error) < pid.iLimit)
-            pid.sum += error * dt;
-        double errorRate = (error - pid.prevError) / dt;
-        double output = (pid.p * error) + (pid.i * pid.sum) + (pid.d * errorRate);
-        pid.timeStamp = Timer.getFPGATimestamp();
-        pid.prevError = error;
-        return output;
+    public boolean atDesiredPosition(){
+        return drivePid.underThreshold() && rotationPid.underThreshold();
     }
 
-    public boolean atDesiredPosition(Pose2d currentPosition){
-        return desiredSpeeds.getTotal() < pid.threshold;
+    public static DesiredPosition fromCords(double x, double y, double theta, DesiredSettings... settings){
+        return fromCords(x,y,theta, new DesiredPID(false), new DesiredPID(true), settings);
     }
 
-    public static DesiredPosition fromCords(double x, double y, double theta){
-        return fromCords(x,y,theta, new DesiredPID());
-    }
-
-    public static DesiredPosition fromCords(double x, double y, double theta, DesiredPID pid){
-        return new DesiredPosition(new Pose2d(x,y,Rotation2d.fromDegrees(theta)), pid);
+    public static DesiredPosition fromCords(double x, double y, double theta, DesiredPID drivePid, DesiredPID rotationPid, DesiredSettings... settings){
+        return new DesiredPosition(new Pose2d(x,y,Rotation2d.fromDegrees(theta)), drivePid, rotationPid, settings);
     }
 
     public static enum DesiredSettings{
-        Ignore_Rotation, Point_To_Heading
+        Ignore_Rotation, Point_To_Heading, Ignore_Drive
     }
 
 
     public static class DesiredSpeeds{
 
-        public double x;
-        public double y;
-        public double theta;
+        public double x, y, theta;
 
         public DesiredSpeeds(){
             this.x = 0;
             this.y = 0;
             this.theta = 0;
         }
-
-        public double getTotal(){
-            return (x+y+theta);
-        }
-        
     }
 
     public static class DesiredPID{
-
-        private static final double DEFAULT_P = 0.01;
-        private static final double DEFAULT_I = 0.001;
-        private static final double DEFAULT_D = 0;
-        private static final double DEFAULT_I_LIMIT = 0.1;
-        private static final double DEFAULT_THRESHOLD = 0.001;
-
-
-        public double p;
-        public double i;
-        public double d;
-        public double iLimit;
+        private boolean rotation;
+        public double p, i, d, iLimit, threshold;
         public double prevError = 0;
+        public double errorRate = 0;
         public double sum = 0;
         public double timeStamp = Timer.getFPGATimestamp();
-        public double threshold;
 
-        public DesiredPID(){
-            this(DEFAULT_P, DEFAULT_I, DEFAULT_D);
+        public DesiredPID(boolean rotation){
+            this.rotation = rotation;
+            if(rotation){
+                this.p = DEFAULT.ROTATION.P.get();
+                this.i = DEFAULT.ROTATION.I.get();
+                this.d = DEFAULT.ROTATION.D.get();
+                this.iLimit = DEFAULT.ROTATION.I_LIMIT.get();
+                this.threshold = DEFAULT.ROTATION.THRESHOLD.get();
+            }else{
+                this.p = DEFAULT.DRIVE.P.get();
+                this.i = DEFAULT.DRIVE.I.get();
+                this.d = DEFAULT.DRIVE.D.get();
+                this.iLimit = DEFAULT.DRIVE.I_LIMIT.get();
+                this.threshold = DEFAULT.DRIVE.THRESHOLD.get();
+            }
+                
         }
 
-        public DesiredPID(double p, double i, double d){
-           this(p, i, d, DEFAULT_I_LIMIT, DEFAULT_THRESHOLD);
-        }
-
-        public DesiredPID(double p, double i, double d, double iLimit, double threshold){
+        public DesiredPID(double p, double i, double d, double iLimit, double threshold, boolean rotation){
             this.p = p;
             this.i = i;
             this.d = d;
             this.iLimit = iLimit;
             this.threshold = threshold;
+            this.rotation = rotation;
         }
 
-        public static DesiredPID fromValues(double p, double i, double d){
-            return fromValues(p, i, d, DEFAULT_I_LIMIT, DEFAULT_THRESHOLD);
+        public boolean underThreshold(){
+            if(rotation){
+                return Math.abs(prevError) < threshold;
+            }
+            return Math.abs(errorRate) < threshold;
         }
 
-        public static DesiredPID fromValues(double p, double i, double d, double iLimit, double threshold){
-            return new DesiredPID(p, i, d, iLimit, threshold);
+        public double calculateSpeed(double error){
+            double dt = Timer.getFPGATimestamp() - timeStamp;
+            if(Math.abs(error) < iLimit)
+                sum += error * dt;
+            errorRate = (error - prevError) / dt;
+            double p_error = p * error;
+            double i_error = i * sum;
+            double d_error = d * errorRate;
+            timeStamp = Timer.getFPGATimestamp();
+            prevError = error;
+            double output = p_error + i_error + d_error;
+            output = Math.abs(output) < DEFAULT.SPEED_LIMIT ? output : output > 0 ? DEFAULT.SPEED_LIMIT : -DEFAULT.SPEED_LIMIT;
+            return output;
+        }
+
+        public static DesiredPID fromValues(double p, double i, double d, double iLimit, double threshold, boolean rotation){
+            return new DesiredPID(p, i, d, iLimit, threshold, rotation);
         }
         
     }
 
-    public static void main(String[] args) {
-        new DesiredPosition(null, new DesiredPID()).run();
-    }
+    private static interface DEFAULT {
 
-    public void run(){
-        System.out.println(calculateSpeed(1));
+        double SPEED_LIMIT = 0.03;
+        
+        enum DRIVE{
+            P(0.045),
+            I(0.03),
+            D(0.00000000008),
+            I_LIMIT(0.2),
+            THRESHOLD(1000);
+
+            private double val;
+            private DRIVE(double val){
+                this.val = val;
+            }
+
+            public double get(){
+                return val;
+            }
+        }
+
+        enum ROTATION{
+            P(0.0015),
+            I(0.005),
+            D(0.0),
+            I_LIMIT(10.0),
+            THRESHOLD(0.1);
+
+            private double val;
+
+            private ROTATION(double val){
+                this.val = val;
+            }
+
+            public double get(){
+                return val;
+            }
+        }
+        
     }
     
 }

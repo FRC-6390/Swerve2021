@@ -4,11 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
@@ -23,7 +19,6 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
@@ -186,7 +181,7 @@ public class SwerveDriveTrain extends SubsystemBase {
 
   public void driveToPosition(DesiredPosition desiredPosition) {
     DesiredSpeeds speeds = desiredPosition.getDesiredSpeeds(robotPosition);
-    System.out.printf("X-%f%nY-%f%nTheta-%f%n",speeds.x,speeds.y,speeds.theta);
+   // System.out.printf("X-%f%nY-%f%nTheta-%f%n",speeds.x,speeds.y,speeds.theta);
     SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds.x,speeds.y,speeds.theta,gyro.getRotation2d()));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.ROBOT.MAX_SPEED.get());
 

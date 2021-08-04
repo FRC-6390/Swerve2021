@@ -8,13 +8,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorTimeBase;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Constants;
 
@@ -26,8 +22,8 @@ public class SwerveModule {
     private TalonFXConfiguration rotationConfiguration, driveConfiguration;
     private int ModuleId;
     
-    public SwerveModule(int ModuleId, Rotation2d offset) {
-      this.ModuleId = ModuleId;
+    public SwerveModule(int id, Rotation2d offset) {
+        this.ModuleId = id;
         //Motors
         driveMotor = new TalonFX(ModuleId);
         rotationMotor = new TalonFX(ModuleId+4);
