@@ -14,6 +14,8 @@ public class DesiredPosition {
     public DesiredPID drivePid, rotationPid;
     public DesiredSpeeds desiredSpeeds;
 
+    private double pointToHeadingAngle = -300;
+
     public DesiredPosition(Pose2d desiredCord, DesiredSettings... settings){
         this(desiredCord, new DesiredPID(false), new DesiredPID(true), settings);
     }
@@ -28,34 +30,84 @@ public class DesiredPosition {
 
     public DesiredSpeeds getDesiredSpeeds(Pose2d currentPosition){
 
-        double xDistance = calculateDistance(currentPosition.getX(), desiredCord.getX());
-        double yDistance = calculateDistance(currentPosition.getY(), desiredCord.getY());
-        double thetaDistance = calculateDistance(currentPosition.getRotation().getDegrees(), desiredCord.getRotation().getDegrees());
+        desiredSpeeds.xDistance = calculateDistance(currentPosition.getX(), desiredCord.getX());
+        desiredSpeeds.yDistance = calculateDistance(currentPosition.getY(), desiredCord.getY());
+        desiredSpeeds.thetaDistance = calculateDistance(currentPosition.getRotation().getDegrees(), desiredCord.getRotation().getDegrees());
 
         if(settings.contains(DesiredSettings.Point_To_Heading)){
             desiredCord = pointToHeading(currentPosition);
         }
         
-        if(settings.contains(DesiredSettings.Ignore_Drive)){
-            desiredSpeeds.x = 0.0;
-            desiredSpeeds.y = 0.0;
-        }else{
-            desiredSpeeds.x = drivePid.calculateSpeed(xDistance);
-            desiredSpeeds.y = drivePid.calculateSpeed(yDistance);
-        }
-        
-        if(settings.contains(DesiredSettings.Ignore_Rotation)){
-            desiredSpeeds.theta = 0.0;
-        }else{
-            desiredSpeeds.theta = rotationPid.calculateSpeed(thetaDistance);    
-        }
+        desiredSpeeds.x = calculateX(desiredSpeeds);
+        desiredSpeeds.y = calculateY(desiredSpeeds);
+        desiredSpeeds.theta = calculateTheta(desiredSpeeds);
     
         
         return desiredSpeeds; 
     }
 
+    public double calculateX(DesiredSpeeds speeds){
+
+        if(settings.contains(DesiredSettings.Ignore_Drive))
+            return 0.0;
+
+        if(settings.contains(DesiredSettings.Rotate_Then_Drive)){
+            if(!rotationPid.underThreshold()){
+                return 0.0;
+            }
+        }
+
+        if(settings.contains(DesiredSettings.Y_Then_X)){
+            if(speeds.yDistance > drivePid.threshold){
+                return 0.0;
+            }
+        }
+
+        return drivePid.calculateSpeed(speeds.xDistance);
+    }
+
+    public double calculateY(DesiredSpeeds speeds){
+
+        if(settings.contains(DesiredSettings.Ignore_Drive))
+            return 0.0;
+
+        if(settings.contains(DesiredSettings.Rotate_Then_Drive)){
+            if(!rotationPid.underThreshold()){
+                return 0.0;
+            }
+        }
+
+        if(settings.contains(DesiredSettings.X_Then_Y)){
+            if(speeds.xDistance > drivePid.threshold){
+                return 0.0;
+            }
+        }
+
+        return drivePid.calculateSpeed(speeds.yDistance);
+    }
+
+    public double calculateTheta(DesiredSpeeds speeds){
+
+        if(settings.contains(DesiredSettings.Ignore_Rotation)){
+            return 0.0;
+        }
+
+        if(settings.contains(DesiredSettings.Drive_Then_Rotate)){
+                if(!drivePid.underThreshold()){
+                   return 0.0;
+                }
+        }
+
+        return rotationPid.calculateSpeed(speeds.thetaDistance);
+    }
+
     public Pose2d pointToHeading(Pose2d currentPosition){
-        return new Pose2d(desiredCord.getX(), desiredCord.getY(), Rotation2d.fromDegrees(angleFromCoordinate(desiredCord.getX(), desiredCord.getY(), currentPosition.getX(), currentPosition.getY())));
+        if(desiredCord.getRotation().getDegrees() == pointToHeadingAngle)
+            return desiredCord;
+
+        pointToHeadingAngle = angleFromCoordinate(desiredCord.getX(), desiredCord.getY(), currentPosition.getX(), currentPosition.getY());
+
+        return new Pose2d(desiredCord.getX(), desiredCord.getY(), Rotation2d.fromDegrees(pointToHeadingAngle));
     }
 
     //https://stackoverflow.com/questions/3932502/calculate-angle-between-two-latitude-longitude-points
@@ -95,13 +147,15 @@ public class DesiredPosition {
     }
 
     public static enum DesiredSettings{
-        Ignore_Rotation, Point_To_Heading, Ignore_Drive
+        Ignore_Rotation, Point_To_Heading, Ignore_Drive, Rotate_Then_Drive, Drive_Then_Rotate, X_Then_Y, Y_Then_X;
     }
 
 
     public static class DesiredSpeeds{
 
         public double x, y, theta;
+        public double xDistance, yDistance, thetaDistance;
+
 
         public DesiredSpeeds(){
             this.x = 0;
@@ -111,7 +165,6 @@ public class DesiredPosition {
     }
 
     public static class DesiredPID{
-        private boolean rotation;
         public double p, i, d, iLimit, threshold;
         public double prevError = 0;
         public double errorRate = 0;
@@ -119,7 +172,6 @@ public class DesiredPosition {
         public double timeStamp = Timer.getFPGATimestamp();
 
         public DesiredPID(boolean rotation){
-            this.rotation = rotation;
             if(rotation){
                 this.p = DEFAULT.ROTATION.P.get();
                 this.i = DEFAULT.ROTATION.I.get();
@@ -136,20 +188,16 @@ public class DesiredPosition {
                 
         }
 
-        public DesiredPID(double p, double i, double d, double iLimit, double threshold, boolean rotation){
+        public DesiredPID(double p, double i, double d, double iLimit, double threshold){
             this.p = p;
             this.i = i;
             this.d = d;
             this.iLimit = iLimit;
             this.threshold = threshold;
-            this.rotation = rotation;
         }
 
         public boolean underThreshold(){
-            if(rotation){
-                return Math.abs(prevError) < threshold;
-            }
-            return Math.abs(errorRate) < threshold;
+            return Math.abs(prevError) < threshold;
         }
 
         public double calculateSpeed(double error){
@@ -167,8 +215,8 @@ public class DesiredPosition {
             return output;
         }
 
-        public static DesiredPID fromValues(double p, double i, double d, double iLimit, double threshold, boolean rotation){
-            return new DesiredPID(p, i, d, iLimit, threshold, rotation);
+        public static DesiredPID fromValues(double p, double i, double d, double iLimit, double threshold){
+            return new DesiredPID(p, i, d, iLimit, threshold);
         }
         
     }
@@ -182,7 +230,7 @@ public class DesiredPosition {
             I(0.03),
             D(0.00000000008),
             I_LIMIT(0.2),
-            THRESHOLD(1000);
+            THRESHOLD(0.02);
 
             private double val;
             private DRIVE(double val){
@@ -199,7 +247,7 @@ public class DesiredPosition {
             I(0.005),
             D(0.0),
             I_LIMIT(10.0),
-            THRESHOLD(0.1);
+            THRESHOLD(0.2);
 
             private double val;
 
