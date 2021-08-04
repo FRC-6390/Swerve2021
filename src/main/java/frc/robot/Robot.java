@@ -13,7 +13,7 @@ import frc.robot.subsystems.vission.Camera;
 public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
   private SwerveDrive swerveDrive;
-  public static SwerveDriveTrain driveTrain, autoDrive;
+  public static SwerveDriveTrain driveTrain;
   public static Camera camera;
   public static boolean runningCommand;
 
@@ -37,11 +37,13 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
-    SwerveDriveTrain.getMotorArray().forEach(motor -> motor.setNeutralMode(NeutralMode.Coast));
   }
 
   @Override
   public void disabledPeriodic() {
+    if(robotContainer.XboxA.get()){
+      SwerveDriveTrain.getMotorArray().forEach(motor -> motor.setNeutralMode(NeutralMode.Coast));
+    }
   }
 
   @Override

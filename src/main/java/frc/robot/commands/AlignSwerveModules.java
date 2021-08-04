@@ -6,7 +6,6 @@ import frc.robot.subsystems.drivetrain.*;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AlignSwerveModules extends CommandBase {
