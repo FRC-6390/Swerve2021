@@ -6,6 +6,41 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch Positions",
+      "request": "launch",
+      "mainClass": "frc.robot.files.models.Positions",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
+      "name": "Launch JsonManager",
+      "request": "launch",
+      "mainClass": "frc.robot.files.JsonManager",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
+      "name": "Launch JsonArray1",
+      "request": "launch",
+      "mainClass": "frc.robot.files.JsonArray1",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
+      "name": "Launch User",
+      "request": "launch",
+      "mainClass": "frc.robot.files.User",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
+      "name": "Launch DesiredPositionFileReader",
+      "request": "launch",
+      "mainClass": "frc.robot.files.DesiredPositionFileReader",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
       "name": "Launch DesiredPosition2",
       "request": "launch",
       "mainClass": "frc.robot.subsystems.drivetrain.DesiredPosition2",
