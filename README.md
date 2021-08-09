@@ -2,7 +2,7 @@
 This is FRC 6390's github repository for Swerve Drive, we are using MK3 Modules, and are programming in command base Java!
 
 
-## If Your A New Programming Member
+## If You Are A New Programming Member
   1. Set up you visual studio invironment
   2. Create a github **account** and download the desktop version
   3. Ask a current Programmer on the team to add you to this organization
