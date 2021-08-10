@@ -29,13 +29,13 @@ public class JsonManager {
 
 
     public static void main(String[] args) throws Exception {
-        String file = "C:\\Users\\Mohammad\\Documents\\GitHub\\Swerve2021\\src\\main\\java\\frc\\robot\\files\\models\\test2.json";
+        String file = "C:\\Users\\Mohammad\\Documents\\GitHub\\Swerve2021\\src\\main\\java\\frc\\robot\\files\\models\\test.json";
         String json = readFileAsString(file);
         System.out.println(json);
 
         // This is to be used if the array is the root element of the json file 
-        Type posTypeList = new TypeToken<ArrayList<Positions>>(){}.getType();
-        List<Positions> pos = new Gson().fromJson(json, posTypeList);
+        Type posTypeList = new TypeToken<ArrayList<Positions.DesiredPostion>>(){}.getType();
+        List<Positions.DesiredPostion> pos = new Gson().fromJson(json, posTypeList);
 
         //Positions pos = new Gson().fromJson(json, Positions.class);
 
@@ -44,7 +44,6 @@ public class JsonManager {
             System.out.println(pos.get(x));
         }
         
-
     }
 
 }
