@@ -1,4 +1,4 @@
-package frc.robot.files;
+package frc.robot.files.models;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
@@ -10,8 +10,6 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import frc.robot.files.models.Positions;
 
 public class JsonManager {
    
@@ -27,15 +25,17 @@ public class JsonManager {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
 
+    public static List<Positions.DesiredPostion> pos;
+    public static List<Positions.PID> pid;
 
-    public static void main(String[] args) throws Exception {
+    public static void readJson() throws Exception{
         String file = "C:\\Users\\Mohammad\\Documents\\GitHub\\Swerve2021\\src\\main\\java\\frc\\robot\\files\\models\\test.json";
         String json = readFileAsString(file);
         System.out.println(json);
 
         // This is to be used if the array is the root element of the json file 
         Type posTypeList = new TypeToken<ArrayList<Positions.DesiredPostion>>(){}.getType();
-        List<Positions.DesiredPostion> pos = new Gson().fromJson(json, posTypeList);
+        pos = new Gson().fromJson(json, posTypeList);
 
         //Positions pos = new Gson().fromJson(json, Positions.class);
 
@@ -43,7 +43,15 @@ public class JsonManager {
         for(int x = 0; x < pos.size(); x++){
             System.out.println(pos.get(x));
         }
-        
+
+        System.out.println("-------------------------------");
+        System.out.println(pid.get(0));
     }
+
+    public static void main(String[] args) throws Exception {
+        JsonManager.readJson();
+        System.out.println("___________________________________");
+    }
+
 
 }

@@ -1,0 +1,29 @@
+{
+    "data":[
+       {
+          "part_number":"3DFN64G08VS8695 MS",
+          "part_type":"NAND Flash",
+          "id":1154,
+          "manufacturers":[
+             "3D-Plus"
+          ]
+       },
+       {
+          "part_number":"3DPM0168-2",
+          "part_type":"System in a Package (SiP)",
+          "id":452,
+          "manufacturers":[
+             "3D-Plus"
+          ]
+       },
+       {
+          "part_number":"3DSD1G16VS2620 SS",
+          "part_type":"SDRAM",
+          "id":269,
+          "manufacturers":[
+             "3D-Plus"
+          ]
+       }
+    ]
+ }
+ 

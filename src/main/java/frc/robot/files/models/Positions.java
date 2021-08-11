@@ -4,8 +4,13 @@ import java.util.List;
 
 public class Positions {
     
-    public DesiredPostion positions[];
-   
+    // public List <DesiredPostion> positions;
+
+    // @Override
+    // public String toString(){
+    //     return getClass().getSimpleName() + " " + positions; 
+    // }
+
     public class DesiredPostion {
         public double x;
         public double y;
@@ -32,4 +37,9 @@ public class Positions {
         }
     }
 
+
+    
+    public static void main(String[] args) throws Exception {
+        JsonManager.readJson();
+    }
 }

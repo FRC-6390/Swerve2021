@@ -6,6 +6,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch JsonManager",
+      "request": "launch",
+      "mainClass": "frc.robot.files.take2.JsonManager",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
+      "name": "Launch testMain",
+      "request": "launch",
+      "mainClass": "frc.robot.files.take2.testMain",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
       "name": "Launch Positions",
       "request": "launch",
       "mainClass": "frc.robot.files.models.Positions",

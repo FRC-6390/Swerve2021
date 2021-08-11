@@ -1,0 +1,32 @@
+{
+    "pos":[
+       {
+         "x": 1.0,
+         "y": 1.0,
+         "theta": 1.0,
+         "manufacturers":[
+            "one-1",
+            "one-2"
+         ]
+       },
+       {
+         "x": 2.0,
+         "y": 2.0,
+         "theta": 2.0,
+         "manufacturers":[
+            "two-1",
+            "two-2"
+         ]
+       },
+       {
+         "x": 3.0,
+         "y": 3.0,
+         "theta": 3.0,
+         "manufacturers":[
+            "three-1",
+            "three-2"
+         ]
+       }
+    ]
+ }
+ 
