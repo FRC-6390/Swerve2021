@@ -2,6 +2,7 @@ package frc.robot.files.take2;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
+
 public class PosData {
 
     @SerializedName("x")
@@ -13,8 +14,15 @@ public class PosData {
     @SerializedName("theta")
     private double theta;
 
-    @SerializedName("manufacturers")
-    private List<String> manufacturers = null;
+    @SerializedName("drive")
+    private List<Double> drive = null;
+
+    @SerializedName("p")
+    private double p;
+
+    @SerializedName("i")
+    private double i;
+
 
 
     public double getX() {
@@ -41,11 +49,19 @@ public class PosData {
     }
 
 
-    public List<String> getManufacturers() {
-        return manufacturers;
+    public double getP() {
+        return p;
     }
-    public void setManufacturers(List<String> manufacturers) {
-        this.manufacturers = manufacturers;
+    public void setP(double p) {
+        this.p = p;
+    }
+    
+
+    public double getI() {
+        return i;
+    }
+    public void seti(double i) {
+        this.i = i;
     }
 
 }
