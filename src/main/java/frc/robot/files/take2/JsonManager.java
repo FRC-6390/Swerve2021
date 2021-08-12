@@ -21,6 +21,7 @@ public class JsonManager {
         this.pos = pos;
     }
 
+
     public static String readFileAsString(String file)throws Exception
     {
         return new String(Files.readAllBytes(Paths.get(file)));
@@ -33,22 +34,23 @@ public class JsonManager {
 
         JsonManager manager = new Gson().fromJson(json, new TypeToken<JsonManager>() {}.getType());
 
-        List<PosData>  posList = manager.getPositions();
+        List<PosData> posList = manager.getPositions();
         List<Double> xList = new ArrayList<>();
         List<Double> yList = new ArrayList<>();
         List<Double> thetaList = new ArrayList<>();
-        ArrayList partManuList = new ArrayList();
+        List<Double> driveList = new ArrayList<>();
+        
 
         for (PosData pos : posList) {
               xList.add(pos.getX());
               yList.add(pos.getY());
               thetaList.add(pos.getTheta());
-              partManuList.add(pos.getManufacturers());
+              driveList.add();
         }
 
         System.out.println(xList);
         System.out.println(yList);
         System.out.println(thetaList);
-        System.out.println(partManuList);
+        System.out.println(driveList);
     }
 }
