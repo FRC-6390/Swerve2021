@@ -28,9 +28,9 @@ public class PointAtoB extends CommandBase {
     Robot.runningCommand = true;
     drivetrain = SwerveDriveTrain.getInstance();
     desiredList = new ArrayList<>(){{
-      add(DesiredPosition.fromCords(1.0 , 0.5, 90.0));
-      add(DesiredPosition.fromCords(-1.0,-0.5, -90.0));
+      add(DesiredPosition.fromCords(0.5 , 0.5, 10.0));
     }};
+    //add for loop for x, y, theta lists for cords
     desiredIterator = desiredList.iterator();
     desiredPosition = desiredIterator.next();
   }

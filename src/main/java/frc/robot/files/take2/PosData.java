@@ -15,14 +15,7 @@ public class PosData {
     private double theta;
 
     @SerializedName("drive")
-    private List<Double> drive = null;
-
-    @SerializedName("p")
-    private double p;
-
-    @SerializedName("i")
-    private double i;
-
+    private List<PidData> drive = null;
 
 
     public double getX() {
@@ -49,19 +42,11 @@ public class PosData {
     }
 
 
-    public double getP() {
-        return p;
+    public List<PidData> getDrive(){
+        return drive;
     }
-    public void setP(double p) {
-        this.p = p;
-    }
-    
-
-    public double getI() {
-        return i;
-    }
-    public void seti(double i) {
-        this.i = i;
+    public void setDrive(List<PidData> drive){
+        this.drive = drive;
     }
 
 }

@@ -230,7 +230,7 @@ public class DesiredPosition {
             I(0.03),
             D(0.00000000008),
             I_LIMIT(0.2),
-            THRESHOLD(0.02);
+            THRESHOLD(0.025);
 
             private double val;
             private DRIVE(double val){

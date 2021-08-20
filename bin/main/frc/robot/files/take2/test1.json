@@ -1,28 +1,36 @@
 {
-    "data":[
+    "pos":[
        {
-          "part_number":"3DFN64G08VS8695 MS",
-          "part_type":"NAND Flash",
-          "id":1154,
-          "manufacturers":[
-             "3D-Plus"
-          ]
+         "x": 1.0,
+         "y": 1.0,
+         "theta": 1.0,
+         "drive":[{
+            "p": 0.1,
+            "i": 0.1,
+            "d": 0.1
+         }]
        },
        {
-          "part_number":"3DPM0168-2",
-          "part_type":"System in a Package (SiP)",
-          "id":452,
-          "manufacturers":[
-             "3D-Plus"
-          ]
+         "x": 2.0,
+         "y": 2.0,
+         "theta": 2.0,
+         "drive":[{
+            "p": 0.2,
+            "i": 0.2,
+            "d": 0.2
+         }]
+          
        },
        {
-          "part_number":"3DSD1G16VS2620 SS",
-          "part_type":"SDRAM",
-          "id":269,
-          "manufacturers":[
-             "3D-Plus"
-          ]
+         "x": 3.0,
+         "y": 3.0,
+         "theta": 3.0,
+         "drive":[{
+            "p": 0.3,
+            "i": 0.3,
+            "d": 0.3
+         }]
+          
        }
     ]
  }
