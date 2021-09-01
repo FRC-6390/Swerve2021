@@ -1,7 +1,13 @@
 package frc.robot;
 
+import org.opencv.core.Point;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AlignSwerveModules;
 import frc.robot.commands.LimeLightAim;
@@ -65,6 +71,14 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
     configureCommands();
+
+
+    // Add commands to the autonomous command chooser
+    autoChooser.setDefaultOption("Simple Auto", PointAtoB);
+    autoChooser.addOption("Complex Auto", PointAtoB);
+
+    // Put the chooser on the dashboard
+    SmartDashboard.putData(autoChooser);
   }
 
   private void configureCommands() {
@@ -82,10 +96,18 @@ public class RobotContainer {
 
   }
 
+  // A complex auto routine that drives forward, drops a hatch, and then drives backward.
+  private final Command PointAtoB = new PointAtoB();
+
+  // A chooser for autonomous commands
+  SendableChooser<Command> autoChooser = new SendableChooser<>();  
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+  }
 }
