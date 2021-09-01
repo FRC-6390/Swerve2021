@@ -74,9 +74,9 @@ public class RobotContainer {
 
 
     // Add commands to the autonomous command chooser
-    autoChooser.setDefaultOption("Simple Auto", PointAtoB);
-    autoChooser.addOption("Complex Auto", PointAtoB);
-
+    autoChooser.setDefaultOption("auto1", PointAtoB);
+    autoChooser.addOption("auto2", PointAtoB);
+  
     // Put the chooser on the dashboard
     SmartDashboard.putData(autoChooser);
   }
@@ -100,7 +100,7 @@ public class RobotContainer {
   private final Command PointAtoB = new PointAtoB();
 
   // A chooser for autonomous commands
-  SendableChooser<Command> autoChooser = new SendableChooser<>();  
+  public SendableChooser<Command> autoChooser = new SendableChooser<>();  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -43,12 +43,12 @@ public class JsonManager {
 
     
     // public static void main(String[] args) throws Exception {
-    public void readJson() throws Exception {
+    public void readJson(String autoName) throws Exception {
 
-        String file = "C:\\Users\\Mohammad\\Documents\\GitHub\\Swerve2021\\src\\main\\java\\frc\\robot\\files\\models\\auto1.json";
+        String file = "C:\\Users\\Mohammad\\Documents\\GitHub\\Swerve2021\\src\\main\\java\\frc\\robot\\files\\models\\" + autoName + ".json";
         
         //needs to be tested
-        // inputStream = new InputStreamReader(new FileInputStream(Filesystem.getDeployDirectory()+"/"+ "test1" + ".json"));
+        // inputStream = new InputStreamReader(new FileInputStream(Filesystem.getDeployDirectory()+"/"+ autoName + ".json"));
         // String file = inputStream.toString();
         
         String json = readFileAsString(file);

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.files.Models.JsonManager;
 import frc.robot.subsystems.drivetrain.DesiredPosition;
 import frc.robot.subsystems.drivetrain.SwerveDriveTrain;
@@ -14,6 +16,7 @@ import frc.robot.subsystems.drivetrain.DesiredPosition.DesiredSettings;
 public class PointAtoB extends CommandBase {
 
   public SwerveDriveTrain drivetrain;
+  public RobotContainer robotContainer;
   public JsonManager jsonManager;
   private List<DesiredPosition> desiredList;
   private Iterator<DesiredPosition> desiredIterator;
@@ -28,8 +31,18 @@ public class PointAtoB extends CommandBase {
   public void initialize() {
     done = false;
     Robot.runningCommand = true;
-    // drivetrain = SwerveDriveTrain.getInstance();
+    drivetrain = SwerveDriveTrain.getInstance();
+    robotContainer = new RobotContainer();
     jsonManager = new JsonManager();
+
+    String autoSelected = SmartDashboard.getString("Auto Selector","auto1");
+    String autoChosen = robotContainer.autoChooser.getName();
+    try {
+      jsonManager.readJson(autoSelected);
+      jsonManager.readJson(autoChosen);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     //iterate over json here 
     desiredList = new ArrayList<>();
@@ -39,7 +52,7 @@ public class PointAtoB extends CommandBase {
     // }};
 
     for(int z = 0; z < jsonManager.posList.size() -1; z++){
-      desiredList.add(DesiredPosition.fromCords(0, 0, 0));
+      desiredList.add(DesiredPosition.fromCords(jsonManager.xList.get(z), jsonManager.yList.get(z), jsonManager.thetaList.get(z)));
     }
     System.out.println(desiredList);
 
@@ -72,8 +85,6 @@ public class PointAtoB extends CommandBase {
 
   public static void main(String[] args) throws Exception {
     PointAtoB point = new PointAtoB();
-    JsonManager jsonManager = new JsonManager();
-    jsonManager.readJson();
     point.initialize();
   }
  
