@@ -24,17 +24,24 @@ public class PointAtoB extends CommandBase {
     
   }
 
-  @Override 
+  @Override
   public void initialize() {
     done = false;
     Robot.runningCommand = true;
-    drivetrain = SwerveDriveTrain.getInstance();
+    // drivetrain = SwerveDriveTrain.getInstance();
+    jsonManager = new JsonManager();
 
     //iterate over json here 
-    desiredList = new ArrayList<>(){{
+    desiredList = new ArrayList<>();
+    // {{
       // add(DesiredPosition.fromCords(0.5 , 0.5, 10.0));
-      add(DesiredPosition.fromCords(jsonManager.xList.get(0), jsonManager.yList.get(0), jsonManager.thetaList.get(0)));
-    }};
+      // add(DesiredPosition.fromCords(jsonManager.xList.get(0), jsonManager.yList.get(0), jsonManager.thetaList.get(0)));
+    // }};
+
+    for(int z = 0; z < jsonManager.posList.size() -1; z++){
+      desiredList.add(DesiredPosition.fromCords(0, 0, 0));
+    }
+    System.out.println(desiredList);
 
     desiredIterator = desiredList.iterator();
     desiredPosition = desiredIterator.next();
@@ -63,5 +70,14 @@ public class PointAtoB extends CommandBase {
     return done;
   }
 
+  public static void main(String[] args) throws Exception {
+    PointAtoB point = new PointAtoB();
+    JsonManager jsonManager = new JsonManager();
+    jsonManager.readJson();
+    point.initialize();
+  }
  
 }
+
+
+

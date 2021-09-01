@@ -16,6 +16,13 @@ public class PidData {
     @SerializedName("d")
     private double d;
 
+    @SerializedName("iLimit")
+    private double iLimit;
+
+    @SerializedName("threshold")
+    private double threshold;
+
+
     public double getP() {
         return p;
     }
@@ -31,9 +38,23 @@ public class PidData {
     }
 
     public double getD() {
-        return i;
+        return d;
     }
     public void setD(double d) {
         this.d = d;
+    }
+
+    public double getILimit() {
+        return iLimit;
+    }
+    public void setILimit(double iLimit) {
+        this.iLimit = iLimit;
+    }
+
+    public double getThreshold() {
+        return threshold;
+    }
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
     }
 }

@@ -17,11 +17,14 @@ public class PosData {
     @SerializedName("drive")
     private List<PidData> drive = null;
 
+    @SerializedName("rotation")
+    private List<PidData> rotation = null;
+
 
     public double getX() {
         return x;
     }
-    public void setPartNumber(double x) {
+    public void setX(double x) {
         this.x = x;
     }
 
@@ -29,7 +32,7 @@ public class PosData {
     public double getY() {
         return y;
     }
-    public void setPartType(double y) {
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -37,7 +40,7 @@ public class PosData {
     public double getTheta() {
         return theta;
     }
-    public void setId(double theta) {
+    public void setTheta(double theta) {
         this.theta = theta;
     }
 
@@ -49,4 +52,10 @@ public class PosData {
         this.drive = drive;
     }
 
+    public List<PidData> getRotation(){
+        return rotation;
+    }
+    public void setRotation(List<PidData> rotation){
+        this.rotation = rotation;
+    }
 }

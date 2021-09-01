@@ -6,6 +6,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch PointAtoB",
+      "request": "launch",
+      "mainClass": "frc.robot.commands.autonomous.PointAtoB",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
+      "name": "Launch JsonManager",
+      "request": "launch",
+      "mainClass": "frc.robot.files.Models.JsonManager",
+      "projectName": "Swerve2021"
+    },
+    {
+      "type": "java",
       "name": "Launch JsonManager",
       "request": "launch",
       "mainClass": "frc.robot.files.take2.JsonManager",
