@@ -38,7 +38,6 @@ public class JsonManager {
         List<Double> xList = new ArrayList<>();
         List<Double> yList = new ArrayList<>();
         List<Double> thetaList = new ArrayList<>();
-        List<Double> drivePID = new ArrayList<>();
         List<List<Double>> driveLists = new ArrayList<List<Double>>();
 
         
@@ -46,22 +45,21 @@ public class JsonManager {
             xList.add(pos.getX());
             yList.add(pos.getY());
             thetaList.add(pos.getTheta());
+
             for(PidData pid : pos.getDrive()){
+                List<Double> drivePID = new ArrayList<>();
                 drivePID.add(pid.getP());
                 drivePID.add(pid.getI());
                 drivePID.add(pid.getD());
-                driveLists.add(pid, drivePID);
+                driveLists.add(drivePID);
+                break;
             }
-            
-            
-            System.out.println(drivePID);
-            System.out.println(driveLists);
+
         }
 
         System.out.println(xList);
         System.out.println(yList);
         System.out.println(thetaList);
-        System.out.println(drivePID);
         System.out.println(driveLists);
     }
 }
