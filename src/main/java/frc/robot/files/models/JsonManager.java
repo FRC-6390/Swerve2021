@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.text.NumberFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -33,6 +33,7 @@ public class JsonManager {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
 
+    private NumberFormat formatter;
     private static InputStreamReader inputStream;
     public static List<PosData> posList;
     public static List<Double> xList;
@@ -56,6 +57,9 @@ public class JsonManager {
 
         JsonManager manager = new Gson().fromJson(json, new TypeToken<JsonManager>() {}.getType());
 
+        formatter = new DecimalFormat();
+        formatter.setMaximumFractionDigits(20);
+
         posList = manager.getPositions();
         xList = new ArrayList<>();
         yList = new ArrayList<>();
@@ -75,7 +79,7 @@ public class JsonManager {
                 List<Double> drivePID = new ArrayList<>();
                 drivePID.add(pid.getP());
                 drivePID.add(pid.getI());
-                drivePID.add(pid.getD());
+                drivePID.add(Double.parseDouble(formatter.format(pid.getD())));
                 drivePID.add(pid.getILimit());
                 drivePID.add(pid.getThreshold());
                 driveLists.add(drivePID);
@@ -102,5 +106,4 @@ public class JsonManager {
         System.out.println(driveLists);
         System.out.println(rotationLists);
     }
-
 }
