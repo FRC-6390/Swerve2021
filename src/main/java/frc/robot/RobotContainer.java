@@ -71,14 +71,6 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
     configureCommands();
-
-
-    // Add commands to the autonomous command chooser
-    autoChooser.setDefaultOption("auto1", PointAtoB);
-    autoChooser.addOption("auto2", PointAtoB);
-  
-    // Put the chooser on the dashboard
-    SmartDashboard.putData(autoChooser);
   }
 
   private void configureCommands() {
@@ -96,18 +88,12 @@ public class RobotContainer {
 
   }
 
-  // A complex auto routine that drives forward, drops a hatch, and then drives backward.
-  private final Command PointAtoB = new PointAtoB();
-
-  // A chooser for autonomous commands
-  public SendableChooser<Command> autoChooser = new SendableChooser<>();  
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return new PointAtoB();
   }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
@@ -36,22 +37,17 @@ public class PointAtoB extends CommandBase {
     jsonManager = new JsonManager();
 
     String autoSelected = SmartDashboard.getString("Auto Selector","auto1");
-    String autoChosen = robotContainer.autoChooser.getName();
+    System.out.println("AUTO_________________: " + autoSelected);
+
     try {
       jsonManager.readJson(autoSelected);
-      jsonManager.readJson(autoChosen);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     //iterate over json here 
     desiredList = new ArrayList<>();
-    // {{
-      // add(DesiredPosition.fromCords(0.5 , 0.5, 10.0));
-      // add(DesiredPosition.fromCords(jsonManager.xList.get(0), jsonManager.yList.get(0), jsonManager.thetaList.get(0)));
-    // }};
-
-    for(int z = 0; z < jsonManager.posList.size() -1; z++){
+    for(int z = 0; z < jsonManager.posList.size(); z++){
       desiredList.add(DesiredPosition.fromCords(jsonManager.xList.get(z), jsonManager.yList.get(z), jsonManager.thetaList.get(z)));
     }
     System.out.println(desiredList);
@@ -83,10 +79,10 @@ public class PointAtoB extends CommandBase {
     return done;
   }
 
-  public static void main(String[] args) throws Exception {
-    PointAtoB point = new PointAtoB();
-    point.initialize();
-  }
+  // public static void main(String[] args) throws Exception {
+  //   PointAtoB point = new PointAtoB();
+  //   point.initialize();
+  // }
  
 }
 

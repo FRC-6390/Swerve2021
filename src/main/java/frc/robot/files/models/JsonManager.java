@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import java.text.DecimalFormat;
+import java.math.BigDecimal;
 
 import edu.wpi.first.wpilibj.Filesystem;
 
@@ -33,7 +34,6 @@ public class JsonManager {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
 
-    private NumberFormat formatter;
     private static InputStreamReader inputStream;
     public static List<PosData> posList;
     public static List<Double> xList;
@@ -46,19 +46,17 @@ public class JsonManager {
     // public static void main(String[] args) throws Exception {
     public void readJson(String autoName) throws Exception {
 
-        String file = "C:\\Users\\Mohammad\\Documents\\GitHub\\Swerve2021\\src\\main\\java\\frc\\robot\\files\\models\\" + autoName + ".json";
+        //for testing purposes
+        // String file = "C:\\Users\\Mohammad\\Documents\\GitHub\\Swerve2021\\src\\main\\java\\frc\\robot\\files\\models\\" + autoName + ".json";
         
         //needs to be tested
-        // inputStream = new InputStreamReader(new FileInputStream(Filesystem.getDeployDirectory()+"/"+ autoName + ".json"));
-        // String file = inputStream.toString();
+        String file = Filesystem.getDeployDirectory()+"/"+ autoName + ".json";
+        System.out.println(file);
         
         String json = readFileAsString(file);
         System.out.println(json);
 
         JsonManager manager = new Gson().fromJson(json, new TypeToken<JsonManager>() {}.getType());
-
-        formatter = new DecimalFormat();
-        formatter.setMaximumFractionDigits(20);
 
         posList = manager.getPositions();
         xList = new ArrayList<>();
@@ -72,14 +70,12 @@ public class JsonManager {
             yList.add(pos.getY());
             thetaList.add(pos.getTheta());
 
-
-            // df.setMaximumFractionDigits(15);
             
             for(PidData pid : pos.getDrive()){
                 List<Double> drivePID = new ArrayList<>();
                 drivePID.add(pid.getP());
                 drivePID.add(pid.getI());
-                drivePID.add(Double.parseDouble(formatter.format(pid.getD())));
+                drivePID.add(pid.getD());
                 drivePID.add(pid.getILimit());
                 drivePID.add(pid.getThreshold());
                 driveLists.add(drivePID);
