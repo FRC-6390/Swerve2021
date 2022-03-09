@@ -1,4 +1,4 @@
-package frc.robot.files.Models;
+package frc.robot.files.models;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;

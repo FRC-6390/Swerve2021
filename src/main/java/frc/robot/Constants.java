@@ -83,10 +83,10 @@ public interface Constants {
     //Limit Switches
     //Encoderss
     enum SENSORS {
-        FRONT_LEFT_ENCODER(0),
-        FRONT_RIGHT_ENCODER(1),
-        BACK_LEFT_ENCODER(2),
-        BACK_RIGHT_ENCODER(3),
+        FRONT_LEFT_ENCODER(8),
+        FRONT_RIGHT_ENCODER(9),
+        BACK_LEFT_ENCODER(10),
+        BACK_RIGHT_ENCODER(11),
         FRONT_LEFT_LIMIT(0), 
         FRONT_RIGHT_LIMIT(1), 
         BACK_RIGHT_LIMIT(2),

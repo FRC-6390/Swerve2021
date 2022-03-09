@@ -1,4 +1,4 @@
-package frc.robot.files.Models;
+package frc.robot.files.models;
 
 import java.io.FileInputStream;
 import java.io.InputStreamReader;

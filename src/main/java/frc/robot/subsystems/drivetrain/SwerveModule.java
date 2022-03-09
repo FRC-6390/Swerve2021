@@ -31,14 +31,14 @@ public class SwerveModule {
         rotationMotor.configFactoryDefault();
         driveMotor.configFactoryDefault();
         //Module Encoders
-        moduleEncoder = new CANCoder(ModuleId);
+        moduleEncoder = new CANCoder(ModuleId+8);
         moduleEncoder.configFactoryDefault();
         
         rotationConfiguration = new TalonFXConfiguration(){{
           slot0.kP = Constants.SWERVE.P_ROTATION.get();
           slot0.kI = Constants.SWERVE.I_ROTATION.get();
           slot0.kD = Constants.SWERVE.D_ROTATION.get();
-          remoteFilter0.remoteSensorDeviceID = ModuleId;
+          remoteFilter0.remoteSensorDeviceID = ModuleId+8;
           remoteFilter0.remoteSensorSource = RemoteSensorSource.CANCoder;
           primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
         }};
